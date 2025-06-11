@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>About Me - E_C LEGO Lab</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    header {
+      background-color: #ffcc00;
+      color: #333;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      margin: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+    }
+    .container h2 {
+      color: #444;
+    }
+    p {
+      line-height: 1.6;
+    }
+    footer {
+      text-align: center;
+      padding: 10px;
+      font-size: 0.8em;
+      background-color: #333;
+      color: white;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+    }
+    a {
+      color: #333;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>About Me</h1>
+  <p>Meet the builder behind the bricks.</p>
+</header>
+
+<div class="container">
+  <h2>Hey, I'm Tish!</h2>
+  <p>
+    I’m a Digital Learning Specialist by day and a LEGO-loving creator by night. My passion lies in using LEGO builds not just for fun—but as powerful tools for storytelling, STEM learning, and innovation.
+  </p>
+  <p>
+    Whether I’m building a robotic rover, recreating iconic vehicles, or designing stop-motion sets, I’m always exploring ways to turn plastic bricks into imaginative experiences.
+  </p>
+  <p>
+    This site is my digital sandbox—a place to showcase creations, share ideas, and hopefully inspire others to pick up a brick and start building. 
+  </p>
+  <p>
+    When I’m not in LEGO mode, you’ll find me mentoring students, building tech curriculum, or finding new ways to make learning more hands-on and engaging.
+  </p>
+  <p>
+    <a href="index.html">← Back to Gallery</a>
+  </p>
+</div>
+
+<footer>
+  Created with bricks and brains by Tish. Powered by GitHub Pages.
+</footer>
+
+</body>
+</html>
