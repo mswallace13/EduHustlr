@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T-TESS Artifact Sorting Activity</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            touch-action: none; /* Prevents scrolling on touch devices while dragging */
+        }
+        .scenario-card {
+            cursor: grab;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .scenario-card:active {
+            cursor: grabbing;
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .drop-zone {
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+        .drop-zone.drag-over {
+            border-color: #3b82f6; /* blue-500 */
+            background-color: #eff6ff; /* blue-50 */
+        }
+        .correct-animation {
+            animation: correct-pulse 0.5s ease;
+        }
+        .incorrect-animation {
+            animation: incorrect-shake 0.5s ease;
+        }
+        @keyframes correct-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        @keyframes incorrect-shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        .completion-modal {
+            display: none; /* Hidden by default */
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 flex flex-col items-center justify-center min-h-screen p-4 sm:p-6 lg:p-8">
+
+    <div class="w-full max-w-7xl mx-auto">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-slate-900">T-TESS Artifact Sorting Activity</h1>
+            <p class="text-slate-600 mt-2 max-w-3xl mx-auto">Read the teaching scenario below and drag it into the T-TESS performance level you believe it best represents.</p>
+        </header>
+
+        <!-- Score & Progress -->
+        <div class="flex justify-between items-center mb-6 max-w-lg mx-auto">
+             <div class="text-lg font-medium">Score: <span id="score" class="font-bold text-blue-600">0</span></div>
+             <div class="text-lg font-medium">Progress: <span id="progress" class="font-bold text-slate-700">1 / 10</span></div>
+        </div>
+
+
+        <!-- Scenario Area -->
+        <div id="scenario-container" class="mb-8 min-h-[200px] flex items-center justify-center">
+            <div id="scenario-card" draggable="true" class="scenario-card bg-white p-6 rounded-lg shadow-md border border-slate-200 w-full max-w-lg text-center">
+                <p id="scenario-text" class="text-slate-700 leading-relaxed"></p>
+            </div>
+        </div>
+
+        <!-- Drop Zones -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Developing -->
+            <div id="developing" data-category="developing" class="drop-zone bg-white rounded-lg shadow-sm border-2 border-dashed border-slate-300 p-6 min-h-[250px] flex flex-col">
+                <h2 class="text-xl font-semibold text-red-600 mb-2 text-center">Developing</h2>
+                <p class="text-slate-500 text-sm text-center italic">Teacher performance is inconsistent. Struggles with planning or implementation, lacks content knowledge, or has unclear learning objectives.</p>
+            </div>
+
+            <!-- Proficient -->
+            <div id="proficient" data-category="proficient" class="drop-zone bg-white rounded-lg shadow-sm border-2 border-dashed border-slate-300 p-6 min-h-[250px] flex flex-col">
+                <h2 class="text-xl font-semibold text-yellow-600 mb-2 text-center">Proficient</h2>
+                <p class="text-slate-500 text-sm text-center italic">Teacher performance is consistent and effective. Demonstrates solid content knowledge, clear learning objectives, and successful lesson implementation.</p>
+            </div>
+
+            <!-- Accomplished -->
+            <div id="accomplished" data-category="accomplished" class="drop-zone bg-white rounded-lg shadow-sm border-2 border-dashed border-slate-300 p-6 min-h-[250px] flex flex-col">
+                <h2 class="text-xl font-semibold text-green-600 mb-2 text-center">Accomplished</h2>
+                <p class="text-slate-500 text-sm text-center italic">Teacher performance is highly effective and student-centered. Seamlessly differentiates instruction, integrates technology, and fosters a collaborative learning environment.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Completion Modal -->
+    <div id="completion-modal" class="completion-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-2xl p-8 text-center max-w-md w-full">
+            <h2 class="text-3xl font-bold text-slate-900 mb-4">Activity Complete!</h2>
+            <p class="text-slate-600 mb-6">Great job practicing your T-TESS evaluation skills. Your final score is:</p>
+            <div id="final-score" class="text-5xl font-bold text-blue-600 mb-8"></div>
+            <button id="reset-button" class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors">Play Again</button>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM Elements
+            const scenarioCard = document.getElementById('scenario-card');
+            const scenarioText = document.getElementById('scenario-text');
+            const dropZones = document.querySelectorAll('.drop-zone');
+            const scoreEl = document.getElementById('score');
+            const progressEl = document.getElementById('progress');
+            const completionModal = document.getElementById('completion-modal');
+            const finalScoreEl = document.getElementById('final-score');
+            const resetButton = document.getElementById('reset-button');
+
+            // Scenarios Data
+            const scenarios = [
+                { text: "The teacher lectures for the entire period while students take notes. The lesson plan shows the same activity for all students, regardless of their performance on the pre-assessment.", category: "developing" },
+                { text: "Students work in small groups on a project-based learning activity. The teacher circulates, provides feedback, and asks probing questions to extend student thinking.", category: "accomplished" },
+                { text: "The lesson follows a standard 'I do, we do, you do' model. The teacher explains the concept, works through examples with the class, and then assigns independent practice.", category: "proficient" },
+                { text: "During a math lesson, a student asks how the formula relates to real life. The teacher replies, 'You just need to know it for the test.'", category: "developing" },
+                { text: "The teacher uses an online simulation to allow students to virtually dissect a frog, followed by a student-led discussion comparing their findings to a professional dissection.", category: "accomplished" },
+                { text: "The teacher provides clear, step-by-step instructions for the day's lab activity. All students complete the lab and fill out a corresponding worksheet.", category: "proficient" },
+                { text: "The classroom is orderly, but student engagement is low. Most students are compliant but not visibly excited or invested in the learning activity.", category: "proficient" },
+                { text: "A teacher notices several students are struggling with a concept, so they pull them into a small group for re-teaching while other students work on an extension activity.", category: "accomplished" },
+                { text: "The teacher's questions are mostly low-level, requiring students to recall facts directly from the textbook. There are few opportunities for higher-order thinking.", category: "developing" },
+                { text: "Students are using a rubric to provide peer feedback on their essays. The teacher has modeled the process and provides sentence stems for constructive comments.", category: "accomplished" }
+            ];
+
+            let currentScenarioIndex = 0;
+            let score = 0;
+            let shuffledScenarios = [];
+
+            function shuffleArray(array) {
+                return array.sort(() => Math.random() - 0.5);
+            }
+
+            function startGame() {
+                currentScenarioIndex = 0;
+                score = 0;
+                shuffledScenarios = shuffleArray([...scenarios]);
+                updateScoreboard();
+                loadScenario();
+                completionModal.style.display = 'none';
+                scenarioCard.style.display = 'block';
+            }
+
+            function loadScenario() {
+                if (currentScenarioIndex < shuffledScenarios.length) {
+                    const currentScenario = shuffledScenarios[currentScenarioIndex];
+                    scenarioText.textContent = currentScenario.text;
+                    scenarioCard.dataset.category = currentScenario.category;
+                    updateScoreboard();
+                } else {
+                    showCompletionScreen();
+                }
+            }
+            
+            function updateScoreboard() {
+                scoreEl.textContent = score;
+                progressEl.textContent = `${currentScenarioIndex + 1} / ${shuffledScenarios.length}`;
+            }
+
+            function showCompletionScreen() {
+                scenarioCard.style.display = 'none';
+                finalScoreEl.textContent = `${score} / ${shuffledScenarios.length}`;
+                completionModal.style.display = 'flex';
+            }
+
+            // Drag and Drop Event Handlers
+            scenarioCard.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', 'card');
+                setTimeout(() => {
+                    scenarioCard.style.opacity = '0.5';
+                }, 0);
+            });
+
+            scenarioCard.addEventListener('dragend', () => {
+                scenarioCard.style.opacity = '1';
+            });
+
+            dropZones.forEach(zone => {
+                zone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    zone.classList.add('drag-over');
+                });
+
+                zone.addEventListener('dragleave', () => {
+                    zone.classList.remove('drag-over');
+                });
+
+                zone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    zone.classList.remove('drag-over');
+                    
+                    const droppedCategory = zone.dataset.category;
+                    const correctCategory = scenarioCard.dataset.category;
+
+                    if (droppedCategory === correctCategory) {
+                        handleCorrectDrop(zone);
+                    } else {
+                        handleIncorrectDrop();
+                    }
+                });
+            });
+
+            function handleCorrectDrop(zone) {
+                score++;
+                currentScenarioIndex++;
+                zone.classList.add('correct-animation');
+                scenarioCard.classList.add('correct-animation');
+                
+                setTimeout(() => {
+                    zone.classList.remove('correct-animation');
+                    scenarioCard.classList.remove('correct-animation');
+                    loadScenario();
+                }, 500);
+            }
+
+            function handleIncorrectDrop() {
+                scenarioCard.classList.add('incorrect-animation');
+                setTimeout(() => {
+                    scenarioCard.classList.remove('incorrect-animation');
+                }, 500);
+            }
+            
+            resetButton.addEventListener('click', startGame);
+
+            // Initial game start
+            startGame();
+        });
+    </script>
+</body>
+</html>
