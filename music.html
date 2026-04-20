@@ -1,1 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Favorite Albums</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #121212; /* Dark theme */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+        }
 
+        .album-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .album-card {
+            background: #1e1e1e;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .album-card:hover {
+            transform: scale(1.05);
+            background: #282828;
+        }
+
+        .album-card img {
+            width: 100%; /* Keeps it small but fills the card */
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .album-title { font-weight: bold; margin-bottom: 5px; }
+        .artist-name { color: #b3b3b3; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+
+    <h1>My Heavy Rotation</h1>
+    <p>A few albums I've been loving lately.</p>
+    <br>
+
+    <div class="album-grid">
+        
+        <div class="album-card">
+            <img src="https://via.placeholder.com/300" alt="Album Cover">
+            <div class="album-title">Album Name</div>
+            <div class="artist-name">Artist Name</div>
+        </div>
+
+        <div class="album-card">
+            <img src="https://via.placeholder.com/300" alt="Album Cover">
+            <div class="album-title">Another Album</div>
+            <div class="artist-name">Artist Name</div>
+        </div>
+
+        </div>
+
+</body>
+</html>
