@@ -1,17 +1,66 @@
-<h3>Pokemon Data Content:</h3>
-<pre id="csv-content" style="background: #f4f4f4; padding: 15px; border: 1px solid #ddd;">
-    Loading data...
-</pre>
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background-color: #f9f9f9; }
+        
+        /* Table Styling */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
 
-<script>
-    const rawUrl = "https://raw.githubusercontent.com/mswallace13/EduHustlr/main/Pokemon.csv";
+        .data-table th {
+            background-color: #007bff;
+            color: white;
+            text-align: left;
+            padding: 12px;
+        }
 
-    fetch(rawUrl)
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('csv-content').textContent = data;
-        })
-        .catch(error => {
-            document.getElementById('csv-content').textContent = "Error loading CSV: " + error;
-        });
-</script>
+        .data-table td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            color: #333;
+        }
+
+        .data-table tr:hover { background-color: #f1f1f1; }
+
+        h2 { color: #222; }
+    </style>
+</head>
+<body>
+
+    <h2>My Collection</h2>
+    <div id="table-container">Loading data into table...</div>
+
+    <script>
+        const rawUrl = "https://raw.githubusercontent.com/mswallace13/EduHustlr/main/Pokemon.csv";
+
+        fetch(rawUrl)
+            .then(res => res.text())
+            .then(csvText => {
+                const rows = csvText.trim().split("\n");
+                let tableHtml = '<table class="data-table">';
+
+                rows.forEach((row, index) => {
+                    const columns = row.split(",");
+                    const tag = (index === 0) ? "th" : "td"; // Use <th> for the first row
+                    
+                    tableHtml += "<tr>";
+                    columns.forEach(col => {
+                        tableHtml += `<${tag}>${col}</${tag}>`;
+                    });
+                    tableHtml += "</tr>";
+                });
+
+                tableHtml += "</table>";
+                document.getElementById('table-container').innerHTML = tableHtml;
+            });
+    </script>
+
+</body>
+</html>
