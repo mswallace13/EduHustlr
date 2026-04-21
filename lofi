@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduHustlr | Lo-Fi Vibe</title>
+    <style>
+        :root {
+            --bg: #000;
+            --text: #fff;
+            --accent: #888;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 3rem;
+            letter-spacing: 10px;
+            text-align: center;
+            border-bottom: 1px solid var(--text);
+            padding-bottom: 20px;
+            margin-bottom: 50px;
+        }
+
+        .section {
+            margin-bottom: 60px;
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .recommendations {
+            list-style: none;
+            padding: 0;
+        }
+
+        .recommendations li {
+            border: 1px solid #333;
+            padding: 15px;
+            margin-bottom: 10px;
+            transition: 0.3s;
+        }
+
+        .recommendations li:hover {
+            border-color: var(--text);
+            background: #111;
+        }
+
+        .recommendations a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: bold;
+            display: block;
+        }
+
+        .tagline {
+            text-align: center;
+            font-style: italic;
+            color: var(--accent);
+            margin-top: 40px;
+        }
+
+        .back-home {
+            margin-top: 60px;
+            text-decoration: none;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 10px 20px;
+            transition: 0.3s;
+        }
+
+        .back-home:hover {
+            color: var(--text);
+            border-color: var(--text);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>LO-FI</h1>
+
+        <div class="section">
+            <h2>01. The Definition</h2>
+            <p>
+                Short for <strong>low-fidelity</strong>, Lo-Fi is a music aesthetic that embraces imperfections. 
+                Where modern pop chases polished perfection, Lo-Fi finds beauty in the cracks—the hiss of a vinyl record, 
+                the hum of a tape deck, and the soft "mistakes" of a live performance.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>02. The Vibe</h2>
+            <p>
+                It is the sound of a rainy Tuesday evening. It's the companion to a late-night study session or a 
+                solitary walk through a quiet city. It’s designed not to take center stage, but to create a "headspace" 
+                where your mind can wander or focus.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>03. Where to Listen</h2>
+            <ul class="recommendations">
+                <li>
+                    <a href="https://www.youtube.com/watch?v=jfKfPfyJRdk" target="_blank">Lofi Girl (YouTube)</a>
+                    <span>The gold standard of the genre. 24/7 beats to study/relax to.</span>
+                </li>
+                <li>
+                    <a href="https://open.spotify.com/playlist/37i9dQZF1DWWQRv9pS0v3z" target="_blank">Lo-Fi Beats (Spotify)</a>
+                    <span>A curated selection of the most iconic chill-hop tracks.</span>
+                </li>
+                <li>
+                    <a href="https://soundcloud.com/chilledcow" target="_blank">ChilledCow (SoundCloud)</a>
+                    <span>Great for finding underground artists and new sounds.</span>
+                </li>
+            </ul>
+        </div>
+
+        <p class="tagline">Stay chill. Keep hustling.</p>
+        
+        <div style="text-align: center;">
+            <a href="index.html" class="back-home">RETURN TO HUB</a>
+        </div>
+    </div>
+
+</body>
+</html>
