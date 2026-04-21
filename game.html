@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EduHustlr | Ascension</title>
+    <style>
+        body { background: #000; color: #fff; font-family: 'Courier New', monospace; padding: 50px; }
+        #game-text { margin-bottom: 20px; line-height: 1.5; min-height: 100px; }
+        .stats { border-top: 1px solid #444; padding-top: 10px; margin-bottom: 20px; color: #888; }
+        .btn { 
+            background: none; border: 1px solid #fff; color: #fff; 
+            padding: 10px 20px; cursor: pointer; margin-right: 10px; 
+            font-family: inherit;
+        }
+        .btn:hover { background: #fff; color: #000; }
+    </style>
+</head>
+<body>
+
+    <div class="stats">
+        FAITH: <span id="faith">0</span> | LEVEL: <span id="rank">Spirit</span>
+    </div>
+
+    <div id="game-text">You are a faint echo in the void. Below, a small village prays for rain.</div>
+    <div id="choices"></div>
+
+    <script>
+        let faith = 0;
+        let rank = "Spirit";
+
+        const scenarios = {
+            start: {
+                text: "The villagers of Eldermire are starving. A drought has lasted months. What is your first miracle?",
+                options: [
+                    { text: "Bring the Rain", result: "rain", faithGain: 10 },
+                    { text: "Burn the Crops", result: "fire", faithGain: 5 },
+                    { text: "Stay Silent", result: "silence", faithGain: 0 }
+                ]
+            },
+            rain: {
+                text: "Rain pours. The village lives. They build a small shrine in your name. You feel stronger.",
+                options: [
+                    { text: "Appear in a Dream", result: "ascend", faithGain: 20 },
+                    { text: "Demand Sacrifice", result: "darkness", faithGain: 50 }
+                ]
+            },
+            // Add more scenarios here...
+        };
+
+        function updateGame(sceneKey) {
+            const scene = scenarios[sceneKey];
+            document.getElementById('game-text').innerText = scene.text;
+            
+            const choiceContainer = document.getElementById('choices');
+            choiceContainer.innerHTML = ''; // Clear old buttons
+
+            scene.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'btn';
+                btn.innerText = opt.text;
+                btn.onclick = () => {
+                    faith += opt.faithGain;
+                    document.getElementById('faith').innerText = faith;
+                    checkRank();
+                    updateGame(opt.result);
+                };
+                choiceContainer.appendChild(btn);
+            });
+        }
+
+        function checkRank() {
+            if (faith > 50) rank = "Lesser Deity";
+            if (faith > 100) rank = "Great Architect";
+            document.getElementById('rank').innerText = rank;
+        }
+
+        updateGame('start');
+    </script>
+</body>
+</html>
