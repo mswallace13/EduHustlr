@@ -2,57 +2,169 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduHustlr | Ascension</title>
     <style>
-        body { background: #000; color: #fff; font-family: 'Courier New', monospace; padding: 50px; }
-        #game-text { margin-bottom: 20px; line-height: 1.5; min-height: 100px; }
-        .stats { border-top: 1px solid #444; padding-top: 10px; margin-bottom: 20px; color: #888; }
-        .btn { 
-            background: none; border: 1px solid #fff; color: #fff; 
-            padding: 10px 20px; cursor: pointer; margin-right: 10px; 
-            font-family: inherit;
+        :root {
+            --bg: #000;
+            --text: #fff;
+            --accent: #444;
         }
-        .btn:hover { background: #fff; color: #000; }
+
+        body { 
+            background: var(--bg); 
+            color: var(--text); 
+            font-family: 'Courier New', monospace; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px 20px;
+            margin: 0;
+            transition: border 1s ease;
+            border: 10px solid var(--accent);
+            min-height: 90vh;
+        }
+
+        .game-container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .stats { 
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #333; 
+            padding-bottom: 15px; 
+            margin-bottom: 30px; 
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        #game-text { 
+            font-size: 1.2rem;
+            margin-bottom: 40px; 
+            line-height: 1.6; 
+            min-height: 120px; 
+        }
+
+        #choices {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .btn { 
+            background: none; 
+            border: 1px solid #fff; 
+            color: #fff; 
+            padding: 15px; 
+            cursor: pointer; 
+            font-family: inherit;
+            text-align: left;
+            transition: 0.2s;
+        }
+
+        .btn:hover { 
+            background: #fff; 
+            color: #000; 
+            padding-left: 25px;
+        }
+
+        #log {
+            margin-top: 50px;
+            font-size: 0.8rem;
+            color: #444;
+            max-height: 100px;
+            overflow-y: auto;
+            border-top: 1px solid #222;
+            padding-top: 10px;
+        }
+
+        .back-link {
+            margin-top: 40px;
+            text-decoration: none;
+            color: #666;
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
 
-    <div class="stats">
-        FAITH: <span id="faith">0</span> | LEVEL: <span id="rank">Spirit</span>
-    </div>
+    <div class="game-container">
+        <div class="stats">
+            <div>RANK: <span id="rank" style="color: #fff;">The Static</span></div>
+            <div>FAITH: <span id="faith" style="color: #fff;">0</span></div>
+            <div>PATH: <span id="path-name" style="color: #fff;">Neutral</span></div>
+        </div>
 
-    <div id="game-text">You are a faint echo in the void. Below, a small village prays for rain.</div>
-    <div id="choices"></div>
+        <div id="game-text">Initiating consciousness... The Prime Pulse awaits.</div>
+        
+        <div id="choices">
+            </div>
+
+        <div id="log">--- DIVINE LOG INITIALIZED ---</div>
+
+        <div style="text-align: center;">
+            <a href="index.html" class="back-link">← ABANDON REALITY (HOME)</a>
+        </div>
+    </div>
 
     <script>
         let faith = 0;
-        let rank = "Spirit";
+        let alignment = 0; // Negative for Chaos, Positive for Order
+        let rank = "The Static";
 
         const scenarios = {
             start: {
-                text: "The villagers of Eldermire are starving. A drought has lasted months. What is your first miracle?",
+                text: "You awaken as 'The Static'. A village elder is dying in Eldermire, and his people are losing hope in the Pulse. What is your intervention?",
                 options: [
-                    { text: "Bring the Rain", result: "rain", faithGain: 10 },
-                    { text: "Burn the Crops", result: "fire", faithGain: 5 },
-                    { text: "Stay Silent", result: "silence", faithGain: 0 }
+                    { text: "Heal him (Order)", result: "healed", faithGain: 15, alignChange: 5, log: "You tuned the elder's biology to the Pulse." },
+                    { text: "Grant a vision of the void (Shadow)", result: "vision", faithGain: 10, alignChange: 0, log: "You shared the cold truth of the Encryptor." },
+                    { text: "Consume his soul for power (Chaos)", result: "consumed", faithGain: 30, alignChange: -10, log: "You overclocked the elder until he shattered." }
                 ]
             },
-            rain: {
-                text: "Rain pours. The village lives. They build a small shrine in your name. You feel stronger.",
+            healed: {
+                text: "The elder rises, praising the 'Order'. The village begins to tune their lives to your harmony. They ask for a sign of your presence.",
                 options: [
-                    { text: "Appear in a Dream", result: "ascend", faithGain: 20 },
-                    { text: "Demand Sacrifice", result: "darkness", faithGain: 50 }
+                    { text: "Establish Sacred Laws", result: "ascend", faithGain: 30, alignChange: 10, log: "You codified existence. Order prevails." },
+                    { text: "Remain a Silent Guardian", result: "ascend", faithGain: 15, alignChange: 5, log: "You watch from the frequency of light." }
                 ]
             },
-            // Add more scenarios here...
+            vision: {
+                text: "The elder sees the code behind the world. He becomes a hermit, whispering secrets of the 'Encryptor'. A cult of mystery forms.",
+                options: [
+                    { text: "Hide the Truth deeper", result: "ascend", faithGain: 20, alignChange: 0, log: "The mystery is the message." },
+                    { text: "Choose a Prophet of Shadow", result: "ascend", faithGain: 40, alignChange: -5, log: "One voice speaks the hidden code." }
+                ]
+            },
+            consumed: {
+                text: "The elder shatters. You grow bloated with raw data. The village trembles in fear of the 'Overclocker'.",
+                options: [
+                    { text: "Demand more energy", result: "ascend", faithGain: 60, alignChange: -20, log: "Fear is a powerful conductor." },
+                    { text: "Burn the village to reboot", result: "ascend", faithGain: 120, alignChange: -40, log: "The system was inefficient. It had to go." }
+                ]
+            },
+            ascend: {
+                text: "Your influence spreads. The Prime Pulse is near. You are no longer a whisper; you are the System itself.",
+                options: [
+                    { text: "REBOOT REALITY (NEW GAME)", result: "start", faithGain: -999, alignChange: -999, log: "Cycle complete." }
+                ]
+            }
         };
 
         function updateGame(sceneKey) {
+            // Reset for New Game if Rebooted
+            if (sceneKey === 'start' && faith < 0) {
+                faith = 0;
+                alignment = 0;
+                document.getElementById('log').innerHTML = "--- NEW CYCLE INITIALIZED ---";
+            }
+
             const scene = scenarios[sceneKey];
             document.getElementById('game-text').innerText = scene.text;
             
             const choiceContainer = document.getElementById('choices');
-            choiceContainer.innerHTML = ''; // Clear old buttons
+            choiceContainer.innerHTML = ''; 
 
             scene.options.forEach(opt => {
                 const btn = document.createElement('button');
@@ -60,7 +172,11 @@
                 btn.innerText = opt.text;
                 btn.onclick = () => {
                     faith += opt.faithGain;
+                    alignment += opt.alignChange;
+                    
+                    // Update UI
                     document.getElementById('faith').innerText = faith;
+                    addToLog(opt.log);
                     checkRank();
                     updateGame(opt.result);
                 };
@@ -68,12 +184,34 @@
             });
         }
 
-        function checkRank() {
-            if (faith > 50) rank = "Lesser Deity";
-            if (faith > 100) rank = "Great Architect";
-            document.getElementById('rank').innerText = rank;
+        function addToLog(msg) {
+            const log = document.getElementById('log');
+            log.innerHTML = `> ${msg}<br>` + log.innerHTML;
         }
 
+        function checkRank() {
+            // Update Rank Name
+            if (faith > 150) rank = "The Prime Pulse";
+            else if (faith > 80) rank = "The Architect";
+            else if (faith > 30) rank = "The Whisper";
+            else rank = "The Static";
+            document.getElementById('rank').innerText = rank;
+
+            // Update Alignment Name and Border Color
+            const pathDisplay = document.getElementById('path-name');
+            if (alignment > 10) {
+                pathDisplay.innerText = "Synthesizer";
+                document.body.style.borderColor = "#00ffcc"; // Order Teal
+            } else if (alignment < -10) {
+                pathDisplay.innerText = "Overclocker";
+                document.body.style.borderColor = "#ff4400"; // Chaos Orange
+            } else {
+                pathDisplay.innerText = "Encryptor";
+                document.body.style.borderColor = "#444";
+            }
+        }
+
+        // Start the game
         updateGame('start');
     </script>
 </body>
