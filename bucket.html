@@ -1,2 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bucket List</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --accent-color: #58a6ff;
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+            --done-color: #238636;
+        }
 
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .bucket-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .item {
+            background: var(--card-bg);
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .item:hover {
+            transform: translateX(5px);
+            border-color: var(--accent-color);
+        }
+
+        /* Status Indicators */
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--text-muted);
+            border-radius: 4px;
+            margin-right: 15px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .item.completed .checkbox {
+            background-color: var(--done-color);
+            border-color: var(--done-color);
+        }
+
+        .item.completed .checkbox::after {
+            content: '✓';
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .item.completed .text {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .category {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            background: #21262d;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-left: auto;
+            color: var(--accent-color);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>~/bucket-list</h1>
+        <p class="subtitle">Main quest line in progress...</p>
+    </header>
+
+    <ul class="bucket-list">
+        <li class="item completed">
+            <div class="checkbox"></div>
+            <span class="text">Contribute to a major Open Source project</span>
+            <span class="category">Code</span>
+        </li>
+
+        <li class="item">
+            <div class="checkbox"></div>
+            <span class="text">See the Northern Lights in Iceland</span>
+            <span class="category">Travel</span>
+        </li>
+
+        <li class="item">
+            <div class="checkbox"></div>
+            <span class="text">Build a custom mechanical keyboard</span>
+            <span class="category">Gear</span>
+        </li>
+
+        <li class="item">
+            <div class="checkbox"></div>
+            <span class="text">Launch a SaaS product to $1k MRR</span>
+            <span class="category">Startup</span>
+        </li>
+
+        <li class="item">
+            <div class="checkbox"></div>
+            <span class="text">Learn to play "Neon" on guitar</span>
+            <span class="category">Skill</span>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>
 
