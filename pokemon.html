@@ -1,66 +1,192 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduHustlr | My Collection</title>
     <style>
-        body { font-family: sans-serif; padding: 20px; background-color: #00171F; }
-        
-        /* Table Styling */
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        :root {
+            --bg: #0a0a0a;
+            --text: #ffffff;
+            --card-inner: #1a1a1a;
+            --holo: linear-gradient(45deg, transparent 25%, rgba(255,255,255,0.2) 50%, transparent 75%);
         }
 
-        .data-table th {
-            background-color: #000000;
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        h1 { font-family: 'Courier New', monospace; letter-spacing: 5px; margin-bottom: 30px; }
+
+        /* Search Area */
+        .search-box {
+            margin-bottom: 40px;
+            display: flex;
+            gap: 10px;
+        }
+
+        input {
+            background: #111;
+            border: 1px solid #444;
             color: white;
-            text-align: left;
-            padding: 12px;
+            padding: 12px 20px;
+            border-radius: 30px;
+            outline: none;
+            width: 250px;
         }
 
-        .data-table td {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            color: #333;
+        button {
+            background: white;
+            color: black;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
         }
 
-        .data-table tr:hover { background-color: #f1f1f1; }
+        button:hover { background: #ff0000; color: white; }
 
-        h2 { color: #222; }
+        /* THE BINDER GRID */
+        #binder {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* INDIVIDUAL CARD DESIGN */
+        .pkmn-card {
+            background-color: var(--card-inner);
+            border: 2px solid #333;
+            border-radius: 18px;
+            padding: 15px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
+            cursor: pointer;
+        }
+
+        .pkmn-card:hover {
+            transform: translateY(-10px) rotate(2deg);
+            box-shadow: 0 15px 30px rgba(255, 0, 0, 0.3);
+            border-color: #ff0000;
+        }
+
+        /* Holographic Shine */
+        .pkmn-card::after {
+            content: "";
+            position: absolute;
+            top: -150%;
+            left: -150%;
+            width: 300%;
+            height: 300%;
+            background: var(--holo);
+            transform: rotate(45deg);
+            transition: 0.6s;
+        }
+
+        .pkmn-card:hover::after {
+            top: 100%;
+            left: 100%;
+        }
+
+        .pkmn-card img {
+            width: 140px;
+            height: 140px;
+            background: #000;
+            border-radius: 10px;
+            margin-top: 10px;
+            image-rendering: pixelated;
+        }
+
+        .card-name {
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin: 15px 0 5px 0;
+            font-size: 1.2rem;
+        }
+
+        .type-badge {
+            display: inline-block;
+            background: #444;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+        }
+
+        .back-link {
+            margin-top: 50px;
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
 
-    <h2>My Collection</h2>
-    <div id="table-container">Loading data into table...</div>
+    <h1>COLLECTION</h1>
+
+    <div class="search-box">
+        <input type="text" id="pkmn-input" placeholder="Enter Name or ID...">
+        <button onclick="addCard()">ADD TO BINDER</button>
+    </div>
+
+    <div id="binder">
+        </div>
+
+    <a href="index.html" class="back-link">← HUB</a>
 
     <script>
-        const rawUrl = "https://raw.githubusercontent.com/mswallace13/EduHustlr/main/Pokemon.csv";
+        async function addCard() {
+            const input = document.getElementById('pkmn-input');
+            const name = input.value.toLowerCase().trim();
+            const binder = document.getElementById('binder');
 
-        fetch(rawUrl)
-            .then(res => res.text())
-            .then(csvText => {
-                const rows = csvText.trim().split("\n");
-                let tableHtml = '<table class="data-table">';
+            if (!name) return;
 
-                rows.forEach((row, index) => {
-                    const columns = row.split(",");
-                    const tag = (index === 0) ? "th" : "td"; // Use <th> for the first row
-                    
-                    tableHtml += "<tr>";
-                    columns.forEach(col => {
-                        tableHtml += `<${tag}>${col}</${tag}>`;
-                    });
-                    tableHtml += "</tr>";
-                });
+            try {
+                const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+                if (!response.ok) throw new Error("Pokémon not found");
+                
+                const data = await response.json();
 
-                tableHtml += "</table>";
-                document.getElementById('table-container').innerHTML = tableHtml;
-            });
+                // Create Card Element
+                const card = document.createElement('div');
+                card.className = 'pkmn-card';
+                
+                card.innerHTML = `
+                    <div class="type-badge">${data.types[0].type.name}</div>
+                    <br>
+                    <img src="${data.sprites.other['official-artwork'].front_default || data.sprites.front_default}" alt="${data.name}">
+                    <div class="card-name">${data.name}</div>
+                    <div style="font-size: 0.8rem; color: #888;">HP: ${data.stats[0].base_stat} | NO. ${data.id}</div>
+                `;
+
+                // Add to start of binder
+                binder.prepend(card);
+                input.value = ""; // Clear search
+            } catch (err) {
+                alert(err.message);
+            }
+        }
+
+        // Allow pressing "Enter" to search
+        document.getElementById('pkmn-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') addCard();
+        });
     </script>
-
 </body>
 </html>
