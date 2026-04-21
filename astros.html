@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduHustlr | Astros Tracker</title>
+    <style>
+        :root {
+            --bg: #000;
+            --text: #fff;
+            --accent: #eb6e1f; /* Astros Orange */
+            --navy: #002d62;   /* Astros Navy */
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Courier New', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .container {
+            display: grid;
+            gap: 20px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .card {
+            border: 1px solid #333;
+            padding: 20px;
+            text-align: center;
+            background: #0a0a0a;
+        }
+
+        .score-row {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            font-size: 1.5rem;
+            margin: 15px 0;
+        }
+
+        .team-name { font-weight: bold; font-size: 1rem; color: var(--accent); }
+        .big-number { font-size: 3rem; font-weight: bold; }
+        
+        .status-badge {
+            background: var(--accent);
+            color: #000;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .back-link {
+            margin-top: 40px;
+            color: var(--accent);
+            text-decoration: none;
+            border: 1px solid var(--accent);
+            padding: 10px 20px;
+        }
+
+        .back-link:hover { background: var(--accent); color: #000; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>HOUSTON ASTROS</h1>
+        <p id="date-display"></p>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div id="game-status" class="status-badge">FETCHING GAME...</div>
+            <div class="score-row">
+                <div>
+                    <div class="team-name" id="away-name">AWAY</div>
+                    <div class="big-number" id="away-score">-</div>
+                </div>
+                <div>VS</div>
+                <div>
+                    <div class="team-name" id="home-name">HOME</div>
+                    <div class="big-number" id="home-score">-</div>
+                </div>
+            </div>
+            <p id="venue" style="color: #666; font-size: 0.8rem;"></p>
+        </div>
+
+        <div class="card">
+            <h2>SEASON RECORD</h2>
+            <div class="big-number" id="record" style="color: var(--accent);">0 - 0</div>
+            <p id="standing">Loading Standings...</p>
+        </div>
+    </div>
+
+    <a href="index.html" class="back-link">← RETURN TO HUB</a>
+
+    <script>
+        const ASTROS_ID = 117;
+        const currentYear = new Date().getFullYear();
+
+        async function fetchAstrosData() {
+            try {
+                // 1. Fetch Game Data (Live or most recent)
+                const gameRes = await fetch(`https://statsapi.mlb.com/api/v1/schedule/games/?sportId=1&teamId=${ASTROS_ID}`);
+                const gameData = await gameRes.json();
+                
+                if (gameData.dates && gameData.dates.length > 0) {
+                    const game = gameData.dates[0].games[0];
+                    document.getElementById('game-status').textContent = game.status.abstractGameState.toUpperCase();
+                    document.getElementById('away-name').textContent = game.teams.away.team.name.toUpperCase();
+                    document.getElementById('home-name').textContent = game.teams.home.team.name.toUpperCase();
+                    document.getElementById('away-score').textContent = game.teams.away.score || 0;
+                    document.getElementById('home-score').textContent = game.teams.home.score || 0;
+                    document.getElementById('venue').textContent = game.venue.name;
+                }
+
+                // 2. Fetch Standings/Record
+                const standRes = await fetch(`https://statsapi.mlb.com/api/v1/standings?leagueId=103&season=${currentYear}`);
+                const standData = await standRes.json();
+                
+                // Find AL West (ID: 200) and then find the Astros
+                const alWest = standData.records.find(r => r.division.id === 200);
+                const astros = alWest.teamRecords.find(t => t.team.id === ASTROS_ID);
+
+                document.getElementById('record').textContent = `${astros.wins} - ${astros.losses}`;
+                document.getElementById('standing').textContent = `${astros.divisionRank}TH IN AL WEST | PCT: ${astros.leagueRecord.pct}`;
+
+                document.getElementById('date-display').textContent = new Date().toDateString().toUpperCase();
+
+            } catch (error) {
+                console.error("Error fetching MLB data:", error);
+                document.getElementById('game-status').textContent = "OFFLINE";
+            }
+        }
+
+        fetchAstrosData();
+    </script>
+</body>
+</html>
