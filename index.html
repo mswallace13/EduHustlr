@@ -1,72 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Educator_Hustle - Lab</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #FFFFFF;
-    }
-    header {
-      background-color: #FFFFFF;
-      color: #333;
-      padding: 20px;
-      text-align: center;
-    }
-    h1 {
-      margin: 0;
-    }
-    .gallery {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      padding: 20px;
-    }
-    .gallery-item {
-      background-color: white;
-      margin: 10px;
-      border: 2px solid #ddd;
-      border-radius: 8px;
-      overflow: hidden;
-      width: 300px;
-      box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
-      box-sizing: border-box;
-    }
-    .gallery-item img {
-      width: 100%;
-      height: auto;
-    }
-    .description {
-      padding: 10px;
-      font-size: 0.9em;
-    }
-    footer {
-      text-align: center;
-      padding: 10px;
-      font-size: 0.8em;
-      background-color: #333;
-      color: white;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduHustlr | Dashboard</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
+    <style>
+        /* 1. CSS VARIABLES (For easy Dark Mode) */
+        :root {
+            --bg: #f4f7f6;
+            --card: #ffffff;
+            --text: #2d3436;
+            --accent: #6c5ce7;
+        }
+
+        body.dark-mode {
+            --bg: #1e272e;
+            --card: #2f3640;
+            --text: #f5f6fa;
+            --accent: #a29bfe;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: 0.3s;
+        }
+
+        /* 2. LAYOUT */
+        #ui-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            width: 300px;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+        }
+
+        h1 { margin: 0 0 10px 0; font-size: 1.5rem; color: var(--accent); }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 6px;
+            background: var(--accent);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* 3. THE MAP */
+        #map {
+            height: 100vh;
+            width: 100%;
+            z-index: 1;
+        }
+    </style>
 </head>
 <body>
 
-<header>
-  <h1>E_C Lab</h1>
-  <br>
-<a href="music.html" style="margin-right: 10px;">music</a>
-<a href="bucket.html" style="margin-right: 10px;">bucket</a>
-<a href="pokemon.html" style="margin-right: 10px;">pokemon</a>
-<a href="lego.html" style="margin-right: 10px;">hobbies</a>
-</header>
+    <div id="ui-container">
+        <div class="card">
+            <h1>EduHustlr</h1>
+            <p id="status">Ready to hustle?</p>
+            <button onclick="findMe()">📍 Get Local Weather</button>
+            <button onclick="toggleTheme()" id="theme-btn">🌙 Dark Mode</button>
+        </div>
+    </div>
 
-<br>
-<center>_developer. -<i>in training</i></center>
+    <div id="map"></div>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const myKey = '343689d5789d6fa50db0bae1d469ba6c'; // Add your key here!
+        
+        // Initialize Map
+        const map = L.map('map').setView([20, 0], 2);
+        const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
 
+        // DARK MODE TOGGLE
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const btn = document.getElementById('theme-btn');
+            const isDark = document.body.classList.contains('dark-mode');
+            
+            btn.textContent = isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
+            
+            // Spicy Add-on: Change map style to dark if dark mode is on
+            if(isDark) {
+                tiles.setUrl('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png');
+            } else {
+                tiles.setUrl('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+            }
+        }
+
+        // GEOLOCATION & WEATHER
+        async function findMe() {
+            const status = document.getElementById('status');
+            status.textContent = "Locating...";
+
+            navigator.geolocation.getCurrentPosition(async (position) => {
+                const { latitude, longitude } = position.coords;
+                map.setView([latitude, longitude], 13);
+
+                try {
+                    const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${myKey}&units=metric`);
+                    const data = await res.json();
+                    
+                    status.textContent = `It's ${Math.round(data.main.temp)}°C in ${data.name}`;
+                    
+                    L.marker([latitude, longitude]).addTo(map)
+                        .bindPopup(`<b>${data.name}</b><br>${data.weather[0].description}`)
+                        .openPopup();
+                } catch (err) {
+                    status.textContent = "Weather unavailable.";
+                }
+            }, () => {
+                status.textContent = "Location access denied.";
+            });
+        }
+    </script>
 </body>
 </html>
-
