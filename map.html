@@ -3,90 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Where Am I?</title>
+    <title>EduHustlr | Dashboard</title>
+    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    
     <style>
-        body { margin: 0; padding: 0; font-family: sans-serif; }
-        #map { height: 100vh; width: 100%; }
-        #ui-overlay {
+        /* 1. CSS VARIABLES (For easy Dark Mode) */
+        :root {
+            --bg: #f4f7f6;
+            --card: #ffffff;
+            --text: #2d3436;
+            --accent: #6c5ce7;
+        }
+
+        body.dark-mode {
+            --bg: #1e272e;
+            --card: #2f3640;
+            --text: #f5f6fa;
+            --accent: #a29bfe;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: 0.3s;
+        }
+
+        /* 2. LAYOUT */
+        #ui-container {
             position: absolute;
             top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            left: 20px;
             z-index: 1000;
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            text-align: center;
+            width: 300px;
         }
+
+        .card {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+        }
+
+        h1 { margin: 0 0 10px 0; font-size: 1.5rem; color: var(--accent); }
+
         button {
-            padding: 10px 20px;
-            background: #007bff;
-            color: white;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
             border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            border-radius: 6px;
+            background: var(--accent);
+            color: white;
             font-weight: bold;
+            cursor: pointer;
         }
-        button:hover { background: #0056b3; }
+
+        /* 3. THE MAP */
+        #map {
+            height: 100vh;
+            width: 100%;
+            z-index: 1;
+        }
     </style>
 </head>
 <body>
 
-    <div id="ui-overlay">
-        <h1>Where in the World?</h1>
-        <button onclick="findMe()">Locate Me</button>
-        <p id="status"></p>
+    <div id="ui-container">
+        <div class="card">
+            <h1>EduHustlr</h1>
+            <p id="status">Ready to hustle?</p>
+            <button onclick="findMe()">📍 Get Local Weather</button>
+            <button onclick="toggleTheme()" id="theme-btn">🌙 Dark Mode</button>
+        </div>
     </div>
 
     <div id="map"></div>
 
-   const myKey = '343689d5789d6fa50db0bae1d469ba6c'; // <--- Put your key here!
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const myKey = '343689d5789d6fa50db0bae1d469ba6c'; // Add your key here!
+        
+        // Initialize Map
+        const map = L.map('map').setView([20, 0], 2);
+        const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
 
-const map = L.map('map').setView([20, 0], 2);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-
-async function findMe() {
-    const status = document.getElementById('status');
-    status.textContent = "Locating...";
-
-    navigator.geolocation.getCurrentPosition(async (position) => {
-        const lat = position.coords.latitude;
-        const lon = position.coords.longitude;
-
-        // 1. Move the map
-        map.setView([lat, lon], 13);
-
-        // 2. Fetch the weather
-        try {
-            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${myKey}&units=metric`);
-            const data = await response.json();
-
-            const temp = data.main.temp;
-            const desc = data.weather[0].description;
-            const icon = data.weather[0].icon;
-
-            // 3. Drop a marker with the weather info
-            const weatherHTML = `
-                <div style="text-align:center">
-                    <img src="http://openweathermap.org/img/wn/${icon}@2x.png" width="50">
-                    <br><b>${temp}°C</b><br>
-                    <span style="text-transform:capitalize">${desc}</span>
-                </div>
-            `;
-
-            L.marker([lat, lon]).addTo(map)
-                .bindPopup(weatherHTML)
-                .openPopup();
-
-            status.textContent = `It's ${temp}°C in your area!`;
-
-        } catch (error) {
-            status.textContent = "Weather data failed to load.";
-            console.error(error);
+        // DARK MODE TOGGLE
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const btn = document.getElementById('theme-btn');
+            const isDark = document.body.classList.contains('dark-mode');
+            
+            btn.textContent = isDark ? "☀️ Light Mode" : "🌙 Dark Mode";
+            
+            // Spicy Add-on: Change map style to dark if dark mode is on
+            if(isDark) {
+                tiles.setUrl('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png');
+            } else {
+                tiles.setUrl('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+            }
         }
-    });
-}
+
+        // GEOLOCATION & WEATHER
+        async function findMe() {
+            const status = document.getElementById('status');
+            status.textContent = "Locating...";
+
+            navigator.geolocation.getCurrentPosition(async (position) => {
+                const { latitude, longitude } = position.coords;
+                map.setView([latitude, longitude], 13);
+
+                try {
+                    const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${myKey}&units=metric`);
+                    const data = await res.json();
+                    
+                    status.textContent = `It's ${Math.round(data.main.temp)}°C in ${data.name}`;
+                    
+                    L.marker([latitude, longitude]).addTo(map)
+                        .bindPopup(`<b>${data.name}</b><br>${data.weather[0].description}`)
+                        .openPopup();
+                } catch (err) {
+                    status.textContent = "Weather unavailable.";
+                }
+            }, () => {
+                status.textContent = "Location access denied.";
+            });
+        }
+    </script>
 </body>
 </html>
