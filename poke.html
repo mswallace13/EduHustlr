@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduHustlr | Pokédex</title>
+    <style>
+        :root {
+            --bg: #000;
+            --text: #fff;
+            --accent: #ff0000; /* Classic Poké-Red */
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Courier New', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 50px;
+            margin: 0;
+        }
+
+        .search-container {
+            margin-bottom: 30px;
+        }
+
+        input {
+            background: none;
+            border: 1px solid var(--text);
+            color: var(--text);
+            padding: 10px;
+            font-family: inherit;
+            outline: none;
+        }
+
+        button {
+            background: var(--text);
+            color: var(--bg);
+            border: 1px solid var(--text);
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #pokemon-card {
+            border: 1px solid var(--text);
+            padding: 20px;
+            width: 250px;
+            text-align: center;
+            display: none; /* Hidden until search */
+        }
+
+        #pokemon-card img {
+            width: 150px;
+            image-rendering: pixelated; /* Keeps that retro look */
+        }
+
+        .stats {
+            text-align: left;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .error { color: var(--accent); margin-top: 10px; }
+
+        a.back-home {
+            margin-top: 40px;
+            color: #888;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>POKÉ-SEARCH</h1>
+
+    <div class="search-container">
+        <input type="text" id="pokemon-name" placeholder="Enter Name (e.g. pikachu)">
+        <button onclick="getPokemon()">FETCH</button>
+    </div>
+
+    <div id="error-msg" class="error"></div>
+
+    <div id="pokemon-card">
+        <h2 id="name" style="text-transform: uppercase;"></h2>
+        <img id="sprite" src="" alt="pokemon">
+        <div class="stats">
+            <p>ID: <span id="id"></span></p>
+            <p>TYPE: <span id="type"></span></p>
+            <p>HEIGHT: <span id="height"></span></p>
+        </div>
+    </div>
+
+    <a href="index.html" class="back-home">< RETURN TO HUB</a>
+
+    <script>
+        async function getPokemon() {
+            const input = document.getElementById('pokemon-name').value.toLowerCase().trim();
+            const card = document.getElementById('pokemon-card');
+            const errorMsg = document.getElementById('error-msg');
+
+            if (!input) return;
+
+            try {
+                errorMsg.textContent = "";
+                const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${input}`);
+                
+                if (!response.ok) throw new Error("Pokémon not found");
+
+                const data = await response.json();
+
+                // Fill the card with data
+                document.getElementById('name').textContent = data.name;
+                document.getElementById('sprite').src = data.sprites.front_default;
+                document.getElementById('id').textContent = data.id;
+                document.getElementById('type').textContent = data.types.map(t => t.type.name).join(', ');
+                document.getElementById('height').textContent = data.height;
+
+                card.style.display = 'block';
+            } catch (err) {
+                card.style.display = 'none';
+                errorMsg.textContent = err.message;
+            }
+        }
+    </script>
+</body>
+</html>
