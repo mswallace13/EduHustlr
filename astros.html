@@ -76,6 +76,22 @@
         }
 
         .back-link:hover { background: var(--accent); color: #000; }
+        #previous-games {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 8px;
+}
+
+.score-row {
+    border-bottom: 1px solid #eb5e28; /* Astros orange */
+    padding: 10px 0;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.score-row:last-child {
+    border-bottom: none;
+}
     </style>
 </head>
 <body>
@@ -107,9 +123,15 @@
             <div class="big-number" id="record" style="color: var(--accent);">0 - 0</div>
             <p id="standing">Loading Standings...</p>
         </div>
+
+        <section id="previous-games">
+    <h2>PREVIOUS SCORES</h2>
+    <div id="scores-container">
+        <p>Loading recent games...</p>
+    </div>
     </div>
 
-    <a href="index.html" class="back-link">← RETURN TO HUB</a>
+      <a href="index.html" class="back-link">← RETURN TO HUB</a>
 
     <script>
         const ASTROS_ID = 117;
