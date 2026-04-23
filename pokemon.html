@@ -141,6 +141,34 @@
 
         // Run this function as soon as the page opens
         loadCollection();
+        <script>
+        const url = "https://api.tcgdex.net/v2/en/random/card";
+
+        async function getPokemonCard() {
+            try {
+                const response = await fetch(url);
+                const card = await response.json();
+
+                // This looks for an <img> tag with id="pokemon-img"
+                if(document.getElementById("pokemon-img")) {
+                    document.getElementById("pokemon-img").src = card.image + "/high.png";
+                }
+                
+                // This looks for an element with id="pokemon-name"
+                if(document.getElementById("pokemon-name")) {
+                    document.getElementById("pokemon-name").innerText = card.name;
+                }
+
+                console.log("Success! Data fetched:", card);
+            } catch (error) {
+                console.error("Error fetching the Pokémon:", error);
+            }
+        }
+
+        getPokemonCard();
+    </script>
+</body>
+</html>
     </script>
 </body>
 </html>
