@@ -3,172 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduHustlr | My Collection</title>
+    <title>EduHustlr - Pokémon TCG Explorer</title>
     <style>
-        :root {
-            --bg: #0a0a0a;
-            --text: #ffffff;
-            --card-inner: #1a1a1a;
-            --holo: linear-gradient(45deg, transparent 25%, rgba(255,255,255,0.2) 50%, transparent 75%);
-        }
-
+        /* Simple styling to make it look professional */
         body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 40px 20px;
+            justify-content: center;
+            min-height: 100vh;
             margin: 0;
+            background-color: #f0f2f5;
+            color: #333;
         }
 
-        h1 { font-family: 'Courier New', monospace; letter-spacing: 5px; margin-bottom: 10px; }
-        p.subtitle { color: #888; margin-bottom: 40px; }
-
-        #binder {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            gap: 25px;
-            width: 100%;
-            max-width: 1200px;
-        }
-
-        .pkmn-card {
-            background-color: var(--card-inner);
-            border: 2px solid #333;
-            border-radius: 18px;
-            padding: 15px;
-            position: relative;
-            overflow: hidden;
+        .card-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             text-align: center;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s;
+            max-width: 400px;
+            width: 90%;
         }
 
-        .pkmn-card:hover {
-            transform: translateY(-10px) rotate(2deg);
-            box-shadow: 0 15px 30px rgba(255, 0, 0, 0.3);
-            border-color: #ff0000;
+        #pokemon-img {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
         }
 
-        .pkmn-card::after {
-            content: "";
-            position: absolute;
-            top: -150%; left: -150%; width: 300%; height: 300%;
-            background: var(--holo);
-            transform: rotate(45deg);
-            transition: 0.6s;
+        #pokemon-img:hover {
+            transform: scale(1.05);
         }
 
-        .pkmn-card:hover::after { top: 100%; left: 100%; }
-
-        .pkmn-card img {
-            width: 160px;
-            height: 160px;
-            margin-top: 10px;
-        }
-
-        .card-name {
-            text-transform: uppercase;
+        button {
+            background-color: #ff4757;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
             font-weight: bold;
-            letter-spacing: 2px;
-            margin: 15px 0 5px 0;
+            transition: background 0.2s;
         }
 
-        .type-badge {
-            display: inline-block;
-            background: #444;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            text-transform: uppercase;
+        button:hover {
+            background-color: #e84118;
         }
 
-        .back-link { margin-top: 50px; color: #666; text-decoration: none; }
+        .info {
+            margin-bottom: 1.5rem;
+        }
+
+        h1 { margin-bottom: 0.5rem; }
+        p { color: #666; margin-top: 0; }
     </style>
 </head>
 <body>
 
-    <h1>MY BINDER</h1>
-    <p class="subtitle">A showcase of the cards I actually own.</p>
-
-    <div id="binder">
+    <div class="card-container">
+        <div class="info">
+            <h1 id="pokemon-name">Loading...</h1>
+            <p id="pokemon-rarity">Searching the tall grass...</p>
         </div>
 
-    <a href="index.html" class="back-link">← HUB</a>
+        <img id="pokemon-img" src="" alt="Pokemon Card">
+
+        <br>
+        <button onclick="getPokemonCard()">Catch Another Card</button>
+    </div>
 
     <script>
-        // 1. LIST YOUR POKEMON HERE
-        // Just add the names of the cards you own to this list!
-        const myCollection = [
-            'meowth', 
-            'durant', 
-            'snorlax', 
-            'tauros', 
-            'mimikyu', 
-            'bramblin',
-            'lileep',
-            'honchkrow',
-            'noibat',
-            'manaphy'
-        ];
-
-        async function loadCollection() {
-            const binder = document.getElementById('binder');
-
-            for (const name of myCollection) {
-                try {
-                    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
-                    const data = await response.json();
-
-                    const card = document.createElement('div');
-                    card.className = 'pkmn-card';
-                    
-                    card.innerHTML = `
-                        <div class="type-badge">${data.types[0].type.name}</div>
-                        <br>
-                        <img src="${data.sprites.other['official-artwork'].front_default}" alt="${data.name}">
-                        <div class="card-name">${data.name}</div>
-                        <div style="font-size: 0.8rem; color: #888;">NO. ${data.id}</div>
-                    `;
-
-                    binder.appendChild(card);
-                } catch (err) {
-                    console.error(`Could not load ${name}`);
-                }
-            }
-        }
-
-        // Run this function as soon as the page opens
-        loadCollection();
-        <script>
-        const url = "https://api.tcgdex.net/v2/en/random/card";
+        // The API endpoint for a random card
+        const url = "https://api.tcgdex.net/v2/en/cards/swsh3-136";
 
         async function getPokemonCard() {
+            // Visual feedback while loading
+            document.getElementById("pokemon-name").innerText = "Loading...";
+            
             try {
+                // 1. Fetch data from TCGdex
                 const response = await fetch(url);
+                
+                // 2. Convert that data into a JSON object
                 const card = await response.json();
 
-                // This looks for an <img> tag with id="pokemon-img"
-                if(document.getElementById("pokemon-img")) {
-                    document.getElementById("pokemon-img").src = card.image + "/high.png";
-                }
+                // 3. Update the HTML elements with our JSON data
+                document.getElementById("pokemon-name").innerText = card.name;
+                document.getElementById("pokemon-rarity").innerText = "Rarity: " + (card.rarity || "Unknown");
                 
-                // This looks for an element with id="pokemon-name"
-                if(document.getElementById("pokemon-name")) {
-                    document.getElementById("pokemon-name").innerText = card.name;
-                }
+                // We add /high.png to get the high-quality version of the image
+                document.getElementById("pokemon-img").src = card.image + "/high.png";
 
-                console.log("Success! Data fetched:", card);
+                // Log the whole object to the console so you can practice reading it!
+                console.log("Here is the full JSON object:", card);
+
             } catch (error) {
-                console.error("Error fetching the Pokémon:", error);
+                document.getElementById("pokemon-name").innerText = "Error!";
+                console.error("Failed to fetch data:", error);
             }
         }
 
+        // Run once on initial page load
         getPokemonCard();
     </script>
-</body>
-</html>
-    </script>
+
 </body>
 </html>
