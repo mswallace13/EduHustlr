@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduHustlr | Tokyo Travel Guide</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f8fafc;
+            --accent-color: #ff4a5a; /* Tokyo cherry/neon red */
+            --secondary-color: #38bdf8;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?auto=format&fit=crop&w=1200&q=80') no-repeat center center/cover;
+            padding: 60px 20px;
+            text-align: center;
+            border-bottom: 3px solid var(--accent-color);
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #fff;
+            text-shadow: 0 0 10px var(--accent-color);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            margin-top: 10px;
+        }
+
+        .nav-back {
+            display: inline-block;
+            margin-top: 15px;
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: bold;
+            border: 1px solid var(--secondary-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-back:hover {
+            background-color: var(--secondary-color);
+            color: var(--bg-color);
+            box-shadow: 0 0 10px var(--secondary-color);
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            border: 1px solid #334155;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 10px;
+        }
+
+        .card ul {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+
+        .card li {
+            margin-bottom: 10px;
+        }
+
+        .highlight {
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #64748b;
+            font-size: 0.9rem;
+            border-top: 1px solid #334155;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 2rem; }
+            .container { margin: 20px auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Tokyo Travel Guide</h1>
+        <p>Essential tips & details for navigating Japan's cyberpunk metropolis</p>
+        <a href="index.html" class="nav-back">← Back to Portal</a>
+    </header>
+
+    <div class="container">
+        <div class="grid">
+            
+            <div class="card">
+                <h2>🌐 Arrival & Logistics</h2>
+                <ul>
+                    <li><span class="highlight">Airports:</span> You will fly into either <strong>Narita (NRT)</strong> (further away, take the Skyliner or Narita Express) or <strong>Haneda (HND)</strong> (much closer to the city center).</li>
+                    <li><span class="highlight">Connectivity:</span> Pre-order an <strong>eSIM</strong> or pick up a pocket Wi-Fi at the airport. Google Maps is essential for navigating the train system.</li>
+                    <li><span class="highlight">Visas:</span> Tourists from many countries (US, EU, UK, Canada) get a 90-day visa-free entry stamp on arrival.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>💴 Cash & Payments</h2>
+                <ul>
+                    <li><span class="highlight">Cash is King:</span> While credit cards are widely accepted now, many small ramen shops, temples, and vending machines still <em>only</em> accept cash. Keep Yen on you!</li>
+                    <li><span class="highlight">IC Transit Cards:</span> Get a digital <strong>Suica</strong> or <strong>Pasmo</strong> card added to your Apple/Google Wallet. You can tap it for trains, buses, convenience stores, and vending machines.</li>
+                    <li><span class="highlight">ATMs:</span> The easiest place to withdraw cash using international debit cards is at any <strong>7-Eleven (7-Bank)</strong> or FamilyMart.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>🚆 Navigating the Trains</h2>
+                <ul>
+                    <li><span class="highlight">Subway vs. JR:</span> Tokyo's train lines are run by different companies (Tokyo Metro and JR East). The <strong>Yamanote Line (JR)</strong> is a massive loop connecting major hubs like Shibuya, Shinjuku, and Tokyo Station.</li>
+                    <li><span class="highlight">Train Etiquette:</span> Keep your voice to a whisper, do not talk on your phone, and put your backpack in front of you on crowded cars. No eating or drinking on local commuter trains!</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>🇯🇵 Cultural Etiquette</h2>
+                <ul>
+                    <li><span class="highlight">No Tipping:</span> Tipping is non-existent and can actually be seen as confusing or insulting. Excellent service is already included!</li>
+                    <li><span class="highlight">Trash:</span> There are almost no public trash cans on the street. Carry a small plastic bag and hold onto your trash until you return to your hotel or spot a bin next to a vending machine (only for bottles/cans).</li>
+                    <li><span class="highlight">Walking & Eating:</span> Avoid eating or drinking while walking down the street. Consume it next to the shop or vending machine where you bought it.</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>🏙️ Neighborhood Guide</h2>
+                <ul>
+                    <li><span class="highlight">Shibuya & Shinjuku:</span> Neon lights, nightlife, massive shopping centers, and the famous Shibuya Crossing.</li>
+                    <li><span class="highlight">Akihabara:</span> The anime, manga, gaming, and electronics capital of the world.</li>
+                    <li><span class="highlight">Asakusa:</span> Home to Senso-ji, Tokyo's oldest and most iconic Buddhist temple, offering a traditional historic vibe.</li>
+                    <li><span class="highlight">Harajuku:</span> Pop culture, quirky street fashion on Takeshita Street, and great street food (crepes!).</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h2>📱 Must-Download Apps</h2>
+                <ul>
+                    <li><strong>Google Maps:</strong> Incredibly accurate for Tokyo's complex train platforms and exit numbers.</li>
+                    <li><strong>Google Translate:</strong> Use the live camera feature to read menus, food labels, and signs instantly.</li>
+                    <li><strong>Japan Travel by NAVITIME:</strong> Excellent alternative for route planning, especially if trying to filter routes covered by transit passes.</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 EduHustlr Dev. Safe travels to Tokyo!</p>
+    </footer>
+
+</body>
+</html>
