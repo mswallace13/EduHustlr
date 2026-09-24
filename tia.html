@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Texas Social Studies TIA Eligibility Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen p-4 md:p-8">
+
+  <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
+    <!-- Header -->
+    <header class="bg-blue-900 text-white p-6">
+      <h1 class="text-2xl font-bold">Texas Social Studies TIA Eligibility Calculator</h1>
+      <p class="text-blue-200 text-sm mt-1">Calculate Teacher Incentive Allotment point scores & designation eligibility</p>
+    </header>
+
+    <form id="tiaForm" class="p-6 space-y-8">
+      
+      <!-- NBCT Checkbox -->
+      <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <label class="inline-flex items-center space-x-3 cursor-pointer">
+          <input type="checkbox" id="nbctStatus" class="form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-blue-500">
+          <span class="text-slate-800 font-semibold">I hold active National Board Certification (NBCT)</span>
+        </label>
+        <p class="text-xs text-slate-500 mt-1 pl-8">Per state guidelines, active NBCTs earn an automatic Nationally Board Certified designation (Acknowledged allotment tier).</p>
+      </div>
+
+      <!-- Section 1: T-TESS Observation Ratings -->
+      <div id="observationSection" class="space-y-4">
+        <h2 class="text-xl font-bold text-slate-900 border-b pb-2">1. T-TESS Observation Ratings (40% Weight)</h2>
+        <p class="text-sm text-slate-600">Enter End-of-Year ratings (1–5) across Domains 2 & 3 dimensions.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Domain 2 -->
+          <div class="space-y-3">
+            <h3 class="font-semibold text-blue-800 text-sm uppercase tracking-wider">Domain 2: Instruction</h3>
+            <div>
+              <label class="block text-xs font-medium text-slate-700">D2.A Instructional Alignment</label>
+              <input type="number" min="1" max="5" step="0.1" required class="ttess-score mt-1 w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500" placeholder="1.0 - 5.0">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-700">D2.B Instructional Content</label>
+              <input type="number" min="1" max="5" step="0.1" required class="ttess-score mt-1 w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500" placeholder="1.0 - 5.0">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-700">D2.C Monitoring & Responding</label>
+              <input type="number" min="1" max="5" step="0.1" required class="ttess-score mt-1 w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500" placeholder="1.0 - 5.0">
+            </div>
+          </div>
+
+          <!-- Domain 3 -->
+          <div class="space-y-3">
+            <h3 class="font-semibold text-blue-800 text-sm uppercase tracking-wider">Domain 3: Learning Environment</h3>
+            <div>
+              <label class="block text-xs font-medium text-slate-700">D3.A Efficient Routines</label>
+              <input type="number" min="1" max="5" step="0.1" required class="ttess-score mt-1 w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500" placeholder="1.0 - 5.0">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-700">D3.B Student Persistence</label>
+              <input type="number" min="1" max="5" step="0.1" required class="ttess-score mt-1 w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500" placeholder="1.0 - 5.0">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 2: Student Growth -->
+      <div id="growthSection" class="space-y-4">
+        <h2 class="text-xl font-bold text-slate-900 border-b pb-2">2. Student Growth (60% Weight)</h2>
+        <div>
+          <label class="block text-sm font-medium text-slate-700">% of Students Meeting/Exceeding Growth Target</label>
+          <div class="relative mt-1 max-w-xs">
+            <input type="number" id="growthPct" min="0" max="100" step="1" required class="w-full p-2 pr-8 border rounded-md focus:ring-2 focus:ring-blue-500" placeholder="0 - 100">
+            <span class="absolute right-3 top-2 text-slate-400 font-bold">%</span>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" onclick="calculateTIA()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200">
+        Calculate Eligibility
+      </button>
+    </form>
+
+    <!-- Results Display -->
+    <div id="resultsCard" class="hidden p-6 bg-slate-100 border-t border-slate-200">
+      <h2 class="text-xl font-bold text-slate-900 mb-4">Calculation Results</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-white p-4 rounded-lg border text-center">
+          <span class="text-xs font-semibold text-slate-500 uppercase">T-TESS Points (40%)</span>
+          <div id="ttessPointsDisplay" class="text-2xl font-bold text-slate-800">0.00</div>
+          <span id="ttessAvgDisplay" class="text-xs text-slate-400">(Avg: 0.00)</span>
+        </div>
+        <div class="bg-white p-4 rounded-lg border text-center">
+          <span class="text-xs font-semibold text-slate-500 uppercase">Growth Points (60%)</span>
+          <div id="growthPointsDisplay" class="text-2xl font-bold text-slate-800">0.00</div>
+          <span id="growthPctDisplay" class="text-xs text-slate-400">(0% met target)</span>
+        </div>
+        <div class="bg-white p-4 rounded-lg border text-center bg-blue-50 border-blue-200">
+          <span class="text-xs font-semibold text-blue-600 uppercase">Total Score</span>
+          <div id="totalPointsDisplay" class="text-3xl font-extrabold text-blue-900">0.00</div>
+          <span class="text-xs text-slate-400">Out of 100</span>
+        </div>
+      </div>
+
+      <!-- Eligibility Output Banner -->
+      <div id="statusBanner" class="p-4 rounded-lg text-center font-bold text-lg"></div>
+      
+      <p id="gateWarning" class="hidden text-xs text-red-600 mt-2 text-center font-medium">
+        * Ineligible: All T-TESS dimensions must receive a rating of 3.0 (Proficient) or higher.
+      </p>
+
+      <!-- Funding Lookup Note -->
+      <div class="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-900">
+        <strong>Note on Funding Amounts:</strong> Actual funding ranges from <strong>$3,000 to $36,000</strong> annually, depending on designation level, campus socioeconomic status, and rural status. Check exact allotments using the official <a href="https://tiatexas.org/funding-map/" target="_blank" class="underline text-amber-900 font-semibold">TIA Funding Map</a>.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function calculateTIA() {
+      const isNBCT = document.getElementById('nbctStatus').checked;
+      const resultsCard = document.getElementById('resultsCard');
+      const statusBanner = document.getElementById('statusBanner');
+      const gateWarning = document.getElementById('gateWarning');
+      
+      resultsCard.classList.remove('hidden');
+      gateWarning.classList.add('hidden');
+
+      if (isNBCT) {
+        document.getElementById('ttessPointsDisplay').innerText = "N/A";
+        document.getElementById('ttessAvgDisplay').innerText = "NBCT Pathway";
+        document.getElementById('growthPointsDisplay').innerText = "N/A";
+        document.getElementById('growthPctDisplay').innerText = "NBCT Pathway";
+        document.getElementById('totalPointsDisplay').innerText = "N/A";
+        
+        statusBanner.className = "p-4 rounded-lg text-center font-bold text-lg bg-emerald-100 text-emerald-800 border border-emerald-300";
+        statusBanner.innerText = "Eligible Designation: Nationally Board Certified (Acknowledged Tier)";
+        return;
+      }
+
+      // Collect T-TESS Scores
+      const ttessInputs = Array.from(document.querySelectorAll('.ttess-score'));
+      let ttessSum = 0;
+      let failsGate = false;
+
+      for (let input of ttessInputs) {
+        const val = parseFloat(input.value);
+        if (isNaN(val) || val < 1 || val > 5) {
+          alert("Please enter valid ratings between 1.0 and 5.0 for all T-TESS dimensions.");
+          return;
+        }
+        if (val < 3.0) {
+          failsGate = true; // Minimum proficient threshold gate
+        }
+        ttessSum += val;
+      }
+
+      const ttessAvg = ttessSum / ttessInputs.length;
+      const ttessPoints = (ttessAvg / 5.0) * 40.0;
+
+      // Collect Growth Scores
+      const growthPctInput = parseFloat(document.getElementById('growthPct').value);
+      if (isNaN(growthPctInput) || growthPctInput < 0 || growthPctInput > 100) {
+        alert("Please enter a valid student growth percentage between 0 and 100.");
+        return;
+      }
+
+      const growthPoints = (growthPctInput / 100.0) * 60.0;
+      const totalPoints = ttessPoints + growthPoints;
+
+      // Render Math Results
+      document.getElementById('ttessPointsDisplay').innerText = ttessPoints.toFixed(2);
+      document.getElementById('ttessAvgDisplay').innerText = `(Avg: ${ttessAvg.toFixed(2)})`;
+      document.getElementById('growthPointsDisplay').innerText = growthPoints.toFixed(2);
+      document.getElementById('growthPctDisplay').innerText = `(${growthPctInput}% met target)`;
+      document.getElementById('totalPointsDisplay').innerText = totalPoints.toFixed(2);
+
+      // Designation Logic
+      let designation = "No Designation Earned";
+      let bannerStyle = "bg-slate-200 text-slate-800";
+
+      if (failsGate) {
+        designation = "Ineligible (Domain Score < 3.0)";
+        bannerStyle = "bg-red-100 text-red-800 border border-red-300";
+        gateWarning.classList.remove('hidden');
+      } else if (totalPoints >= 78.0 && ttessAvg >= 4.5 && growthPctInput >= 70) {
+        designation = "Eligible Designation: Master Teacher";
+        bannerStyle = "bg-purple-100 text-purple-900 border border-purple-300";
+      } else if (totalPoints >= 67.2 && ttessAvg >= 3.9 && growthPctInput >= 60) {
+        designation = "Eligible Designation: Exemplary Teacher";
+        bannerStyle = "bg-indigo-100 text-indigo-900 border border-indigo-300";
+      } else if (totalPoints >= 62.6 && ttessAvg >= 3.7 && growthPctInput >= 55) {
+        designation = "Eligible Designation: Recognized Teacher";
+        bannerStyle = "bg-blue-100 text-blue-900 border border-blue-300";
+      } else if (totalPoints >= 58.0 && ttessAvg >= 3.5 && growthPctInput >= 50) {
+        designation = "Eligible Designation: Acknowledged Teacher";
+        bannerStyle = "bg-teal-100 text-teal-900 border border-teal-300";
+      }
+
+      statusBanner.className = `p-4 rounded-lg text-center font-bold text-lg ${bannerStyle}`;
+      statusBanner.innerText = designation;
+    }
+  </script>
+</body>
+</html>
