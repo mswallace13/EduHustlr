@@ -1,604 +1,327 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Texas Social Studies TIA Eligibility & Allotment Calculator</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIA Application Configuration Guidelines</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        h1, h2, h3 {
+            color: #1a365d;
+        }
+        h1 {
+            border-bottom: 2px solid #1a365d;
+            padding-bottom: 8px;
+        }
+        blockquote {
+            background-color: #f7fafc;
+            border-left: 4px solid #2b6cb0;
+            margin: 15px 0;
+            padding: 10px 15px;
+            font-style: italic;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+        th, td {
+            border: 1px solid #cbd5e0;
+            padding: 10px 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #ebf8ff;
+            color: #2c5282;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background: #e2e8f0;
+            margin: 30px 0;
+        }
+    </style>
 </head>
-<body class="bg-slate-100 text-slate-800 font-sans min-h-screen p-4 md:p-8">
+<body>
+
+    <p>Based on the TIA guidelines and the application parameters provided, here is the structured configuration to add <strong>Math (6–8)</strong>, <strong>ELA (6–8)</strong>, <strong>Science (6–8)</strong>, and <strong>Fine Arts (6–8)</strong> to your district's <strong>Weighting Tab</strong> and <strong>Eligible Teachers Tab</strong>[cite: 2].</p>
+
+    <hr>
+
+    <h2>1. Weighting Tab Configurations</h2>
+
+    <p>Because <strong>Math, ELA, and Science (6–8)</strong> share similar assessment/growth structures (typically using standardized pre/post-tests or VAM/SLOs), they can be grouped together if using the same weights[cite: 2]. <strong>Fine Arts (6–8)</strong> uses a portfolio-based student growth measure, which requires its own distinct category and table[cite: 2, 3].</p>
+
+    <h3>A. Pre-Test / Post-Test Category (Math 6–8, ELA 6–8, Science 6–8)</h3>
+    <blockquote>
+        <em>Note: Adjust assessment names, expected growth setters, and weightings to match your district's specific assessment plan (e.g., NWEA MAP, STAAR Transition, or District Assessments)[cite: 2, 3].</em>
+    </blockquote>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Field / Question</th>
+                <th>Responses</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Category #</strong></td>
+                <td>Category 1 <em>(or next sequential number)</em>[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>What teaching assignments will be included in this category?</strong></td>
+                <td>Math (Grades 6–8), ELA (Grades 6–8), Science (Grades 6–8)[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>What Pre-Test will you use to determine student growth?</strong></td>
+                <td>Third-Party Assessment (e.g., NWEA MAP / BOY STAAR / Released STAAR)[cite: 2, 3]</td>
+            </tr>
+            <tr>
+                <td><strong>Who will set the expected student growth targets?</strong></td>
+                <td>Third-Party Vendor / District-Created[cite: 2, 3]</td>
+            </tr>
+            <tr>
+                <td><strong>What Post-Test will you use to determine student growth?</strong></td>
+                <td>Third-Party Assessment (e.g., NWEA MAP / EOY STAAR)[cite: 2, 3]</td>
+            </tr>
+            <tr>
+                <td><strong>What percentage weight will Student Growth hold for this category?</strong></td>
+                <td>50%[cite: 2, 3]</td>
+            </tr>
+            <tr>
+                <td><strong>What percentage weight will Teacher Observations hold for this category?</strong></td>
+                <td>50%[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>If any, what optional components will be selected?</strong></td>
+                <td>☐ Family Survey ☐ Student Survey ☐ Other (None)[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>What percentage weight will each optional component hold?</strong></td>
+                <td>N/A[cite: 2]</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>B. Portfolios Category (Fine Arts 6–8)</h3>
+    <blockquote>
+        <em>Portfolios require a minimum of 4 proficiency levels on the rubric and a minimum of 5 student work artifacts[cite: 2, 3].</em>
+    </blockquote>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Field / Question</th>
+                <th>Responses</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Category #</strong></td>
+                <td>Category 2 <em>(or next sequential number)</em>[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>What teaching assignments will be included in this category?</strong></td>
+                <td>Fine Arts (Grades 6–8: Art, Music, Theatre, Dance)[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>What percentage weight will Portfolios hold for this category?</strong></td>
+                <td>50%[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>What percentage weight will Teacher Observations hold for this category?</strong></td>
+                <td>50%[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>If any, what optional components will be selected?</strong></td>
+                <td>☐ Family Survey ☐ Student Survey ☐ Other (None)[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>What percentage weight will each optional component hold?</strong></td>
+                <td>N/A[cite: 2]</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h2>2. Eligible Teachers Tab (Service ID Mapping)</h2>
+
+    <p>Below are the standard Texas Education Data Standards (TEDS) / PEIMS Service IDs corresponding to each newly added teaching assignment[cite: 2, 3]. Assign each to its respective Teacher Category established above[cite: 2].</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Service ID</th>
+                <th>Service Description (Content/Grade-Level)</th>
+                <th>Subject Description</th>
+                <th>Grade Level</th>
+                <th>Eligible Teacher Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>03100700</strong></td>
+                <td>Grade 6 Mathematics</td>
+                <td>Mathematics</td>
+                <td>Grade 6</td>
+                <td>Category 1[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>03100800</strong></td>
+                <td>Grade 7 Mathematics</td>
+                <td>Mathematics</td>
+                <td>Grade 7</td>
+                <td>Category 1[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>03100820</strong></td>
+                <td>Grade 8 Mathematics</td>
+                <td>Mathematics</td>
+                <td>Grade 8</td>
+                <td>Category 1[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>03200510</strong></td>
+                <td>Grade 6 English Language Arts and Reading</td>
+                <td>ELA / Reading</td>
+                <td>Grade 6</td>
+                <td>Category 1[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>03200520</strong></td>
+                <td>Grade 7 English Language Arts and Reading</td>
+                <td>ELA / Reading</td>
+                <td>Grade 7</td>
+                <td>Category 1[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>03200530</strong></td>
+                <td>Grade 8 English Language Arts and Reading</td>
+                <td>ELA / Reading</td>
+                <td>Grade 8</td>
+                <td>Category 1[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>03060600</strong></td>
+                <td>Grade 6 Science</td>
+                <td>Science</td>
+                <td>Grade 6</td>
+                <td>Category 1[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>03060700</strong></td>
+                <td>Grade 7 Science</td>
+                <td>Science</td>
+                <td>Grade 7</td>
+                <td>Category 1[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>03060800</strong></td>
+                <td>Grade 8 Science</td>
+                <td>Science</td>
+                <td>Grade 8</td>
+                <td>Category 1[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>03154100</strong></td>
+                <td>Art, Middle School 1 (Grades 6–8)</td>
+                <td>Fine Arts / Art</td>
+                <td>Grades 6–8</td>
+                <td>Category 2[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>03154200</strong></td>
+                <td>Art, Middle School 2 (Grades 6–8)</td>
+                <td>Fine Arts / Art</td>
+                <td>Grades 6–8</td>
+                <td>Category 2[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>03154300</strong></td>
+                <td>Art, Middle School 3 (Grades 6–8)</td>
+                <td>Fine Arts / Art</td>
+                <td>Grades 6–8</td>
+                <td>Category 2[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>03154600</strong></td>
+                <td>Music, Middle School 1 (Grades 6–8)</td>
+                <td>Fine Arts / Music</td>
+                <td>Grades 6–8</td>
+                <td>Category 2[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>03154700</strong></td>
+                <td>Music, Middle School 2 (Grades 6–8)</td>
+                <td>Fine Arts / Music</td>
+                <td>Grades 6–8</td>
+                <td>Category 2[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>03154800</strong></td>
+                <td>Music, Middle School 3 (Grades 6–8)</td>
+                <td>Fine Arts / Music</td>
+                <td>Grades 6–8</td>
+                <td>Category 2[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>03250900</strong></td>
+                <td>Theatre, Middle School 1 (Grades 6–8)</td>
+                <td>Fine Arts / Theatre</td>
+                <td>Grades 6–8</td>
+                <td>Category 2[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>03251000</strong></td>
+                <td>Theatre, Middle School 2 (Grades 6–8)</td>
+                <td>Fine Arts / Theatre</td>
+                <td>Grades 6–8</td>
+                <td>Category 2[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>03251100</strong></td>
+                <td>Theatre, Middle School 3 (Grades 6–8)</td>
+                <td>Fine Arts / Theatre</td>
+                <td>Grades 6–8</td>
+                <td>Category 2[cite: 2]</td>
+            </tr>
+            <tr>
+                <td><strong>03830100</strong></td>
+                <td>Dance, Middle School 1 (Grades 6–8)</td>
+                <td>Fine Arts / Dance</td>
+                <td>Grades 6–8</td>
+                <td>Category 2[cite: 2]</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h2>3. Application Readiness Checklist Checks</h2>
+    <ul>
+        <li><strong>Multiple Assessments:</strong> If Math, ELA, and Science use different test vendors or different growth target rules (e.g., NWEA MAP for Math vs. STAAR VAM for ELA), separate them into individual Category numbers on the Weighting Tab[cite: 2].</li>
+        <li><strong>Support Teachers:</strong> If any interventionists, inclusion, or dyslexia teachers support these 6–8 courses, set their category to <strong>"Multiple"</strong> on the Eligible Teachers Tab if they span more than one category[cite: 2].</li>
+    </ul>
 
-  <div class="max-w-5xl mx-auto space-y-6">
-    
-    <!-- Disclaimer Banner -->
-    <div class="bg-amber-100 border-l-4 border-amber-500 text-amber-900 p-4 rounded shadow-sm text-xs leading-relaxed">
-      <p class="font-bold text-sm">Official Estimate Disclaimer</p>
-      This tool provides an estimate for planning purposes and is not an official designation determination. Klein ISD reserves the right to adjust weighting and cut points without prior notice to ensure system validity during TEA data validation. Per district policy, teachers are cautioned against relying solely on self-calculations.
-    </div>
-
-    <!-- Main Card -->
-    <div class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
-      
-      <!-- Header -->
-      <header class="bg-blue-950 text-white p-6">
-        <div class="flex flex-col md:flex-row justify-between md:items-center gap-4">
-          <div>
-            <h1 class="text-2xl font-bold">Texas Social Studies TIA Eligibility Calculator</h1>
-            <p class="text-blue-200 text-sm mt-1">Calculates point thresholds, next-tier targets, and projected allotment payouts.</p>
-          </div>
-          <button type="button" onclick="toggleSettings()" class="bg-blue-800 hover:bg-blue-700 text-white text-xs py-2 px-3 rounded border border-blue-600 transition">
-            ⚙️ District & System Settings
-          </button>
-        </div>
-      </header>
-
-      <!-- Advanced District/System Settings Drawer (Default: Klein ISD) -->
-      <div id="settingsDrawer" class="hidden bg-slate-50 border-b border-slate-200 p-6 space-y-4 text-xs">
-        <h3 class="font-bold text-slate-900 text-sm border-b pb-2">System Weighting & Cut Points (Defaults: Klein ISD)</h3>
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div>
-            <label class="block font-semibold">T-TESS Weight (%)</label>
-            <input type="number" id="settingTtessWeight" value="40" class="mt-1 w-full p-2 border rounded">
-          </div>
-          <div>
-            <label class="block font-semibold">Growth Weight (%)</label>
-            <input type="number" id="settingGrowthWeight" value="60" class="mt-1 w-full p-2 border rounded">
-          </div>
-          <div>
-            <label class="block font-semibold">District Payout Share (%)</label>
-            <input type="number" id="settingPayoutShare" value="90" class="mt-1 w-full p-2 border rounded" placeholder="Default 90%">
-          </div>
-          <div>
-            <label class="block font-semibold">T-TESS Framework Model</label>
-            <select id="settingTtessModel" onchange="switchTtessModel()" class="mt-1 w-full p-2 border rounded bg-white">
-              <option value="8">Current 8-Dimension (Standard)</option>
-              <option value="5" selected>2026–27 T-TESS 2 Pilot (5-Dimension)</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-2">
-          <div>
-            <label class="block font-semibold">Acknowledged Cut Point</label>
-            <input type="number" step="0.1" id="cutAck" value="58.0" class="mt-1 w-full p-2 border rounded">
-          </div>
-          <div>
-            <label class="block font-semibold">Recognized Cut Point</label>
-            <input type="number" step="0.1" id="cutRec" value="62.6" class="mt-1 w-full p-2 border rounded">
-          </div>
-          <div>
-            <label class="block font-semibold">Exemplary Cut Point</label>
-            <input type="number" step="0.1" id="cutExp" value="67.2" class="mt-1 w-full p-2 border rounded">
-          </div>
-          <div>
-            <label class="block font-semibold">Master Cut Point</label>
-            <input type="number" step="0.1" id="cutMas" value="78.0" class="mt-1 w-full p-2 border rounded">
-          </div>
-        </div>
-      </div>
-
-      <form id="tiaForm" class="p-6 space-y-8">
-
-        <!-- Checklists & Status Flags -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <label class="inline-flex items-center space-x-3 cursor-pointer">
-              <input type="checkbox" id="nbctStatus" onchange="toggleNBCT()" class="form-checkbox h-5 w-5 text-blue-600 rounded">
-              <span class="text-slate-800 font-semibold text-sm">Active National Board Certification (NBCT)</span>
-            </label>
-            <p class="text-xs text-slate-500 mt-1 pl-8">National Board Certified Teachers earn an automatic Nationally Board Certified designation (Acknowledged allotment tier).</p>
-          </div>
-
-          <div class="p-4 bg-slate-50 border border-slate-200 rounded-lg text-xs space-y-2">
-            <span class="font-bold text-slate-700 block">Eligibility Checkpoints:</span>
-            <label class="flex items-center space-x-2">
-              <input type="checkbox" id="chkPeims" checked class="rounded">
-              <span>PEIMS Role 087 & 90+ days at 100% or 180+ days at 50-99%</span>
-            </label>
-            <label class="flex items-center space-x-2">
-              <input type="checkbox" id="chkRoster" checked class="rounded">
-              <span>Class Roster verification at Snapshot & Winter submission</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Section 1: T-TESS Observations -->
-        <div id="observationSection" class="space-y-4">
-          <div class="flex justify-between items-center border-b pb-2">
-            <h2 class="text-lg font-bold text-slate-900">1. T-TESS Observation Ratings</h2>
-            <span id="modelIndicator" class="text-xs bg-slate-200 px-2 py-1 rounded text-slate-700 font-medium">Model: 5-Dimension Pilot</span>
-          </div>
-
-          <div id="ttessInputsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Dynamic Injection of T-TESS dimensions via JS -->
-          </div>
-        </div>
-
-        <!-- Section 2: Student Growth Measures -->
-        <div id="growthSection" class="space-y-4">
-          <h2 class="text-lg font-bold text-slate-900 border-b pb-2">2. Student Growth Data</h2>
-          
-          <div class="flex space-x-4 mb-4 text-xs font-semibold">
-            <label class="inline-flex items-center cursor-pointer">
-              <input type="radio" name="growthInputType" value="pooled" checked onchange="toggleGrowthInput()" class="form-radio text-blue-600">
-              <span class="ml-2">Enter Class / Course Rosters (Pooled Growth)</span>
-            </label>
-            <label class="inline-flex items-center cursor-pointer">
-              <input type="radio" name="growthInputType" value="direct" onchange="toggleGrowthInput()" class="form-radio text-blue-600">
-              <span class="ml-2">Direct Scorecard Growth %</span>
-            </label>
-          </div>
-
-          <!-- Multi-Course Pooled Entry -->
-          <div id="growthPooledContainer" class="space-y-3">
-            <p class="text-xs text-slate-500">Add all assigned Social Studies courses to pool total eligible student growth across sections.</p>
-            <div id="courseRows" class="space-y-2">
-              <div class="course-row grid grid-cols-12 gap-2 items-center">
-                <input type="text" placeholder="Course Name (e.g. 8th Grade US History)" class="col-span-5 p-2 text-xs border rounded">
-                <input type="number" placeholder="Total Students" class="course-total col-span-3 p-2 text-xs border rounded" min="0">
-                <input type="number" placeholder="Met Growth" class="course-met col-span-3 p-2 text-xs border rounded" min="0">
-                <button type="button" onclick="removeCourseRow(this)" class="col-span-1 text-red-500 font-bold hover:text-red-700 text-center">✕</button>
-              </div>
-            </div>
-            <button type="button" onclick="addCourseRow()" class="text-xs bg-slate-200 hover:bg-slate-300 font-semibold text-slate-700 py-1.5 px-3 rounded">
-              + Add Another Course
-            </button>
-          </div>
-
-          <!-- Direct Scorecard Entry -->
-          <div id="growthDirectContainer" class="hidden space-y-2">
-            <label class="block text-xs font-medium text-slate-700">Enter Composite Growth % from TIA Scorecard</label>
-            <input type="number" id="directGrowthPct" min="0" max="100" step="0.1" class="w-48 p-2 border rounded text-sm" placeholder="0 - 100%">
-            <input type="number" id="directStudentCount" min="0" class="w-48 p-2 border rounded text-sm block" placeholder="Total Student Count">
-          </div>
-        </div>
-
-        <!-- Section 3: Campus Socioeconomic / Funding Calculations -->
-        <div class="space-y-4 border-t pt-6">
-          <h2 class="text-lg font-bold text-slate-900">3. Campus Allotment Estimator</h2>
-          <p class="text-xs text-slate-500">Funding allotments are determined by campus socioeconomic levels and rural designations. Enter estimates or lookup exact amounts via the official TIA Funding Map.</p>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-semibold text-slate-700">Estimated Base Allotment ($)</label>
-              <input type="number" id="allotmentBase" value="3000" class="mt-1 w-full p-2 border rounded text-xs">
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-slate-700">Campus Priority Multiplier / Point Value ($)</label>
-              <input type="number" id="allotmentMultiplier" value="5000" class="mt-1 w-full p-2 border rounded text-xs">
-            </div>
-          </div>
-        </div>
-
-        <button type="button" onclick="calculateTIA()" class="w-full bg-blue-900 hover:bg-blue-800 text-white font-bold py-3 px-4 rounded-lg transition duration-200 text-base shadow">
-          Calculate Eligibility & Allotments
-        </button>
-      </form>
-
-      <!-- Results Display Card -->
-      <div id="resultsCard" class="hidden p-6 bg-slate-50 border-t border-slate-200 space-y-6">
-        
-        <!-- Active Warnings Box -->
-        <div id="warningBox" class="hidden p-4 bg-red-50 border-l-4 border-red-500 text-red-900 rounded text-xs space-y-1">
-          <span class="font-bold block text-sm">Eligibility Warnings Identified:</span>
-          <ul id="warningList" class="list-disc pl-4 space-y-0.5"></ul>
-        </div>
-
-        <!-- Top Level Score Summary -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div class="bg-white p-4 rounded-lg border text-center">
-            <span class="text-xs font-semibold text-slate-500 uppercase">T-TESS Score Points</span>
-            <div id="resTtessPoints" class="text-2xl font-bold text-slate-800">0.00</div>
-            <span id="resTtessAvg" class="text-xs text-slate-400">(Avg: 0.00)</span>
-          </div>
-          <div class="bg-white p-4 rounded-lg border text-center">
-            <span class="text-xs font-semibold text-slate-500 uppercase">Student Growth Points</span>
-            <div id="resGrowthPoints" class="text-2xl font-bold text-slate-800">0.00</div>
-            <span id="resGrowthPct" class="text-xs text-slate-400">(0% met target)</span>
-          </div>
-          <div class="bg-white p-4 rounded-lg border text-center bg-blue-50 border-blue-200">
-            <span class="text-xs font-semibold text-blue-600 uppercase">Total System Score</span>
-            <div id="resTotalPoints" class="text-3xl font-extrabold text-blue-900">0.00</div>
-            <span class="text-xs text-slate-400">Total Cumulative Points</span>
-          </div>
-          <div class="bg-white p-4 rounded-lg border text-center bg-emerald-50 border-emerald-200">
-            <span class="text-xs font-semibold text-emerald-700 uppercase">Projected Allotment Share</span>
-            <div id="resTeacherShare" class="text-2xl font-extrabold text-emerald-900">$0</div>
-            <span id="resTotalAllotment" class="text-xs text-slate-500">Total Generated: $0</span>
-          </div>
-        </div>
-
-        <!-- Projected Tier Banner -->
-        <div id="statusBanner" class="p-4 rounded-lg text-center font-bold text-lg"></div>
-
-        <!-- Cut Points Comparison Table -->
-        <div class="bg-white rounded-lg border p-4 space-y-3">
-          <h3 class="font-bold text-sm text-slate-800">Point Score vs. Designation Cut Points</h3>
-          <div class="overflow-x-auto">
-            <table class="w-full text-xs text-left border-collapse">
-              <thead>
-                <tr class="bg-slate-100 border-b">
-                  <th class="p-2 font-bold">Designation Tier</th>
-                  <th class="p-2 font-bold">Min Growth %</th>
-                  <th class="p-2 font-bold">Required Cut Points</th>
-                  <th class="p-2 font-bold">Your Score Difference</th>
-                  <th class="p-2 font-bold">Status</th>
-                </tr>
-              </thead>
-              <tbody id="cutPointsTable">
-                <!-- Dynamically generated rows -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Next Tier Requirements ("What It Would Take") -->
-        <div id="nextTierBox" class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-xs space-y-2">
-          <h3 class="font-bold text-blue-900 text-sm">Path to the Next Tier</h3>
-          <div id="nextTierContent" class="text-slate-700 space-y-1"></div>
-        </div>
-
-        <!-- Payment Timeline Inferences -->
-        <div class="bg-slate-100 p-4 rounded-lg text-xs space-y-2 border">
-          <span class="font-bold text-slate-800 block">Inferred Payment Schedule (Based on Klein ISD Cycle):</span>
-          <p class="text-slate-600">Following state data submission and validation[cite: 1], approved allotments are paid in two equal lump-sum stipends[cite: 1]:</p>
-          <ul class="list-disc pl-5 space-y-1 text-slate-700">
-            <li><strong>First Stipend (50%):</strong> Disbursed on the <strong>June 5</strong> paycheck[cite: 1].</li>
-            <li><strong>Second Stipend (50%):</strong> Disbursed on the <strong>August 5</strong> paycheck (contingent upon continued employment)[cite: 1].</li>
-          </ul>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const dimModels = {
-      "5": [
-        { id: "d2a", label: "D2.A Instructional Alignment", domain: 2 },
-        { id: "d2b", label: "D2.B Instructional Content", domain: 2 },
-        { id: "d2c", label: "D2.C Monitoring & Responding", domain: 2 },
-        { id: "d3a", label: "D3.A Efficient Routines", domain: 3 },
-        { id: "d3b", label: "D3.B Student Persistence", domain: 3 }
-      ],
-      "8": [
-        { id: "d2a", label: "D2.1 Achieving Expectations", domain: 2 },
-        { id: "d2b", label: "D2.2 Content Knowledge & Expertise", domain: 2 },
-        { id: "d2c", label: "D2.3 Communication", domain: 2 },
-        { id: "d2d", label: "D2.4 Differentiation", domain: 2 },
-        { id: "d2e", label: "D2.5 Monitor and Adjust", domain: 2 },
-        { id: "d3a", label: "D3.1 Classroom Environment, Routines & Procedures", domain: 3 },
-        { id: "d3b", label: "D3.2 Managing Student Behavior", domain: 3 },
-        { id: "d3c", label: "D3.3 Classroom Culture", domain: 3 }
-      ]
-    };
-
-    function init() {
-      switchTtessModel();
-    }
-
-    function toggleSettings() {
-      document.getElementById('settingsDrawer').classList.toggle('hidden');
-    }
-
-    function switchTtessModel() {
-      const modelKey = document.getElementById('settingTtessModel').value;
-      const container = document.getElementById('ttessInputsContainer');
-      const indicator = document.getElementById('modelIndicator');
-      
-      indicator.innerText = modelKey === "5" ? "Model: 2026–27 T-TESS 2 Pilot (5 Dimensions)" : "Model: Standard T-TESS (8 Dimensions)";
-      container.innerHTML = "";
-
-      dimModels[modelKey].forEach(dim => {
-        const div = document.createElement('div');
-        div.className = "space-y-1";
-        div.innerHTML = `
-          <label class="block text-xs font-medium text-slate-700">${dim.label}</label>
-          <input type="number" min="1" max="5" step="0.1" required class="ttess-score w-full p-2 border rounded-md text-xs focus:ring-2 focus:ring-blue-500" placeholder="1.0 - 5.0">
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    function toggleNBCT() {
-      const isNBCT = document.getElementById('nbctStatus').checked;
-      const obsSection = document.getElementById('observationSection');
-      const growthSection = document.getElementById('growthSection');
-
-      if (isNBCT) {
-        obsSection.classList.add('opacity-40', 'pointer-events-none');
-        growthSection.classList.add('opacity-40', 'pointer-events-none');
-      } else {
-        obsSection.classList.remove('opacity-40', 'pointer-events-none');
-        growthSection.classList.remove('opacity-40', 'pointer-events-none');
-      }
-    }
-
-    function toggleGrowthInput() {
-      const type = document.querySelector('input[name="growthInputType"]:checked').value;
-      if (type === 'pooled') {
-        document.getElementById('growthPooledContainer').classList.remove('hidden');
-        document.getElementById('growthDirectContainer').classList.add('hidden');
-      } else {
-        document.getElementById('growthPooledContainer').classList.add('hidden');
-        document.getElementById('growthDirectContainer').classList.remove('hidden');
-      }
-    }
-
-    function addCourseRow() {
-      const container = document.getElementById('courseRows');
-      const div = document.createElement('div');
-      div.className = "course-row grid grid-cols-12 gap-2 items-center";
-      div.innerHTML = `
-        <input type="text" placeholder="Course Name" class="col-span-5 p-2 text-xs border rounded">
-        <input type="number" placeholder="Total Students" class="course-total col-span-3 p-2 text-xs border rounded" min="0">
-        <input type="number" placeholder="Met Growth" class="course-met col-span-3 p-2 text-xs border rounded" min="0">
-        <button type="button" onclick="removeCourseRow(this)" class="col-span-1 text-red-500 font-bold hover:text-red-700 text-center">✕</button>
-      `;
-      container.appendChild(div);
-    }
-
-    function removeCourseRow(btn) {
-      const rows = document.querySelectorAll('.course-row');
-      if (rows.length > 1) {
-        btn.closest('.course-row').remove();
-      }
-    }
-
-    function calculateTIA() {
-      const isNBCT = document.getElementById('nbctStatus').checked;
-      const warnings = [];
-      const resultsCard = document.getElementById('resultsCard');
-      resultsCard.classList.remove('hidden');
-
-      // Check Checkboxes
-      if (!document.getElementById('chkPeims').checked) warnings.push("PEIMS creditable service requirements unchecked[cite: 1].");
-      if (!document.getElementById('chkRoster').checked) warnings.push("Class roster verification requirements unchecked[cite: 1].");
-
-      // Custom District Settings
-      const wTtess = parseFloat(document.getElementById('settingTtessWeight').value) / 100.0;
-      const wGrowth = parseFloat(document.getElementById('settingGrowthWeight').value) / 100.0;
-      const pctShare = parseFloat(document.getElementById('settingPayoutShare').value) / 100.0;
-
-      const cuts = {
-        Ack: parseFloat(document.getElementById('cutAck').value),
-        Rec: parseFloat(document.getElementById('cutRec').value),
-        Exp: parseFloat(document.getElementById('cutExp').value),
-        Mas: parseFloat(document.getElementById('cutMas').value)
-      };
-
-      const minGrowthReqs = { Ack: 50, Rec: 55, Exp: 60, Mas: 70 };
-
-      if (isNBCT) {
-        renderNBCTResults(pctShare);
-        return;
-      }
-
-      // T-TESS Calculations
-      const ttessInputs = Array.from(document.querySelectorAll('.ttess-score'));
-      let ttessSum = 0;
-      let ratedBelowProficient = false;
-
-      for (let input of ttessInputs) {
-        const val = parseFloat(input.value);
-        if (isNaN(val) || val < 1 || val > 5) {
-          alert("Please enter valid ratings (1.0 - 5.0) for all T-TESS dimensions.");
-          return;
-        }
-        if (val < 3.0) ratedBelowProficient = true;
-        ttessSum += val;
-      }
-
-      if (ratedBelowProficient) {
-        warnings.push("T-TESS rating below 3.0 (Proficient) detected. State rules require a minimum of Proficient across all reported dimensions to earn any designation[cite: 1].");
-      }
-
-      const ttessAvg = ttessSum / ttessInputs.length;
-      const ttessPoints = (ttessAvg / 5.0) * (wTtess * 100.0);
-
-      // Student Growth Calculations
-      const growthType = document.querySelector('input[name="growthInputType"]:checked').value;
-      let totalStudents = 0;
-      let totalMet = 0;
-      let growthPct = 0;
-
-      if (growthType === 'pooled') {
-        const totals = document.querySelectorAll('.course-total');
-        const mets = document.querySelectorAll('.course-met');
-
-        totals.forEach((totInput, i) => {
-          const t = parseInt(totInput.value) || 0;
-          const m = parseInt(mets[i].value) || 0;
-          totalStudents += t;
-          totalMet += m;
-        });
-
-        if (totalStudents < 5) {
-          warnings.push(`Fewer than 5 total students evaluated (${totalStudents} found). Minimum student count threshold is not met[cite: 1].`);
-        }
-        growthPct = totalStudents > 0 ? (totalMet / totalStudents) * 100.0 : 0;
-      } else {
-        growthPct = parseFloat(document.getElementById('directGrowthPct').value) || 0;
-        totalStudents = parseInt(document.getElementById('directStudentCount').value) || 0;
-        if (totalStudents < 5) warnings.push("Fewer than 5 total students reported on scorecard[cite: 1].");
-      }
-
-      const growthPoints = (growthPct / 100.0) * (wGrowth * 100.0);
-      const totalPoints = ttessPoints + growthPoints;
-
-      // Render Overview Metrics
-      document.getElementById('resTtessPoints').innerText = ttessPoints.toFixed(2);
-      document.getElementById('resTtessAvg').innerText = `(Avg: ${ttessAvg.toFixed(2)})`;
-      document.getElementById('resGrowthPoints').innerText = growthPoints.toFixed(2);
-      document.getElementById('resGrowthPct').innerText = `(${growthPct.toFixed(1)}% met target)`;
-      document.getElementById('resTotalPoints').innerText = totalPoints.toFixed(2);
-
-      // Render Warnings
-      const warningBox = document.getElementById('warningBox');
-      const warningList = document.getElementById('warningList');
-      if (warnings.length > 0) {
-        warningBox.classList.remove('hidden');
-        warningList.innerHTML = warnings.map(w => `<li>${w}</li>`).join('');
-      } else {
-        warningBox.classList.add('hidden');
-      }
-
-      // Determine Eligibility Tier
-      let currentTier = "None";
-      let bannerText = "No Designation Earned";
-      let bannerStyle = "bg-slate-200 text-slate-800";
-
-      if (!ratedBelowProficient) {
-        if (totalPoints >= cuts.Mas && growthPct >= minGrowthReqs.Mas) {
-          currentTier = "Master";
-          bannerText = "Eligible Designation: Master Teacher";
-          bannerStyle = "bg-purple-100 text-purple-900 border border-purple-300";
-        } else if (totalPoints >= cuts.Exp && growthPct >= minGrowthReqs.Exp) {
-          currentTier = "Exemplary";
-          bannerText = "Eligible Designation: Exemplary Teacher";
-          bannerStyle = "bg-indigo-100 text-indigo-900 border border-indigo-300";
-        } else if (totalPoints >= cuts.Rec && growthPct >= minGrowthReqs.Rec) {
-          currentTier = "Recognized";
-          bannerText = "Eligible Designation: Recognized Teacher";
-          bannerStyle = "bg-blue-100 text-blue-900 border border-blue-300";
-        } else if (totalPoints >= cuts.Ack && growthPct >= minGrowthReqs.Ack) {
-          currentTier = "Acknowledged";
-          bannerText = "Eligible Designation: Acknowledged Teacher";
-          bannerStyle = "bg-teal-100 text-teal-900 border border-teal-300";
-        }
-      } else {
-        bannerText = "Ineligible: T-TESS Score Below Proficient Gate";
-        bannerStyle = "bg-red-100 text-red-800 border border-red-300";
-      }
-
-      const statusBanner = document.getElementById('statusBanner');
-      statusBanner.className = `p-4 rounded-lg text-center font-bold text-lg ${bannerStyle}`;
-      statusBanner.innerText = bannerText;
-
-      // Render Cut Points Comparison Table
-      renderCutTable(totalPoints, growthPct, cuts, minGrowthReqs);
-
-      // Render "What It Would Take" for Next Tier
-      renderNextTierPath(currentTier, totalPoints, growthPct, ttessAvg, totalStudents, cuts, minGrowthReqs, wTtess, wGrowth);
-
-      // Calculate Allotment
-      calculateAllotments(currentTier, pctShare);
-    }
-
-    function renderCutTable(score, growthPct, cuts, minGrowth) {
-      const tableBody = document.getElementById('cutPointsTable');
-      const tiers = [
-        { name: "Acknowledged", cut: cuts.Ack, minG: minGrowth.Ack },
-        { name: "Recognized", cut: cuts.Rec, minG: minGrowth.Rec },
-        { name: "Exemplary", cut: cuts.Exp, minG: minGrowth.Exp },
-        { name: "Master", cut: cuts.Mas, minG: minGrowth.Mas }
-      ];
-
-      tableBody.innerHTML = tiers.map(t => {
-        const diff = score - t.cut;
-        const metPoints = score >= t.cut;
-        const metGrowth = growthPct >= t.minG;
-        const met = metPoints && metGrowth;
-
-        return `
-          <tr class="border-b hover:bg-slate-50">
-            <td class="p-2 font-bold">${t.name}</td>
-            <td class="p-2">${t.minG}%</td>
-            <td class="p-2">${t.cut.toFixed(1)} pts</td>
-            <td class="p-2 ${diff >= 0 ? 'text-emerald-600 font-semibold' : 'text-red-500'}">
-              ${diff >= 0 ? '+' : ''}${diff.toFixed(2)}
-            </td>
-            <td class="p-2">
-              <span class="px-2 py-0.5 text-xs rounded ${met ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-600'}">
-                ${met ? 'Qualified' : 'Not Met'}
-              </span>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    }
-
-    function renderNextTierPath(currentTier, score, growthPct, ttessAvg, totalStudents, cuts, minGrowth, wTtess, wGrowth) {
-      const box = document.getElementById('nextTierContent');
-      const tierOrder = ["None", "Acknowledged", "Recognized", "Exemplary", "Master"];
-      const currentIndex = tierOrder.indexOf(currentTier);
-
-      if (currentIndex === 4) {
-        box.innerHTML = "🎉 <strong>Congratulations!</strong> You have reached the highest designation tier (Master Teacher).";
-        return;
-      }
-
-      const nextTier = tierOrder[currentIndex + 1];
-      const nextCut = cuts[nextTier === "Acknowledged" ? "Ack" : nextTier === "Recognized" ? "Rec" : nextTier === "Exemplary" ? "Exp" : "Mas"];
-      const nextMinGrowth = minGrowth[nextTier === "Acknowledged" ? "Ack" : nextTier === "Recognized" ? "Rec" : nextTier === "Exemplary" ? "Exp" : "Mas"];
-
-      const neededPoints = Math.max(0, nextCut - score);
-      
-      // Calculate growth % needed assuming T-TESS stays same
-      const neededGrowthPoints = nextCut - (ttessAvg / 5.0) * (wTtess * 100.0);
-      const neededGrowthPct = Math.max(nextMinGrowth, (neededGrowthPoints / (wGrowth * 100.0)) * 100.0);
-
-      // Calculate T-TESS avg needed assuming Growth % stays same
-      const neededTtessPoints = nextCut - (growthPct / 100.0) * (wGrowth * 100.0);
-      const neededTtessAvg = (neededTtessPoints / (wTtess * 100.0)) * 5.0;
-
-      let studentCountMsg = "";
-      if (totalStudents > 0) {
-        const requiredStudentsMet = Math.ceil((neededGrowthPct / 100.0) * totalStudents);
-        studentCountMsg = `<li>Or ensure at least <strong>${requiredStudentsMet} out of ${totalStudents} students</strong> met growth targets.</li>`;
-      }
-
-      box.innerHTML = `
-        <p>To reach the <strong>${nextTier}</strong> designation tier, you need <strong>+${neededPoints.toFixed(2)} overall points</strong>:</p>
-        <ul class="list-disc pl-5 space-y-1 mt-1">
-          <li>Increase student growth to at least <strong>${neededGrowthPct.toFixed(1)}%</strong> (keeping current T-TESS average).</li>
-          ${studentCountMsg}
-          <li>Or increase T-TESS average to <strong>${Math.min(5.0, neededTtessAvg).toFixed(2)}</strong> (keeping current growth percentage).</li>
-        </ul>
-      `;
-    }
-
-    function calculateAllotments(tier, pctShare) {
-      const base = parseFloat(document.getElementById('allotmentBase').value) || 0;
-      const mult = parseFloat(document.getElementById('allotmentMultiplier').value) || 0;
-
-      const tierMultipliers = {
-        "Acknowledged": 1,
-        "Recognized": 1.5,
-        "Exemplary": 2.5,
-        "Master": 4
-      };
-
-      if (tier === "None" || !(tier in tierMultipliers)) {
-        document.getElementById('resTeacherShare').innerText = "$0";
-        document.getElementById('resTotalAllotment').innerText = "Total Generated: $0";
-        return;
-      }
-
-      const totalGenerated = base + (mult * tierMultipliers[tier]);
-      const teacherShare = totalGenerated * pctShare;
-
-      document.getElementById('resTeacherShare').innerText = `$${Math.round(teacherShare).toLocaleString()}`;
-      document.getElementById('resTotalAllotment').innerText = `Total Campus Generated: $${Math.round(totalGenerated).toLocaleString()} (${(pctShare * 100).toFixed(0)}% set aside for teacher)`;
-    }
-
-    function renderNBCTResults(pctShare) {
-      document.getElementById('resTtessPoints').innerText = "N/A";
-      document.getElementById('resTtessAvg').innerText = "NBCT Pathway";
-      document.getElementById('resGrowthPoints').innerText = "N/A";
-      document.getElementById('resGrowthPct').innerText = "NBCT Pathway";
-      document.getElementById('resTotalPoints').innerText = "N/A";
-
-      const statusBanner = document.getElementById('statusBanner');
-      statusBanner.className = "p-4 rounded-lg text-center font-bold text-lg bg-emerald-100 text-emerald-900 border border-emerald-300";
-      statusBanner.innerText = "Eligible Designation: Nationally Board Certified (Acknowledged Tier Allotment)";
-
-      calculateAllotments("Acknowledged", pctShare);
-
-      document.getElementById('nextTierContent').innerHTML = "National Board Certified Teachers earn an automatic designation outside of local designation scoring systems[cite: 1].";
-    }
-
-    window.onload = init;
-  </script>
 </body>
 </html>
