@@ -37,6 +37,7 @@
               <option value="math">Mathematics (Grades 6–8)</option>
               <option value="ela">English Language Arts and Reading (Grades 6–8)</option>
               <option value="science">Science (Grades 6–8)</option>
+              <option value="socialstudies">Social Studies (Grades 6–8)</option>
               <option value="finearts">Fine Arts (Grades 6–8)</option>
             </select>
           </div>
@@ -168,8 +169,8 @@
     const subjectConfigs = {
       math: {
         category: "Category 1",
-        modelNote: "Pre-Test / Post-Test Growth Model (e.g., NWEA MAP, STAAR Transition, or District Assessment)[cite: 2, 3].",
-        growthLabel: "% of Students Meeting/Exceeding Math Growth Target",
+        modelNote: "NWEA MAP Growth Assessment Model (Fall-to-Spring Growth Projection)[cite: 2, 3].",
+        growthLabel: "% of Students Meeting/Exceeding NWEA MAP Math Growth Target",
         serviceIds: [
           { id: "03100700", desc: "Grade 6 Mathematics", subject: "Mathematics", grade: "Grade 6", cat: "Category 1" },
           { id: "03100800", desc: "Grade 7 Mathematics", subject: "Mathematics", grade: "Grade 7", cat: "Category 1" },
@@ -178,8 +179,8 @@
       },
       ela: {
         category: "Category 1",
-        modelNote: "Pre-Test / Post-Test or Value-Added Model (VAM / STAAR / NWEA MAP)[cite: 2, 3].",
-        growthLabel: "% of Students Meeting/Exceeding ELA/Reading Growth Target",
+        modelNote: "NWEA MAP Growth Assessment Model (Fall-to-Spring Growth Projection)[cite: 2, 3].",
+        growthLabel: "% of Students Meeting/Exceeding NWEA MAP Reading Growth Target",
         serviceIds: [
           { id: "03200510", desc: "Grade 6 English Language Arts and Reading", subject: "ELA / Reading", grade: "Grade 6", cat: "Category 1" },
           { id: "03200520", desc: "Grade 7 English Language Arts and Reading", subject: "ELA / Reading", grade: "Grade 7", cat: "Category 1" },
@@ -188,12 +189,22 @@
       },
       science: {
         category: "Category 1",
-        modelNote: "Pre-Test / Post-Test or Student Learning Objectives (SLO / District Assessment)[cite: 2, 3].",
-        growthLabel: "% of Students Meeting/Exceeding Science Growth Target",
+        modelNote: "NWEA MAP Growth Assessment Model (Fall-to-Spring Growth Projection)[cite: 2, 3].",
+        growthLabel: "% of Students Meeting/Exceeding NWEA MAP Science Growth Target",
         serviceIds: [
           { id: "03060600", desc: "Grade 6 Science", subject: "Science", grade: "Grade 6", cat: "Category 1" },
           { id: "03060700", desc: "Grade 7 Science", subject: "Science", grade: "Grade 7", cat: "Category 1" },
           { id: "03060800", desc: "Grade 8 Science", subject: "Science", grade: "Grade 8", cat: "Category 1" }
+        ]
+      },
+      socialstudies: {
+        category: "Category 1",
+        modelNote: "NWEA MAP Growth Assessment Model (Fall-to-Spring Growth Projection)[cite: 2, 3].",
+        growthLabel: "% of Students Meeting/Exceeding NWEA MAP Growth Target",
+        serviceIds: [
+          { id: "03340600", desc: "Grade 6 Social Studies", subject: "Social Studies", grade: "Grade 6", cat: "Category 1" },
+          { id: "03340700", desc: "Grade 7 Social Studies (Texas History)", subject: "Social Studies", grade: "Grade 7", cat: "Category 1" },
+          { id: "03340800", desc: "Grade 8 Social Studies (U.S. History Early Colonial to Reconstruction)", subject: "Social Studies", grade: "Grade 8", cat: "Category 1" }
         ]
       },
       finearts: {
