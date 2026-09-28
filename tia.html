@@ -1,368 +1,388 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TIA Application Configuration Guidelines & Score Calculator</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333333;
-            max-width: 1000px;
-            margin: 20px auto;
-            padding: 0 20px;
-        }
-        h1, h2, h3 {
-            color: #1a365d;
-        }
-        h1 {
-            border-bottom: 2px solid #1a365d;
-            padding-bottom: 8px;
-        }
-        blockquote {
-            background-color: #f7fafc;
-            border-left: 4px solid #2b6cb0;
-            margin: 15px 0;
-            padding: 10px 15px;
-            font-style: italic;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            font-size: 0.95em;
-        }
-        th, td {
-            border: 1px solid #cbd5e0;
-            padding: 10px 12px;
-            text-align: left;
-        }
-        th {
-            background-color: #ebf8ff;
-            color: #2c5282;
-            font-weight: bold;
-        }
-        tr:nth-child(even) {
-            background-color: #f8fafc;
-        }
-        ul {
-            padding-left: 20px;
-        }
-        li {
-            margin-bottom: 8px;
-        }
-        hr {
-            border: 0;
-            height: 1px;
-            background: #e2e8f0;
-            margin: 30px 0;
-        }
-        /* Interactive Calculator Styling - Kept minimal to match document aesthetic */
-        .calc-panel {
-            background-color: #f7fafc;
-            border: 1px solid #cbd5e0;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 4px;
-        }
-        .calc-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-        @media (max-width: 600px) {
-            .calc-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 5px;
-            color: #2c5282;
-        }
-        select, input[type="number"] {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #cbd5e0;
-            border-radius: 4px;
-            box-sizing: border-box;
-            font-size: 0.95em;
-        }
-        button {
-            background-color: #2b6cb0;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            font-size: 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-top: 15px;
-            width: 100%;
-        }
-        button:hover {
-            background-color: #2c5282;
-        }
-        .result-box {
-            margin-top: 15px;
-            padding: 12px 15px;
-            background-color: #ebf8ff;
-            border-left: 4px solid #2b6cb0;
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TIA Eligibility & Score Calculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen p-4 md:p-8">
 
-    <p>Based on the TIA guidelines and the application parameters provided, here is the structured configuration to add <strong>Math (6–8)</strong>, <strong>ELA (6–8)</strong>, <strong>Science (6–8)</strong>, and <strong>Fine Arts (6–8)</strong> to your district's <strong>Weighting Tab</strong> and <strong>Eligible Teachers Tab</strong>[cite: 2].</p>
+  <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden">
+    <!-- Header -->
+    <header class="bg-blue-900 text-white p-6">
+      <h1 class="text-2xl font-bold">Texas TIA Eligibility & Weighting Calculator</h1>
+      <p class="text-blue-200 text-sm mt-1">Calculate Teacher Incentive Allotment point scores & designation eligibility across content areas</p>
+    </header>
 
-    <!-- Interactive Subject Selector & Interactive Calculator -->
-    <div class="calc-panel">
-        <h3 style="margin-top: 0;">Interactive TIA Subject & Score Calculator</h3>
-        <p>Select a content area to dynamically update the configuration parameters and calculate the overall weighted score based on your district's guidelines[cite: 2, 3].</p>
+    <form id="tiaForm" class="p-6 space-y-8">
+      
+      <!-- NBCT Checkbox -->
+      <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <label class="inline-flex items-center space-x-3 cursor-pointer">
+          <input type="checkbox" id="nbctStatus" onchange="toggleNBCT()" class="form-checkbox h-5 w-5 text-blue-600 rounded focus:ring-blue-500">
+          <span class="text-slate-800 font-semibold">I hold active National Board Certification (NBCT)</span>
+        </label>
+        <p class="text-xs text-slate-500 mt-1 pl-8">Per state guidelines, active NBCTs earn an automatic Nationally Board Certified designation (Acknowledged allotment tier)[cite: 2, 3].</p>
+      </div>
+
+      <!-- Subject Area & Weighting Selection -->
+      <div id="subjectSection" class="p-4 bg-slate-50 border border-slate-200 rounded-lg space-y-4">
+        <h2 class="text-lg font-bold text-slate-900 border-b pb-2">Teaching Assignment & Assessment Configuration</h2>
         
-        <div style="margin-bottom: 15px;">
-            <label for="subjectSelect">Select Teaching Assignment / Content Area:</label>
-            <select id="subjectSelect" onchange="updateSubjectArea()">
-                <option value="math">Mathematics (Grades 6–8)</option>
-                <option value="ela">English Language Arts and Reading (Grades 6–8)</option>
-                <option value="science">Science (Grades 6–8)</option>
-                <option value="finearts">Fine Arts (Grades 6–8)</option>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label for="subjectSelect" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Teaching Assignment / Content Area</label>
+            <select id="subjectSelect" onchange="updateSubjectConfig()" class="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 bg-white">
+              <option value="math">Mathematics (Grades 6–8)</option>
+              <option value="ela">English Language Arts and Reading (Grades 6–8)</option>
+              <option value="science">Science (Grades 6–8)</option>
+              <option value="finearts">Fine Arts (Grades 6–8)</option>
             </select>
+          </div>
+
+          <div>
+            <label for="categoryDisplay" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">Eligible Teacher Category</label>
+            <input type="text" id="categoryDisplay" readonly class="w-full p-2 border rounded-md bg-slate-100 text-slate-600 font-medium" value="Category 1">
+          </div>
         </div>
 
-        <form id="tiaCalcForm" onsubmit="event.preventDefault(); calculateScore();">
-            <div class="calc-grid">
-                <div>
-                    <label for="obsScore">Teacher Observation Score (%):</label>
-                    <input type="number" id="obsScore" min="0" max="100" step="0.1" placeholder="e.g., 85" required>
-                </div>
-                <div>
-                    <label id="growthLabel" for="growthScore">Student Growth Score (%):</label>
-                    <input type="number" id="growthScore" min="0" max="100" step="0.1" placeholder="e.g., 70" required>
-                </div>
-                <div>
-                    <label for="obsWeight">Observation Weight (%):</label>
-                    <input type="number" id="obsWeight" value="50" min="0" max="100" required onchange="syncWeights('obs')">
-                </div>
-                <div>
-                    <label for="growthWeight">Growth Weight (%):</label>
-                    <input type="number" id="growthWeight" value="50" min="0" max="100" required onchange="syncWeights('growth')">
-                </div>
+        <!-- Custom Weight Inputs -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+          <div>
+            <label for="obsWeightInput" class="block text-xs font-medium text-slate-700">Observation Weight (%)</label>
+            <input type="number" id="obsWeightInput" value="50" min="0" max="100" onchange="syncWeights('obs')" class="mt-1 w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label for="growthWeightInput" class="block text-xs font-medium text-slate-700">Student Growth Weight (%)</label>
+            <input type="number" id="growthWeightInput" value="50" min="0" max="100" onchange="syncWeights('growth')" class="mt-1 w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500">
+          </div>
+        </div>
+
+        <div id="modelDescriptionNote" class="text-xs text-blue-800 bg-blue-50 p-3 rounded border border-blue-200 italic mt-2">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- Section 1: T-TESS Observation Ratings -->
+      <div id="observationSection" class="space-y-4">
+        <h2 id="observationHeader" class="text-xl font-bold text-slate-900 border-b pb-2">1. T-TESS Observation Ratings (50% Weight)</h2>
+        <p class="text-sm text-slate-600">Enter End-of-Year ratings (1.0–5.0) across Domains 2 & 3 dimensions[cite: 2].</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Domain 2 -->
+          <div class="space-y-3">
+            <h3 class="font-semibold text-blue-800 text-sm uppercase tracking-wider">Domain 2: Instruction</h3>
+            <div>
+              <label class="block text-xs font-medium text-slate-700">D2.A Instructional Alignment</label>
+              <input type="number" min="1" max="5" step="0.1" required class="ttess-score mt-1 w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500" placeholder="1.0 - 5.0">
             </div>
-            <button type="submit">Calculate Final Weighted Score</button>
-        </form>
+            <div>
+              <label class="block text-xs font-medium text-slate-700">D2.B Instructional Content</label>
+              <input type="number" min="1" max="5" step="0.1" required class="ttess-score mt-1 w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500" placeholder="1.0 - 5.0">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-700">D2.C Monitoring & Responding</label>
+              <input type="number" min="1" max="5" step="0.1" required class="ttess-score mt-1 w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500" placeholder="1.0 - 5.0">
+            </div>
+          </div>
 
-        <div id="calcResult" class="result-box">
-            <strong>Calculated Result:</strong>
-            <div id="calcResultText"></div>
+          <!-- Domain 3 -->
+          <div class="space-y-3">
+            <h3 class="font-semibold text-blue-800 text-sm uppercase tracking-wider">Domain 3: Learning Environment</h3>
+            <div>
+              <label class="block text-xs font-medium text-slate-700">D3.A Efficient Routines</label>
+              <input type="number" min="1" max="5" step="0.1" required class="ttess-score mt-1 w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500" placeholder="1.0 - 5.0">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-slate-700">D3.B Student Persistence</label>
+              <input type="number" min="1" max="5" step="0.1" required class="ttess-score mt-1 w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500" placeholder="1.0 - 5.0">
+            </div>
+          </div>
         </div>
+      </div>
+
+      <!-- Section 2: Student Growth -->
+      <div id="growthSection" class="space-y-4">
+        <h2 id="growthHeader" class="text-xl font-bold text-slate-900 border-b pb-2">2. Student Growth Score (50% Weight)</h2>
+        <div>
+          <label id="growthPctLabel" class="block text-sm font-medium text-slate-700">% of Students Meeting/Exceeding Growth Target</label>
+          <div class="relative mt-1 max-w-xs">
+            <input type="number" id="growthPct" min="0" max="100" step="1" required class="w-full p-2 pr-8 border rounded-md focus:ring-2 focus:ring-blue-500" placeholder="0 - 100">
+            <span class="absolute right-3 top-2 text-slate-400 font-bold">%</span>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" onclick="calculateTIA()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200">
+        Calculate Eligibility & Points
+      </button>
+    </form>
+
+    <!-- Dynamic Service ID Reference Table Section -->
+    <div class="p-6 bg-slate-50 border-t border-slate-200">
+      <h3 class="font-bold text-slate-900 text-lg mb-2">Service ID & Assignment Mapping (Eligible Teachers Tab)</h3>
+      <p class="text-xs text-slate-600 mb-4">Corresponding Texas Education Data Standards (TEDS) / PEIMS Service IDs for the selected content area[cite: 2, 3]:</p>
+      <div id="serviceIdTableContainer" class="overflow-x-auto">
+        <!-- Dynamically Populated Table -->
+      </div>
     </div>
 
-    <hr>
+    <!-- Results Display -->
+    <div id="resultsCard" class="hidden p-6 bg-slate-100 border-t border-slate-200">
+      <h2 class="text-xl font-bold text-slate-900 mb-4">Calculation Results</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-white p-4 rounded-lg border text-center">
+          <span id="ttessCardLabel" class="text-xs font-semibold text-slate-500 uppercase">T-TESS Points (50%)</span>
+          <div id="ttessPointsDisplay" class="text-2xl font-bold text-slate-800">0.00</div>
+          <span id="ttessAvgDisplay" class="text-xs text-slate-400">(Avg: 0.00)</span>
+        </div>
+        <div class="bg-white p-4 rounded-lg border text-center">
+          <span id="growthCardLabel" class="text-xs font-semibold text-slate-500 uppercase">Growth Points (50%)</span>
+          <div id="growthPointsDisplay" class="text-2xl font-bold text-slate-800">0.00</div>
+          <span id="growthPctDisplay" class="text-xs text-slate-400">(0% met target)</span>
+        </div>
+        <div class="bg-white p-4 rounded-lg border text-center bg-blue-50 border-blue-200">
+          <span class="text-xs font-semibold text-blue-600 uppercase">Total Weighted Score</span>
+          <div id="totalPointsDisplay" class="text-3xl font-extrabold text-blue-900">0.00</div>
+          <span class="text-xs text-slate-400">Out of 100</span>
+        </div>
+      </div>
 
-    <h2>1. Weighting Tab Configurations</h2>
+      <!-- Eligibility Output Banner -->
+      <div id="statusBanner" class="p-4 rounded-lg text-center font-bold text-lg"></div>
+      
+      <p id="gateWarning" class="hidden text-xs text-red-600 mt-2 text-center font-medium">
+        * Ineligible: All T-TESS dimensions must receive a rating of 3.0 (Proficient) or higher[cite: 2].
+      </p>
 
-    <p>Because <strong>Math, ELA, and Science (6–8)</strong> share similar assessment/growth structures (typically using standardized pre/post-tests or VAM/SLOs), they can be grouped together if using the same weights[cite: 2]. <strong>Fine Arts (6–8)</strong> uses a portfolio-based student growth measure, which requires its own distinct category and table[cite: 2, 3].</p>
-
-    <div id="dynamicWeightingSection">
-        <!-- Dynamically rendered based on selected subject -->
+      <!-- Funding Lookup Note -->
+      <div class="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-900">
+        <strong>Note on Funding Amounts:</strong> Actual funding ranges from <strong>$3,000 to $36,000</strong> annually, depending on designation level, campus socioeconomic status, and rural status[cite: 2]. Check exact allotments using the official <a href="https://tiatexas.org/funding-map/" target="_blank" class="underline text-amber-900 font-semibold">TIA Funding Map</a>.
+      </div>
     </div>
+  </div>
 
-    <hr>
-
-    <h2>2. Eligible Teachers Tab (Service ID Mapping)</h2>
-
-    <p>Below are the standard Texas Education Data Standards (TEDS) / PEIMS Service IDs corresponding to each newly added teaching assignment[cite: 2, 3]. Assign each to its respective Teacher Category established above[cite: 2].</p>
-
-    <div id="dynamicServiceIdSection">
-        <!-- Dynamically rendered based on selected subject -->
-    </div>
-
-    <hr>
-
-    <h2>3. Application Readiness Checklist Checks</h2>
-    <ul>
-        <li><strong>Multiple Assessments:</strong> If Math, ELA, and Science use different test vendors or different growth target rules (e.g., NWEA MAP for Math vs. STAAR VAM for ELA), separate them into individual Category numbers on the Weighting Tab[cite: 2].</li>
-        <li><strong>Support Teachers:</strong> If any interventionists, inclusion, or dyslexia teachers support these 6–8 courses, set their category to <strong>"Multiple"</strong> on the Eligible Teachers Tab if they span more than one category[cite: 2].</li>
-    </ul>
-
-<script>
-    const subjectConfigurations = {
-        math: {
-            title: "A. Pre-Test / Post-Test Category (Math 6–8)",
-            note: "Adjust assessment names, expected growth setters, and weightings to match your district's specific assessment plan (e.g., NWEA MAP, STAAR Transition, or District Assessments)[cite: 2, 3].",
-            categoryNum: "Category 1 (or next sequential number)",
-            assignments: "Math (Grades 6–8)",
-            preTest: "Third-Party Assessment (e.g., NWEA MAP / BOY STAAR / Released STAAR)",
-            growthSetter: "Third-Party Vendor / District-Created",
-            postTest: "Third-Party Assessment (e.g., NWEA MAP / EOY STAAR)",
-            growthLabel: "Student Growth Score (% meeting growth target):",
-            serviceIds: [
-                { id: "03100700", desc: "Grade 6 Mathematics", subject: "Mathematics", grade: "Grade 6", cat: "Category 1" },
-                { id: "03100800", desc: "Grade 7 Mathematics", subject: "Mathematics", grade: "Grade 7", cat: "Category 1" },
-                { id: "03100820", desc: "Grade 8 Mathematics", subject: "Mathematics", grade: "Grade 8", cat: "Category 1" }
-            ]
-        },
-        ela: {
-            title: "A. Pre-Test / Post-Test Category (ELA 6–8)",
-            note: "Adjust assessment names, expected growth setters, and weightings to match your district's specific assessment plan (e.g., NWEA MAP, STAAR Transition, or District Assessments)[cite: 2, 3].",
-            categoryNum: "Category 1 (or next sequential number)",
-            assignments: "ELA (Grades 6–8)",
-            preTest: "Third-Party Assessment / STAAR Growth / VAM",
-            growthSetter: "Third-Party Vendor / District-Created / VAM",
-            postTest: "Third-Party Assessment / EOY STAAR",
-            growthLabel: "Student Growth Score (% meeting growth target):",
-            serviceIds: [
-                { id: "03200510", desc: "Grade 6 English Language Arts and Reading", subject: "ELA / Reading", grade: "Grade 6", cat: "Category 1" },
-                { id: "03200520", desc: "Grade 7 English Language Arts and Reading", subject: "ELA / Reading", grade: "Grade 7", cat: "Category 1" },
-                { id: "03200530", desc: "Grade 8 English Language Arts and Reading", subject: "ELA / Reading", grade: "Grade 8", cat: "Category 1" }
-            ]
-        },
-        science: {
-            title: "A. Pre-Test / Post-Test Category (Science 6–8)",
-            note: "Adjust assessment names, expected growth setters, and weightings to match your district's specific assessment plan (e.g., District Assessments, SLOs, or STAAR)[cite: 2, 3].",
-            categoryNum: "Category 1 (or next sequential number)",
-            assignments: "Science (Grades 6–8)",
-            preTest: "District Pre-Assessment / Student Learning Objectives (SLO)",
-            growthSetter: "District Rubric / Assessment Committee",
-            postTest: "District Post-Assessment / EOY Exam",
-            growthLabel: "Student Growth Score (% meeting growth target):",
-            serviceIds: [
-                { id: "03060600", desc: "Grade 6 Science", subject: "Science", grade: "Grade 6", cat: "Category 1" },
-                { id: "03060700", desc: "Grade 7 Science", subject: "Science", grade: "Grade 7", cat: "Category 1" },
-                { id: "03060800", desc: "Grade 8 Science", subject: "Science", grade: "Grade 8", cat: "Category 1" }
-            ]
-        },
-        finearts: {
-            title: "B. Portfolios Category (Fine Arts 6–8)",
-            note: "Portfolios require a minimum of 4 proficiency levels on the rubric and a minimum of 5 student work artifacts[cite: 2, 3].",
-            categoryNum: "Category 2 (or next sequential number)",
-            assignments: "Fine Arts (Grades 6–8: Art, Music, Theatre, Dance)",
-            preTest: "Portfolio Assessment Standard (Rubric Based)",
-            growthSetter: "District Fine Arts Rubric Committee",
-            postTest: "Portfolio Assessment Standard (5 Artifacts Min)",
-            growthLabel: "Portfolio Score (% meeting growth standard):",
-            serviceIds: [
-                { id: "03154100", desc: "Art, Middle School 1 (Grades 6–8)", subject: "Fine Arts / Art", grade: "Grades 6–8", cat: "Category 2" },
-                { id: "03154200", desc: "Art, Middle School 2 (Grades 6–8)", subject: "Fine Arts / Art", grade: "Grades 6–8", cat: "Category 2" },
-                { id: "03154300", desc: "Art, Middle School 3 (Grades 6–8)", subject: "Fine Arts / Art", grade: "Grades 6–8", cat: "Category 2" },
-                { id: "03154600", desc: "Music, Middle School 1 (Grades 6–8)", subject: "Fine Arts / Music", grade: "Grades 6–8", cat: "Category 2" },
-                { id: "03154700", desc: "Music, Middle School 2 (Grades 6–8)", subject: "Fine Arts / Music", grade: "Grades 6–8", cat: "Category 2" },
-                { id: "03154800", desc: "Music, Middle School 3 (Grades 6–8)", subject: "Fine Arts / Music", grade: "Grades 6–8", cat: "Category 2" },
-                { id: "03250900", desc: "Theatre, Middle School 1 (Grades 6–8)", subject: "Fine Arts / Theatre", grade: "Grades 6–8", cat: "Category 2" },
-                { id: "03251000", desc: "Theatre, Middle School 2 (Grades 6–8)", subject: "Fine Arts / Theatre", grade: "Grades 6–8", cat: "Category 2" },
-                { id: "03251100", desc: "Theatre, Middle School 3 (Grades 6–8)", subject: "Fine Arts / Theatre", grade: "Grades 6–8", cat: "Category 2" },
-                { id: "03830100", desc: "Dance, Middle School 1 (Grades 6–8)", subject: "Fine Arts / Dance", grade: "Grades 6–8", cat: "Category 2" }
-            ]
-        }
+  <script>
+    const subjectConfigs = {
+      math: {
+        category: "Category 1",
+        modelNote: "Pre-Test / Post-Test Growth Model (e.g., NWEA MAP, STAAR Transition, or District Assessment)[cite: 2, 3].",
+        growthLabel: "% of Students Meeting/Exceeding Math Growth Target",
+        serviceIds: [
+          { id: "03100700", desc: "Grade 6 Mathematics", subject: "Mathematics", grade: "Grade 6", cat: "Category 1" },
+          { id: "03100800", desc: "Grade 7 Mathematics", subject: "Mathematics", grade: "Grade 7", cat: "Category 1" },
+          { id: "03100820", desc: "Grade 8 Mathematics", subject: "Mathematics", grade: "Grade 8", cat: "Category 1" }
+        ]
+      },
+      ela: {
+        category: "Category 1",
+        modelNote: "Pre-Test / Post-Test or Value-Added Model (VAM / STAAR / NWEA MAP)[cite: 2, 3].",
+        growthLabel: "% of Students Meeting/Exceeding ELA/Reading Growth Target",
+        serviceIds: [
+          { id: "03200510", desc: "Grade 6 English Language Arts and Reading", subject: "ELA / Reading", grade: "Grade 6", cat: "Category 1" },
+          { id: "03200520", desc: "Grade 7 English Language Arts and Reading", subject: "ELA / Reading", grade: "Grade 7", cat: "Category 1" },
+          { id: "03200530", desc: "Grade 8 English Language Arts and Reading", subject: "ELA / Reading", grade: "Grade 8", cat: "Category 1" }
+        ]
+      },
+      science: {
+        category: "Category 1",
+        modelNote: "Pre-Test / Post-Test or Student Learning Objectives (SLO / District Assessment)[cite: 2, 3].",
+        growthLabel: "% of Students Meeting/Exceeding Science Growth Target",
+        serviceIds: [
+          { id: "03060600", desc: "Grade 6 Science", subject: "Science", grade: "Grade 6", cat: "Category 1" },
+          { id: "03060700", desc: "Grade 7 Science", subject: "Science", grade: "Grade 7", cat: "Category 1" },
+          { id: "03060800", desc: "Grade 8 Science", subject: "Science", grade: "Grade 8", cat: "Category 1" }
+        ]
+      },
+      finearts: {
+        category: "Category 2",
+        modelNote: "Portfolio Assessment Model (Requires a minimum of 4 rubric proficiency levels and 5 student work artifacts)[cite: 2, 3].",
+        growthLabel: "% of Portfolios Meeting/Exceeding Growth Standards",
+        serviceIds: [
+          { id: "03154100", desc: "Art, Middle School 1 (Grades 6–8)", subject: "Fine Arts / Art", grade: "Grades 6–8", cat: "Category 2" },
+          { id: "03154200", desc: "Art, Middle School 2 (Grades 6–8)", subject: "Fine Arts / Art", grade: "Grades 6–8", cat: "Category 2" },
+          { id: "03154300", desc: "Art, Middle School 3 (Grades 6–8)", subject: "Fine Arts / Art", grade: "Grades 6–8", cat: "Category 2" },
+          { id: "03154600", desc: "Music, Middle School 1 (Grades 6–8)", subject: "Fine Arts / Music", grade: "Grades 6–8", cat: "Category 2" },
+          { id: "03154700", desc: "Music, Middle School 2 (Grades 6–8)", subject: "Fine Arts / Music", grade: "Grades 6–8", cat: "Category 2" },
+          { id: "03154800", desc: "Music, Middle School 3 (Grades 6–8)", subject: "Fine Arts / Music", grade: "Grades 6–8", cat: "Category 2" },
+          { id: "03250900", desc: "Theatre, Middle School 1 (Grades 6–8)", subject: "Fine Arts / Theatre", grade: "Grades 6–8", cat: "Category 2" },
+          { id: "03251000", desc: "Theatre, Middle School 2 (Grades 6–8)", subject: "Fine Arts / Theatre", grade: "Grades 6–8", cat: "Category 2" },
+          { id: "03251100", desc: "Theatre, Middle School 3 (Grades 6–8)", subject: "Fine Arts / Theatre", grade: "Grades 6–8", cat: "Category 2" },
+          { id: "03830100", desc: "Dance, Middle School 1 (Grades 6–8)", subject: "Fine Arts / Dance", grade: "Grades 6–8", cat: "Category 2" }
+        ]
+      }
     };
 
-    function updateSubjectArea() {
-        const key = document.getElementById('subjectSelect').value;
-        const data = subjectConfigurations[key];
-        const obsW = document.getElementById('obsWeight').value;
-        const growthW = document.getElementById('growthWeight').value;
+    function updateSubjectConfig() {
+      const selected = document.getElementById('subjectSelect').value;
+      const config = subjectConfigs[selected];
 
-        // Dynamic Growth Label Update
-        document.getElementById('growthLabel').innerText = data.growthLabel;
+      document.getElementById('categoryDisplay').value = config.category;
+      document.getElementById('modelDescriptionNote').innerText = `Growth Model Parameters: ${config.modelNote}`;
+      document.getElementById('growthPctLabel').innerText = config.growthLabel;
 
-        // Render Weighting Section
-        let weightHtml = `
-            <h3>${data.title}</h3>
-            <blockquote><em>${data.note}</em></blockquote>
-            <table>
-                <thead>
-                    <tr><th>Field / Question</th><th>Responses</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td><strong>Category #</strong></td><td>${data.categoryNum}[cite: 2]</td></tr>
-                    <tr><td><strong>What teaching assignments will be included in this category?</strong></td><td>${data.assignments}[cite: 2]</td></tr>
-                    <tr><td><strong>What Pre-Test / Growth Model will you use?</strong></td><td>${data.preTest}[cite: 2, 3]</td></tr>
-                    <tr><td><strong>Who will set the expected student growth targets?</strong></td><td>${data.growthSetter}[cite: 2, 3]</td></tr>
-                    <tr><td><strong>What Post-Test / Evaluation will determine growth?</strong></td><td>${data.postTest}[cite: 2, 3]</td></tr>
-                    <tr><td><strong>What percentage weight will Student Growth hold for this category?</strong></td><td><span class="growth-w-disp">${growthW}</span>%[cite: 2, 3]</td></tr>
-                    <tr><td><strong>What percentage weight will Teacher Observations hold for this category?</strong></td><td><span class="obs-w-disp">${obsW}</span>%[cite: 2]</td></tr>
-                    <tr><td><strong>If any, what optional components will be selected?</strong></td><td>☐ Family Survey ☐ Student Survey ☐ Other (None)[cite: 2]</td></tr>
-                    <tr><td><strong>What percentage weight will each optional component hold?</strong></td><td>N/A[cite: 2]</td></tr>
-                </tbody>
-            </table>
+      // Render Service ID Table
+      let tableHtml = `
+        <table class="w-full text-xs text-left border-collapse border border-slate-200">
+          <thead>
+            <tr class="bg-blue-50 text-blue-900 border-b border-slate-200">
+              <th class="p-2 border border-slate-200">Service ID</th>
+              <th class="p-2 border border-slate-200">Service Description</th>
+              <th class="p-2 border border-slate-200">Subject</th>
+              <th class="p-2 border border-slate-200">Grade Level</th>
+              <th class="p-2 border border-slate-200">Category</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+      config.serviceIds.forEach(item => {
+        tableHtml += `
+          <tr class="hover:bg-slate-100">
+            <td class="p-2 border border-slate-200 font-bold">${item.id}</td>
+            <td class="p-2 border border-slate-200">${item.desc}</td>
+            <td class="p-2 border border-slate-200">${item.subject}</td>
+            <td class="p-2 border border-slate-200">${item.grade}</td>
+            <td class="p-2 border border-slate-200">${item.cat}</td>
+          </tr>
         `;
-        document.getElementById('dynamicWeightingSection').innerHTML = weightHtml;
+      });
+      tableHtml += `</tbody></table>`;
+      document.getElementById('serviceIdTableContainer').innerHTML = tableHtml;
 
-        // Render Service ID Table
-        let serviceHtml = `
-            <table>
-                <thead>
-                    <tr>
-                        <th>Service ID</th>
-                        <th>Service Description (Content/Grade-Level)</th>
-                        <th>Subject Description</th>
-                        <th>Grade Level</th>
-                        <th>Eligible Teacher Category</th>
-                    </tr>
-                </thead>
-                <tbody>
-        `;
-        data.serviceIds.forEach(item => {
-            serviceHtml += `
-                <tr>
-                    <td><strong>${item.id}</strong></td>
-                    <td>${item.desc}</td>
-                    <td>${item.subject}</td>
-                    <td>${item.grade}</td>
-                    <td>${item.cat}[cite: 2]</td>
-                </tr>
-            `;
-        });
-        serviceHtml += `</tbody></table>`;
-        document.getElementById('dynamicServiceIdSection').innerHTML = serviceHtml;
-
-        // Hide result on subject change
-        document.getElementById('calcResult').style.display = 'none';
+      updateHeadersAndLabels();
     }
 
     function syncWeights(changed) {
-        let obsVal = parseFloat(document.getElementById('obsWeight').value) || 0;
-        let growthVal = parseFloat(document.getElementById('growthWeight').value) || 0;
+      let obsVal = parseFloat(document.getElementById('obsWeightInput').value) || 0;
+      let growthVal = parseFloat(document.getElementById('growthWeightInput').value) || 0;
 
-        if (changed === 'obs') {
-            growthVal = Math.max(0, 100 - obsVal);
-            document.getElementById('growthWeight').value = growthVal;
-        } else {
-            obsVal = Math.max(0, 100 - growthVal);
-            document.getElementById('obsWeight').value = obsVal;
-        }
+      if (changed === 'obs') {
+        growthVal = Math.max(0, 100 - obsVal);
+        document.getElementById('growthWeightInput').value = growthVal;
+      } else {
+        obsVal = Math.max(0, 100 - growthVal);
+        document.getElementById('obsWeightInput').value = obsVal;
+      }
 
-        document.querySelectorAll('.obs-w-disp').forEach(el => el.innerText = obsVal);
-        document.querySelectorAll('.growth-w-disp').forEach(el => el.innerText = growthVal);
+      updateHeadersAndLabels();
     }
 
-    function calculateScore() {
-        const obsScore = parseFloat(document.getElementById('obsScore').value);
-        const growthScore = parseFloat(document.getElementById('growthScore').value);
-        const obsWeight = parseFloat(document.getElementById('obsWeight').value) / 100;
-        const growthWeight = parseFloat(document.getElementById('growthWeight').value) / 100;
+    function updateHeadersAndLabels() {
+      const obsW = document.getElementById('obsWeightInput').value;
+      const growthW = document.getElementById('growthWeightInput').value;
 
-        if (isNaN(obsScore) || isNaN(growthScore)) return;
+      document.getElementById('observationHeader').innerText = `1. T-TESS Observation Ratings (${obsW}% Weight)`;
+      document.getElementById('growthHeader').innerText = `2. Student Growth Score (${growthW}% Weight)`;
 
-        const totalScore = (obsScore * obsWeight) + (growthScore * growthWeight);
-        const activeKey = document.getElementById('subjectSelect').value;
-        const activeName = subjectConfigurations[activeKey].assignments;
+      document.getElementById('ttessCardLabel').innerText = `T-TESS Points (${obsW}%)`;
+      document.getElementById('growthCardLabel').innerText = `Growth Points (${growthW}%)`;
+    }
 
-        document.getElementById('calcResultText').innerHTML = `
-            <strong>Subject Assignment:</strong> ${activeName}<br>
-            <strong>Calculation:</strong> (${obsScore}% × ${obsWeight * 100}%) + (${growthScore}% × ${growthWeight * 100}%)<br>
-            <strong>Total Weighted TIA Score:</strong> <span style="font-size: 1.1em; color: #1a365d; font-weight: bold;">${totalScore.toFixed(2)}%</span>
-        `;
-        document.getElementById('calcResult').style.display = 'block';
+    function toggleNBCT() {
+      const isNBCT = document.getElementById('nbctStatus').checked;
+      const obsSec = document.getElementById('observationSection');
+      const growthSec = document.getElementById('growthSection');
+      
+      if (isNBCT) {
+        obsSec.classList.add('opacity-50', 'pointer-events-none');
+        growthSec.classList.add('opacity-50', 'pointer-events-none');
+      } else {
+        obsSec.classList.remove('opacity-50', 'pointer-events-none');
+        growthSec.classList.remove('opacity-50', 'pointer-events-none');
+      }
+    }
+
+    function calculateTIA() {
+      const isNBCT = document.getElementById('nbctStatus').checked;
+      const resultsCard = document.getElementById('resultsCard');
+      const statusBanner = document.getElementById('statusBanner');
+      const gateWarning = document.getElementById('gateWarning');
+      
+      resultsCard.classList.remove('hidden');
+      gateWarning.classList.add('hidden');
+
+      if (isNBCT) {
+        document.getElementById('ttessPointsDisplay').innerText = "N/A";
+        document.getElementById('ttessAvgDisplay').innerText = "NBCT Pathway";
+        document.getElementById('growthPointsDisplay').innerText = "N/A";
+        document.getElementById('growthPctDisplay').innerText = "NBCT Pathway";
+        document.getElementById('totalPointsDisplay').innerText = "N/A";
+        
+        statusBanner.className = "p-4 rounded-lg text-center font-bold text-lg bg-emerald-100 text-emerald-800 border border-emerald-300";
+        statusBanner.innerText = "Eligible Designation: Nationally Board Certified (Acknowledged Tier)";
+        return;
+      }
+
+      const obsWeightPct = parseFloat(document.getElementById('obsWeightInput').value) || 0;
+      const growthWeightPct = parseFloat(document.getElementById('growthWeightInput').value) || 0;
+
+      // Collect T-TESS Scores
+      const ttessInputs = Array.from(document.querySelectorAll('.ttess-score'));
+      let ttessSum = 0;
+      let failsGate = false;
+
+      for (let input of ttessInputs) {
+        const val = parseFloat(input.value);
+        if (isNaN(val) || val < 1 || val > 5) {
+          alert("Please enter valid ratings between 1.0 and 5.0 for all T-TESS dimensions.");
+          return;
+        }
+        if (val < 3.0) {
+          failsGate = true; // Minimum proficient threshold gate
+        }
+        ttessSum += val;
+      }
+
+      const ttessAvg = ttessSum / ttessInputs.length;
+      const ttessPoints = (ttessAvg / 5.0) * obsWeightPct;
+
+      // Collect Growth Scores
+      const growthPctInput = parseFloat(document.getElementById('growthPct').value);
+      if (isNaN(growthPctInput) || growthPctInput < 0 || growthPctInput > 100) {
+        alert("Please enter a valid student growth percentage between 0 and 100.");
+        return;
+      }
+
+      const growthPoints = (growthPctInput / 100.0) * growthWeightPct;
+      const totalPoints = ttessPoints + growthPoints;
+
+      // Render Results
+      document.getElementById('ttessPointsDisplay').innerText = ttessPoints.toFixed(2);
+      document.getElementById('ttessAvgDisplay').innerText = `(Avg: ${ttessAvg.toFixed(2)})`;
+      document.getElementById('growthPointsDisplay').innerText = growthPoints.toFixed(2);
+      document.getElementById('growthPctDisplay').innerText = `(${growthPctInput}% met target)`;
+      document.getElementById('totalPointsDisplay').innerText = totalPoints.toFixed(2);
+
+      // Designation Logic
+      let designation = "No Designation Earned";
+      let bannerStyle = "bg-slate-200 text-slate-800";
+
+      if (failsGate) {
+        designation = "Ineligible (Domain Score < 3.0)";
+        bannerStyle = "bg-red-100 text-red-800 border border-red-300";
+        gateWarning.classList.remove('hidden');
+      } else if (totalPoints >= 78.0 && ttessAvg >= 4.5 && growthPctInput >= 70) {
+        designation = "Eligible Designation: Master Teacher";
+        bannerStyle = "bg-purple-100 text-purple-900 border border-purple-300";
+      } else if (totalPoints >= 67.2 && ttessAvg >= 3.9 && growthPctInput >= 60) {
+        designation = "Eligible Designation: Exemplary Teacher";
+        bannerStyle = "bg-indigo-100 text-indigo-900 border border-indigo-300";
+      } else if (totalPoints >= 62.6 && ttessAvg >= 3.7 && growthPctInput >= 55) {
+        designation = "Eligible Designation: Recognized Teacher";
+        bannerStyle = "bg-blue-100 text-blue-900 border border-blue-300";
+      } else if (totalPoints >= 58.0 && ttessAvg >= 3.5 && growthPctInput >= 50) {
+        designation = "Eligible Designation: Acknowledged Teacher";
+        bannerStyle = "bg-teal-100 text-teal-900 border border-teal-300";
+      }
+
+      statusBanner.className = `p-4 rounded-lg text-center font-bold text-lg ${bannerStyle}`;
+      statusBanner.innerText = designation;
     }
 
     // Initialize layout on page load
-    window.onload = updateSubjectArea;
-</script>
-
+    window.onload = updateSubjectConfig;
+  </script>
 </body>
 </html>
