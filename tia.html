@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TIA Application Configuration Guidelines</title>
+    <title>TIA Application Configuration & Score Calculator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,6 +12,13 @@
             max-width: 1000px;
             margin: 20px auto;
             padding: 0 20px;
+            background-color: #f4f7f6;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         h1, h2, h3 {
             color: #1a365d;
@@ -19,6 +26,42 @@
         h1 {
             border-bottom: 2px solid #1a365d;
             padding-bottom: 8px;
+        }
+        .selector-box, .calculator-box {
+            background-color: #ebf8ff;
+            border: 1px solid #cbd5e0;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 25px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #2c5282;
+        }
+        select, input[type="number"] {
+            width: 100%;
+            padding: 8px 12px;
+            margin-bottom: 15px;
+            border: 1px solid #cbd5e0;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        button {
+            background-color: #2b6cb0;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #2c5282;
         }
         blockquote {
             background-color: #f7fafc;
@@ -46,11 +89,18 @@
         tr:nth-child(even) {
             background-color: #f8fafc;
         }
-        ul {
-            padding-left: 20px;
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e6fffa;
+            border: 1px solid #b2f5ea;
+            border-radius: 6px;
+            display: none;
         }
-        li {
-            margin-bottom: 8px;
+        .result-title {
+            font-weight: bold;
+            color: #234e52;
+            font-size: 1.1rem;
         }
         hr {
             border: 0;
@@ -62,266 +112,236 @@
 </head>
 <body>
 
-    <p>Based on the TIA guidelines and the application parameters provided, here is the structured configuration to add <strong>Math (6–8)</strong>, <strong>ELA (6–8)</strong>, <strong>Science (6–8)</strong>, and <strong>Fine Arts (6–8)</strong> to your district's <strong>Weighting Tab</strong> and <strong>Eligible Teachers Tab</strong>[cite: 2].</p>
+<div class="container">
+    <h1>TIA Application Configuration & Score Calculator</h1>
+    
+    <p>Based on TIA guidelines, each subject area may utilize specific growth models and weighting configurations[cite: 2, 3]. Select a subject area below to adjust the calculations, growth parameters, and service mappings accordingly.</p>
+
+    <!-- Subject Selector -->
+    <div class="selector-box">
+        <label for="subjectSelect">Select Content / Subject Area:</label>
+        <select id="subjectSelect" onchange="updateForm()">
+            <option value="math">Mathematics (Grades 6–8)</option>
+            <option value="ela">English Language Arts / Reading (Grades 6–8)</option>
+            <option value="science">Science (Grades 6–8)</option>
+            <option value="finearts">Fine Arts (Grades 6–8)</option>
+        </select>
+    </div>
+
+    <!-- Interactive Interactive Score Calculator -->
+    <div class="calculator-box">
+        <h2>Interactive TIA Score Calculator</h2>
+        <form id="tiaForm" onsubmit="event.preventDefault(); calculateTIA();">
+            
+            <div id="observationGroup">
+                <label for="obsScore">Teacher Observation Score (% or Average Rubric Score convert to %):</label>
+                <input type="number" id="obsScore" min="0" max="100" step="0.1" placeholder="e.g., 85" required>
+            </div>
+
+            <!-- Dynamic Growth Inputs -->
+            <div id="growthGroup">
+                <label id="growthLabel" for="growthScore">Student Growth Score (% meeting growth target):</label>
+                <input type="number" id="growthScore" min="0" max="100" step="0.1" placeholder="e.g., 70" required>
+            </div>
+
+            <div id="portfolioDetails" style="display: none; margin-bottom: 15px; font-size: 0.9em; color: #4a5568;">
+                <em>* Note: Fine Arts portfolios require a minimum of 4 proficiency levels on the rubric and at least 5 student work artifacts[cite: 2, 3].</em>
+            </div>
+
+            <!-- Optional Weights Settings -->
+            <div>
+                <label for="obsWeight">Teacher Observation Weight (%):</label>
+                <input type="number" id="obsWeight" value="50" min="0" max="100" required onchange="adjustWeights('obs')">
+
+                <label for="growthWeight">Student Growth / Portfolio Weight (%):</label>
+                <input type="number" id="growthWeight" value="50" min="0" max="100" required onchange="adjustWeights('growth')">
+            </div>
+
+            <button type="submit">Calculate Overall Weighted Score</button>
+        </form>
+
+        <div id="result" class="result-box">
+            <div class="result-title">Calculation Results</div>
+            <p id="resultText"></p>
+        </div>
+    </div>
 
     <hr>
 
+    <!-- Dynamic Guidelines & Reference Tables -->
     <h2>1. Weighting Tab Configurations</h2>
-
-    <p>Because <strong>Math, ELA, and Science (6–8)</strong> share similar assessment/growth structures (typically using standardized pre/post-tests or VAM/SLOs), they can be grouped together if using the same weights[cite: 2]. <strong>Fine Arts (6–8)</strong> uses a portfolio-based student growth measure, which requires its own distinct category and table[cite: 2, 3].</p>
-
-    <h3>A. Pre-Test / Post-Test Category (Math 6–8, ELA 6–8, Science 6–8)</h3>
-    <blockquote>
-        <em>Note: Adjust assessment names, expected growth setters, and weightings to match your district's specific assessment plan (e.g., NWEA MAP, STAAR Transition, or District Assessments)[cite: 2, 3].</em>
-    </blockquote>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Field / Question</th>
-                <th>Responses</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Category #</strong></td>
-                <td>Category 1 <em>(or next sequential number)</em>[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>What teaching assignments will be included in this category?</strong></td>
-                <td>Math (Grades 6–8), ELA (Grades 6–8), Science (Grades 6–8)[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>What Pre-Test will you use to determine student growth?</strong></td>
-                <td>Third-Party Assessment (e.g., NWEA MAP / BOY STAAR / Released STAAR)[cite: 2, 3]</td>
-            </tr>
-            <tr>
-                <td><strong>Who will set the expected student growth targets?</strong></td>
-                <td>Third-Party Vendor / District-Created[cite: 2, 3]</td>
-            </tr>
-            <tr>
-                <td><strong>What Post-Test will you use to determine student growth?</strong></td>
-                <td>Third-Party Assessment (e.g., NWEA MAP / EOY STAAR)[cite: 2, 3]</td>
-            </tr>
-            <tr>
-                <td><strong>What percentage weight will Student Growth hold for this category?</strong></td>
-                <td>50%[cite: 2, 3]</td>
-            </tr>
-            <tr>
-                <td><strong>What percentage weight will Teacher Observations hold for this category?</strong></td>
-                <td>50%[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>If any, what optional components will be selected?</strong></td>
-                <td>☐ Family Survey ☐ Student Survey ☐ Other (None)[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>What percentage weight will each optional component hold?</strong></td>
-                <td>N/A[cite: 2]</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h3>B. Portfolios Category (Fine Arts 6–8)</h3>
-    <blockquote>
-        <em>Portfolios require a minimum of 4 proficiency levels on the rubric and a minimum of 5 student work artifacts[cite: 2, 3].</em>
-    </blockquote>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Field / Question</th>
-                <th>Responses</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>Category #</strong></td>
-                <td>Category 2 <em>(or next sequential number)</em>[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>What teaching assignments will be included in this category?</strong></td>
-                <td>Fine Arts (Grades 6–8: Art, Music, Theatre, Dance)[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>What percentage weight will Portfolios hold for this category?</strong></td>
-                <td>50%[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>What percentage weight will Teacher Observations hold for this category?</strong></td>
-                <td>50%[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>If any, what optional components will be selected?</strong></td>
-                <td>☐ Family Survey ☐ Student Survey ☐ Other (None)[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>What percentage weight will each optional component hold?</strong></td>
-                <td>N/A[cite: 2]</td>
-            </tr>
-        </tbody>
-    </table>
+    <div id="weightingGuidance"></div>
 
     <hr>
 
     <h2>2. Eligible Teachers Tab (Service ID Mapping)</h2>
-
-    <p>Below are the standard Texas Education Data Standards (TEDS) / PEIMS Service IDs corresponding to each newly added teaching assignment[cite: 2, 3]. Assign each to its respective Teacher Category established above[cite: 2].</p>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Service ID</th>
-                <th>Service Description (Content/Grade-Level)</th>
-                <th>Subject Description</th>
-                <th>Grade Level</th>
-                <th>Eligible Teacher Category</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><strong>03100700</strong></td>
-                <td>Grade 6 Mathematics</td>
-                <td>Mathematics</td>
-                <td>Grade 6</td>
-                <td>Category 1[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>03100800</strong></td>
-                <td>Grade 7 Mathematics</td>
-                <td>Mathematics</td>
-                <td>Grade 7</td>
-                <td>Category 1[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>03100820</strong></td>
-                <td>Grade 8 Mathematics</td>
-                <td>Mathematics</td>
-                <td>Grade 8</td>
-                <td>Category 1[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>03200510</strong></td>
-                <td>Grade 6 English Language Arts and Reading</td>
-                <td>ELA / Reading</td>
-                <td>Grade 6</td>
-                <td>Category 1[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>03200520</strong></td>
-                <td>Grade 7 English Language Arts and Reading</td>
-                <td>ELA / Reading</td>
-                <td>Grade 7</td>
-                <td>Category 1[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>03200530</strong></td>
-                <td>Grade 8 English Language Arts and Reading</td>
-                <td>ELA / Reading</td>
-                <td>Grade 8</td>
-                <td>Category 1[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>03060600</strong></td>
-                <td>Grade 6 Science</td>
-                <td>Science</td>
-                <td>Grade 6</td>
-                <td>Category 1[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>03060700</strong></td>
-                <td>Grade 7 Science</td>
-                <td>Science</td>
-                <td>Grade 7</td>
-                <td>Category 1[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>03060800</strong></td>
-                <td>Grade 8 Science</td>
-                <td>Science</td>
-                <td>Grade 8</td>
-                <td>Category 1[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>03154100</strong></td>
-                <td>Art, Middle School 1 (Grades 6–8)</td>
-                <td>Fine Arts / Art</td>
-                <td>Grades 6–8</td>
-                <td>Category 2[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>03154200</strong></td>
-                <td>Art, Middle School 2 (Grades 6–8)</td>
-                <td>Fine Arts / Art</td>
-                <td>Grades 6–8</td>
-                <td>Category 2[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>03154300</strong></td>
-                <td>Art, Middle School 3 (Grades 6–8)</td>
-                <td>Fine Arts / Art</td>
-                <td>Grades 6–8</td>
-                <td>Category 2[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>03154600</strong></td>
-                <td>Music, Middle School 1 (Grades 6–8)</td>
-                <td>Fine Arts / Music</td>
-                <td>Grades 6–8</td>
-                <td>Category 2[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>03154700</strong></td>
-                <td>Music, Middle School 2 (Grades 6–8)</td>
-                <td>Fine Arts / Music</td>
-                <td>Grades 6–8</td>
-                <td>Category 2[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>03154800</strong></td>
-                <td>Music, Middle School 3 (Grades 6–8)</td>
-                <td>Fine Arts / Music</td>
-                <td>Grades 6–8</td>
-                <td>Category 2[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>03250900</strong></td>
-                <td>Theatre, Middle School 1 (Grades 6–8)</td>
-                <td>Fine Arts / Theatre</td>
-                <td>Grades 6–8</td>
-                <td>Category 2[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>03251000</strong></td>
-                <td>Theatre, Middle School 2 (Grades 6–8)</td>
-                <td>Fine Arts / Theatre</td>
-                <td>Grades 6–8</td>
-                <td>Category 2[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>03251100</strong></td>
-                <td>Theatre, Middle School 3 (Grades 6–8)</td>
-                <td>Fine Arts / Theatre</td>
-                <td>Grades 6–8</td>
-                <td>Category 2[cite: 2]</td>
-            </tr>
-            <tr>
-                <td><strong>03830100</strong></td>
-                <td>Dance, Middle School 1 (Grades 6–8)</td>
-                <td>Fine Arts / Dance</td>
-                <td>Grades 6–8</td>
-                <td>Category 2[cite: 2]</td>
-            </tr>
-        </tbody>
-    </table>
+    <p>Below are the corresponding Texas Education Data Standards (TEDS) / PEIMS Service IDs for the selected subject area[cite: 2, 3].</p>
+    <div id="serviceIdTable"></div>
 
     <hr>
 
     <h2>3. Application Readiness Checklist Checks</h2>
     <ul>
-        <li><strong>Multiple Assessments:</strong> If Math, ELA, and Science use different test vendors or different growth target rules (e.g., NWEA MAP for Math vs. STAAR VAM for ELA), separate them into individual Category numbers on the Weighting Tab[cite: 2].</li>
-        <li><strong>Support Teachers:</strong> If any interventionists, inclusion, or dyslexia teachers support these 6–8 courses, set their category to <strong>"Multiple"</strong> on the Eligible Teachers Tab if they span more than one category[cite: 2].</li>
+        <li><strong>Multiple Assessments:</strong> If Math, ELA, and Science use different test vendors or growth target rules (e.g., NWEA MAP for Math vs. STAAR VAM for ELA), ensure they are separated into individual Category numbers on the Weighting Tab[cite: 2].</li>
+        <li><strong>Support Teachers:</strong> If any interventionists, inclusion, or dyslexia teachers support these courses, set their category to <strong>"Multiple"</strong> on the Eligible Teachers Tab if they span more than one category[cite: 2].</li>
     </ul>
+</div>
+
+<script>
+    const subjectData = {
+        math: {
+            name: "Mathematics (Grades 6–8)",
+            category: "Category 1",
+            growthModel: "Pre-Test / Post-Test (e.g., NWEA MAP, STAAR Transition, or District Assessment)",
+            growthLabel: "Percentage of Students Meeting Math Growth Target (%):",
+            serviceIds: [
+                { id: "03100700", desc: "Grade 6 Mathematics", subject: "Mathematics", grade: "Grade 6", cat: "Category 1" },
+                { id: "03100800", desc: "Grade 7 Mathematics", subject: "Mathematics", grade: "Grade 7", cat: "Category 1" },
+                { id: "03100820", desc: "Grade 8 Mathematics", subject: "Mathematics", grade: "Grade 8", cat: "Category 1" }
+            ]
+        },
+        ela: {
+            name: "English Language Arts / Reading (Grades 6–8)",
+            category: "Category 1",
+            growthModel: "Pre-Test / Post-Test or Value-Added Model (VAM)",
+            growthLabel: "Percentage of Students Meeting ELA Growth Target (%):",
+            serviceIds: [
+                { id: "03200510", desc: "Grade 6 English Language Arts and Reading", subject: "ELA / Reading", grade: "Grade 6", cat: "Category 1" },
+                { id: "03200520", desc: "Grade 7 English Language Arts and Reading", subject: "ELA / Reading", grade: "Grade 7", cat: "Category 1" },
+                { id: "03200530", desc: "Grade 8 English Language Arts and Reading", subject: "ELA / Reading", grade: "Grade 8", cat: "Category 1" }
+            ]
+        },
+        science: {
+            name: "Science (Grades 6–8)",
+            category: "Category 1",
+            growthModel: "Pre-Test / Post-Test (e.g., District Assessment / Student Learning Objectives)",
+            growthLabel: "Percentage of Students Meeting Science Growth Target (%):",
+            serviceIds: [
+                { id: "03060600", desc: "Grade 6 Science", subject: "Science", grade: "Grade 6", cat: "Category 1" },
+                { id: "03060700", desc: "Grade 7 Science", subject: "Science", grade: "Grade 7", cat: "Category 1" },
+                { id: "03060800", desc: "Grade 8 Science", subject: "Science", grade: "Grade 8", cat: "Category 1" }
+            ]
+        },
+        finearts: {
+            name: "Fine Arts (Grades 6–8)",
+            category: "Category 2",
+            growthModel: "Portfolio Assessment Model",
+            growthLabel: "Percentage of Portfolios Meeting Growth Standards (%):",
+            serviceIds: [
+                { id: "03154100", desc: "Art, Middle School 1 (Grades 6–8)", subject: "Fine Arts / Art", grade: "Grades 6–8", cat: "Category 2" },
+                { id: "03154200", desc: "Art, Middle School 2 (Grades 6–8)", subject: "Fine Arts / Art", grade: "Grades 6–8", cat: "Category 2" },
+                { id: "03154300", desc: "Art, Middle School 3 (Grades 6–8)", subject: "Fine Arts / Art", grade: "Grades 6–8", cat: "Category 2" },
+                { id: "03154600", desc: "Music, Middle School 1 (Grades 6–8)", subject: "Fine Arts / Music", grade: "Grades 6–8", cat: "Category 2" },
+                { id: "03154700", desc: "Music, Middle School 2 (Grades 6–8)", subject: "Fine Arts / Music", grade: "Grades 6–8", cat: "Category 2" },
+                { id: "03154800", desc: "Music, Middle School 3 (Grades 6–8)", subject: "Fine Arts / Music", grade: "Grades 6–8", cat: "Category 2" },
+                { id: "03250900", desc: "Theatre, Middle School 1 (Grades 6–8)", subject: "Fine Arts / Theatre", grade: "Grades 6–8", cat: "Category 2" },
+                { id: "03251000", desc: "Theatre, Middle School 2 (Grades 6–8)", subject: "Fine Arts / Theatre", grade: "Grades 6–8", cat: "Category 2" },
+                { id: "03251100", desc: "Theatre, Middle School 3 (Grades 6–8)", subject: "Fine Arts / Theatre", grade: "Grades 6–8", cat: "Category 2" },
+                { id: "03830100", desc: "Dance, Middle School 1 (Grades 6–8)", subject: "Fine Arts / Dance", grade: "Grades 6–8", cat: "Category 2" }
+            ]
+        }
+    };
+
+    function updateForm() {
+        const selected = document.getElementById('subjectSelect').value;
+        const data = subjectData[selected];
+
+        // Update Labels and Inputs
+        document.getElementById('growthLabel').innerText = data.growthLabel;
+        document.getElementById('portfolioDetails').style.display = (selected === 'finearts') ? 'block' : 'none';
+
+        // Update Guidance Section
+        let guidanceHtml = `
+            <h3>Configuring: ${data.name}</h3>
+            <blockquote><em>Growth Assessment Model: ${data.growthModel}[cite: 2, 3]</em></blockquote>
+            <table>
+                <thead>
+                    <tr><th>Field / Question</th><th>Configured Response</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Category Assignment</strong></td><td>${data.category}[cite: 2]</td></tr>
+                    <tr><td><strong>Teaching Assignments</strong></td><td>${data.name}[cite: 2]</td></tr>
+                    <tr><td><strong>Growth Assessment Type</strong></td><td>${data.growthModel}[cite: 2, 3]</td></tr>
+                    <tr><td><strong>Student Growth Weight</strong></td><td><span class="disp-growth-weight">${document.getElementById('growthWeight').value}</span>%[cite: 2, 3]</td></tr>
+                    <tr><td><strong>Teacher Observation Weight</strong></td><td><span class="disp-obs-weight">${document.getElementById('obsWeight').value}</span>%[cite: 2]</td></tr>
+                </tbody>
+            </table>
+        `;
+        document.getElementById('weightingGuidance').innerHTML = guidanceHtml;
+
+        // Update Service ID Table
+        let tableHtml = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>Service ID</th>
+                        <th>Service Description</th>
+                        <th>Subject Description</th>
+                        <th>Grade Level</th>
+                        <th>Eligible Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+        data.serviceIds.forEach(item => {
+            tableHtml += `
+                <tr>
+                    <td><strong>${item.id}</strong></td>
+                    <td>${item.desc}</td>
+                    <td>${item.subject}</td>
+                    <td>${item.grade}</td>
+                    <td>${item.cat}[cite: 2]</td>
+                </tr>
+            `;
+        });
+        tableHtml += `</tbody></table>`;
+        document.getElementById('serviceIdTable').innerHTML = tableHtml;
+
+        // Hide old results
+        document.getElementById('result').style.display = 'none';
+    }
+
+    function adjustWeights(changed) {
+        let obs = parseFloat(document.getElementById('obsWeight').value) || 0;
+        let growth = parseFloat(document.getElementById('growthWeight').value) || 0;
+
+        if (changed === 'obs') {
+            document.getElementById('growthWeight').value = Math.max(0, 100 - obs);
+        } else {
+            document.getElementById('obsWeight').value = Math.max(0, 100 - growth);
+        }
+
+        // Update text displayed in guidance table
+        const obsDisp = document.querySelectorAll('.disp-obs-weight');
+        const growthDisp = document.querySelectorAll('.disp-growth-weight');
+        obsDisp.forEach(el => el.innerText = document.getElementById('obsWeight').value);
+        growthDisp.forEach(el => el.innerText = document.getElementById('growthWeight').value);
+    }
+
+    function calculateTIA() {
+        const obsScore = parseFloat(document.getElementById('obsScore').value);
+        const growthScore = parseFloat(document.getElementById('growthScore').value);
+        const obsWeight = parseFloat(document.getElementById('obsWeight').value) / 100;
+        const growthWeight = parseFloat(document.getElementById('growthWeight').value) / 100;
+
+        if (isNaN(obsScore) || isNaN(growthScore)) return;
+
+        const totalScore = (obsScore * obsWeight) + (growthScore * growthWeight);
+        const subjectName = subjectData[document.getElementById('subjectSelect').value].name;
+
+        document.getElementById('resultText').innerHTML = `
+            <strong>Subject:</strong> ${subjectName}<br>
+            <strong>Teacher Observation Score:</strong> ${obsScore.toFixed(1)}% (Weight: ${(obsWeight * 100).toFixed(0)}%)<br>
+            <strong>Student Growth Score:</strong> ${growthScore.toFixed(1)}% (Weight: ${(growthWeight * 100).toFixed(0)}%)<br>
+            <hr style="margin: 10px 0;">
+            <strong>Final Weighted TIA Score:</strong> <span style="font-size: 1.2em; color: #2b6cb0;">${totalScore.toFixed(2)}%</span>
+        `;
+        document.getElementById('result').style.display = 'block';
+    }
+
+    // Initialize on load
+    window.onload = updateForm;
+</script>
 
 </body>
 </html>
