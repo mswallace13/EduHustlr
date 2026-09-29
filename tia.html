@@ -38,7 +38,7 @@
               <option value="ela">English Language Arts and Reading (Grades 6–8)</option>
               <option value="science">Science (Grades 6–8)</option>
               <option value="socialstudies67">Social Studies (Grades 6–7 - Quartile Model)</option>
-              <option value="socialstudies8">Social Studies (Grade 8 - NWEA MAP)</option>
+              <option value="socialstudies8">Social Studies (Grade 8 - STAAR Gap Model)</option>
               <option value="finearts">Fine Arts (Grades 6–8)</option>
             </select>
           </div>
@@ -112,12 +112,12 @@
         <div id="standardGrowthContainer">
           <label id="growthPctLabel" class="block text-sm font-medium text-slate-700">% of Students Meeting/Exceeding Growth Target</label>
           <div class="relative mt-1 max-w-xs">
-            <input type="number" id="growthPct" min="0" max="100" step="1" class="w-full p-2 pr-8 border rounded-md focus:ring-2 focus:ring-blue-500" placeholder="0 - 100">
+            <input type="number" id="growthPct" min="0" max="100" step="0.1" class="w-full p-2 pr-8 border rounded-md focus:ring-2 focus:ring-blue-500" placeholder="0 - 100">
             <span class="absolute right-3 top-2 text-slate-400 font-bold">%</span>
           </div>
         </div>
 
-        <!-- Social Studies Quartile Model Calculator Input (shown for 6th-7th Grade) -->
+        <!-- Social Studies 6-7 Quartile Model Calculator Input -->
         <div id="quartileGrowthContainer" class="hidden p-4 bg-indigo-50 border border-indigo-200 rounded-lg space-y-3">
           <div class="flex items-center justify-between">
             <h3 class="font-bold text-indigo-900 text-sm">Quartile Growth Calculation Tool (Social Studies 6–7)</h3>
@@ -153,6 +153,49 @@
           <div class="flex justify-between items-center bg-indigo-100 p-2.5 rounded border border-indigo-300 text-xs text-indigo-900 font-bold">
             <span>Overall Social Studies Composite Growth:</span>
             <span id="quartileCalcDisplay" class="text-sm">0.0% (0 / 0 Students)</span>
+          </div>
+        </div>
+
+        <!-- 8th Grade Social Studies STAAR Gap Model Calculator -->
+        <div id="staarGrowthContainer" class="hidden p-4 bg-blue-50 border border-blue-200 rounded-lg space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold text-blue-900 text-sm">Released STAAR to STAAR Gap Model Tool (8th Social Studies)</h3>
+            <span class="text-xs text-blue-700 font-semibold">20% Gap Reduction Goal</span>
+          </div>
+          <p class="text-xs text-blue-800 leading-relaxed">
+            Measures progress from Released STAAR (BOY) to State STAAR (EOY) using the Gap Reduction Model[cite: 7]:<br>
+            <span class="font-semibold">Formula:</span> Expected Score = BOY Score + [(100 - BOY Score) × 20%][cite: 7].
+          </p>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+            <div class="bg-white p-3 rounded border border-blue-200 shadow-sm space-y-2">
+              <span class="block text-xs font-bold text-blue-900 uppercase">Single Student Target Checker</span>
+              <div>
+                <label class="block text-xs text-slate-600">Released STAAR BOY Score (%):</label>
+                <input type="number" id="boyScore" placeholder="e.g. 40" min="0" max="100" oninput="calculateStaarTarget()" class="w-full p-1.5 text-xs border rounded mt-0.5">
+              </div>
+              <div class="text-xs bg-slate-50 p-2 rounded border space-y-1">
+                <div>Gap Score (100 - BOY): <span id="gapScoreDisplay" class="font-bold text-slate-800">0</span>[cite: 7]</div>
+                <div>Expected Growth (+20% Gap): <span id="expGrowthDisplay" class="font-bold text-slate-800">0</span>[cite: 7]</div>
+                <div class="text-blue-900 font-bold">Required EOY STAAR Target: <span id="reqTargetDisplay" class="text-sm font-extrabold text-blue-700">0%</span>[cite: 7]</div>
+              </div>
+            </div>
+
+            <div class="bg-white p-3 rounded border border-blue-200 shadow-sm space-y-2">
+              <span class="block text-xs font-bold text-blue-900 uppercase">Roster Composite Growth Score</span>
+              <div>
+                <label class="block text-xs text-slate-600">Total Eligible Students Tested:</label>
+                <input type="number" id="staarTotalStudents" placeholder="e.g. 10" min="0" oninput="calculateStaarRosterPct()" class="w-full p-1.5 text-xs border rounded mt-0.5">
+              </div>
+              <div>
+                <label class="block text-xs text-slate-600">Students Meeting Target Growth Goal:</label>
+                <input type="number" id="staarMetStudents" placeholder="e.g. 7" min="0" oninput="calculateStaarRosterPct()" class="w-full p-1.5 text-xs border rounded mt-0.5">
+              </div>
+              <div class="flex justify-between items-center bg-blue-100 p-2 rounded border border-blue-300 text-xs text-blue-900 font-bold mt-1">
+                <span>Roster % Meeting Growth:</span>
+                <span id="staarRosterDisplay" class="text-sm font-extrabold text-blue-800">0.0%</span>[cite: 7]
+              </div>
+            </div>
           </div>
         </div>
 
@@ -214,7 +257,7 @@
         category: "Category 1",
         modelNote: "NWEA MAP Growth Assessment Model (Fall-to-Spring Growth Projection)[cite: 2, 3].",
         growthLabel: "% of Students Meeting/Exceeding NWEA MAP Math Growth Target",
-        isQuartile: false,
+        modelType: "standard",
         serviceIds: [
           { id: "03100700", desc: "Grade 6 Mathematics", subject: "Mathematics", grade: "Grade 6", cat: "Category 1" },
           { id: "03100800", desc: "Grade 7 Mathematics", subject: "Mathematics", grade: "Grade 7", cat: "Category 1" },
@@ -225,7 +268,7 @@
         category: "Category 1",
         modelNote: "NWEA MAP Growth Assessment Model (Fall-to-Spring Growth Projection)[cite: 2, 3].",
         growthLabel: "% of Students Meeting/Exceeding NWEA MAP Reading Growth Target",
-        isQuartile: false,
+        modelType: "standard",
         serviceIds: [
           { id: "03200510", desc: "Grade 6 English Language Arts and Reading", subject: "ELA / Reading", grade: "Grade 6", cat: "Category 1" },
           { id: "03200520", desc: "Grade 7 English Language Arts and Reading", subject: "ELA / Reading", grade: "Grade 7", cat: "Category 1" },
@@ -236,7 +279,7 @@
         category: "Category 1",
         modelNote: "NWEA MAP Growth Assessment Model (Fall-to-Spring Growth Projection)[cite: 2, 3].",
         growthLabel: "% of Students Meeting/Exceeding NWEA MAP Science Growth Target",
-        isQuartile: false,
+        modelType: "standard",
         serviceIds: [
           { id: "03060600", desc: "Grade 6 Science", subject: "Science", grade: "Grade 6", cat: "Category 1" },
           { id: "03060700", desc: "Grade 7 Science", subject: "Science", grade: "Grade 7", cat: "Category 1" },
@@ -247,7 +290,7 @@
         category: "Category 1",
         modelNote: "Quartile Growth Model: Students are grouped into 4 baseline quartiles (Q1–Q4) with differentiated growth targets based on starting scores[cite: 6].",
         growthLabel: "% of Students Meeting Quartile-Based Expected Growth Target",
-        isQuartile: true,
+        modelType: "quartile",
         serviceIds: [
           { id: "03340600", desc: "Grade 6 Social Studies", subject: "Social Studies", grade: "Grade 6", cat: "Category 1" },
           { id: "03340700", desc: "Grade 7 Social Studies (Texas History)", subject: "Social Studies", grade: "Grade 7", cat: "Category 1" }
@@ -255,9 +298,9 @@
       },
       socialstudies8: {
         category: "Category 1",
-        modelNote: "NWEA MAP Growth Assessment Model (Fall-to-Spring Growth Projection)[cite: 2, 3].",
-        growthLabel: "% of Students Meeting/Exceeding NWEA MAP Social Studies Growth Target",
-        isQuartile: false,
+        modelNote: "Released STAAR to STAAR Gap Model: Growth is calculated using a 20% gap reduction goal from Released STAAR (BOY) to STAAR (EOY)[cite: 7].",
+        growthLabel: "% of Students Meeting STAAR Expected Growth Target (20% Gap Reduction)",
+        modelType: "staar",
         serviceIds: [
           { id: "03340800", desc: "Grade 8 Social Studies (U.S. History Early Colonial to Reconstruction)", subject: "Social Studies", grade: "Grade 8", cat: "Category 1" }
         ]
@@ -266,7 +309,7 @@
         category: "Category 2",
         modelNote: "Portfolio Assessment Model (Requires a minimum of 4 rubric proficiency levels and 5 student work artifacts)[cite: 2, 3].",
         growthLabel: "% of Portfolios Meeting/Exceeding Growth Standards",
-        isQuartile: false,
+        modelType: "standard",
         serviceIds: [
           { id: "03154100", desc: "Art, Middle School 1 (Grades 6–8)", subject: "Fine Arts / Art", grade: "Grades 6–8", cat: "Category 2" },
           { id: "03154200", desc: "Art, Middle School 2 (Grades 6–8)", subject: "Fine Arts / Art", grade: "Grades 6–8", cat: "Category 2" },
@@ -291,13 +334,19 @@
       document.getElementById('growthPctLabel').innerText = config.growthLabel;
 
       const quartileContainer = document.getElementById('quartileGrowthContainer');
+      const staarContainer = document.getElementById('staarGrowthContainer');
       const standardContainer = document.getElementById('standardGrowthContainer');
 
-      if (config.isQuartile) {
+      // Hide all dynamic model panels first
+      quartileContainer.classList.add('hidden');
+      staarContainer.classList.add('hidden');
+      standardContainer.classList.add('hidden');
+
+      if (config.modelType === 'quartile') {
         quartileContainer.classList.remove('hidden');
-        standardContainer.classList.add('hidden');
+      } else if (config.modelType === 'staar') {
+        staarContainer.classList.remove('hidden');
       } else {
-        quartileContainer.classList.add('hidden');
         standardContainer.classList.remove('hidden');
       }
 
@@ -351,6 +400,30 @@
       }
 
       document.getElementById('quartileCalcDisplay').innerText = `${pct.toFixed(1)}% (${totalMet} / ${totalStudents} Students)`;
+      document.getElementById('growthPct').value = pct.toFixed(1);
+    }
+
+    function calculateStaarTarget() {
+      const boy = parseFloat(document.getElementById('boyScore').value) || 0;
+      const gap = Math.max(0, 100 - boy);
+      const expGrowth = gap * 0.20; // 20% gap reduction rule
+      const targetScore = boy + expGrowth;
+
+      document.getElementById('gapScoreDisplay').innerText = gap.toFixed(1);
+      document.getElementById('expGrowthDisplay').innerText = expGrowth.toFixed(1);
+      document.getElementById('reqTargetDisplay').innerText = `${targetScore.toFixed(1)}%`;
+    }
+
+    function calculateStaarRosterPct() {
+      const total = parseFloat(document.getElementById('staarTotalStudents').value) || 0;
+      const met = parseFloat(document.getElementById('staarMetStudents').value) || 0;
+
+      let pct = 0;
+      if (total > 0) {
+        pct = (met / total) * 100.0;
+      }
+
+      document.getElementById('staarRosterDisplay').innerText = `${pct.toFixed(1)}%`;
       document.getElementById('growthPct').value = pct.toFixed(1);
     }
 
