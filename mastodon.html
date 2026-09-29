@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduHustlr - Congressional Mastodon Feed</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>EduHustlr</h1>
+    <p>Congressional Mastodon Live Feed</p>
+  </header>
+
+  <main id="feed-container">
+    <p>Loading posts...</p>
+  </main>
+
+  <script>
+    async function loadMastodonPosts() {
+      const container = document.getElementById('feed-container');
+      try {
+        const response = await fetch('./posts.json');
+        if (!response.ok) throw new Error('Failed to load posts file.');
+        
+        const data = await response.json();
+        container.innerHTML = '';
+
+        data.forEach(member => {
+          const card = document.createElement('div');
+          card.className = 'member-card';
+
+          const title = document.createElement('h2');
+          title.textContent = member.handle;
+          card.appendChild(title);
+
+          if (!member.posts || member.posts.length === 0) {
+            const empty = document.createElement('p');
+            empty.className = 'no-posts';
+            empty.textContent = 'No recent public posts found.';
+            card.appendChild(empty);
+          } else {
+            member.posts.forEach(post => {
+              const postBox = document.createElement('article');
+              postBox.className = 'post';
+
+              const date = document.createElement('span');
+              date.className = 'date';
+              date.textContent = new Date(post.created_at).toLocaleString();
+
+              const content = document.createElement('div');
+              content.className = 'content';
+              content.innerHTML = post.content;
+
+              const link = document.createElement('a');
+              link.href = post.url;
+              link.target = '_blank';
+              link.className = 'post-link';
+              link.textContent = 'View on Mastodon →';
+
+              postBox.appendChild(date);
+              postBox.appendChild(content);
+              postBox.appendChild(link);
+              card.appendChild(postBox);
+            });
+          }
+
+          container.appendChild(card);
+        });
+      } catch (err) {
+        container.innerHTML = `<p class="error">Error loading posts: ${err.message}</p>`;
+      }
+    }
+
+    loadMastodonPosts();
+  </script>
+</body>
+</html>
