@@ -24,11 +24,13 @@ def get_mastodon_posts(mastodon_handle: str, max_results: int = 3):
     
     return []
 
-# Load dataset
-with open("my_congress_project.json", "r") as f:
+# Load dataset using your exact file name
+with open("legislators-social-media.json", "r") as f:
     data = json.load(f)
 
 mastodon_members = [m for m in data if m.get("social", {}).get("mastodon")]
+
+print(f"Found {len(mastodon_members)} members with Mastodon accounts.")
 
 results = []
 for member in mastodon_members:
