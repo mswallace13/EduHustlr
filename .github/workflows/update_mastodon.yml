@@ -3,7 +3,7 @@ name: Update Mastodon Feed
 on:
   schedule:
     - cron: '0 */6 * * *'  # Runs every 6 hours
-  workflow_dispatch:       # Allows manual triggers
+  workflow_dispatch:       # Allows manual trigger button
 
 jobs:
   build:
@@ -12,10 +12,10 @@ jobs:
       contents: write
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
