@@ -37,7 +37,8 @@
               <option value="math">Mathematics (Grades 6–8)</option>
               <option value="ela">English Language Arts and Reading (Grades 6–8)</option>
               <option value="science">Science (Grades 6–8)</option>
-              <option value="socialstudies">Social Studies (Grades 6–8)</option>
+              <option value="socialstudies67">Social Studies (Grades 6–7 - Quartile Model)</option>
+              <option value="socialstudies8">Social Studies (Grade 8 - NWEA MAP)</option>
               <option value="finearts">Fine Arts (Grades 6–8)</option>
             </select>
           </div>
@@ -116,10 +117,10 @@
           </div>
         </div>
 
-        <!-- Social Studies Quartile Model Calculator Input (hidden by default) -->
+        <!-- Social Studies Quartile Model Calculator Input (shown for 6th-7th Grade) -->
         <div id="quartileGrowthContainer" class="hidden p-4 bg-indigo-50 border border-indigo-200 rounded-lg space-y-3">
           <div class="flex items-center justify-between">
-            <h3 class="font-bold text-indigo-900 text-sm">Quartile Growth Calculation Tool (Social Studies 6–8)</h3>
+            <h3 class="font-bold text-indigo-900 text-sm">Quartile Growth Calculation Tool (Social Studies 6–7)</h3>
             <span class="text-xs text-indigo-700 font-semibold">Differentiated Baseline Targets</span>
           </div>
           <p class="text-xs text-indigo-800 leading-relaxed">
@@ -242,14 +243,22 @@
           { id: "03060800", desc: "Grade 8 Science", subject: "Science", grade: "Grade 8", cat: "Category 1" }
         ]
       },
-      socialstudies: {
+      socialstudies67: {
         category: "Category 1",
         modelNote: "Quartile Growth Model: Students are grouped into 4 baseline quartiles (Q1–Q4) with differentiated growth targets based on starting scores[cite: 6].",
         growthLabel: "% of Students Meeting Quartile-Based Expected Growth Target",
         isQuartile: true,
         serviceIds: [
           { id: "03340600", desc: "Grade 6 Social Studies", subject: "Social Studies", grade: "Grade 6", cat: "Category 1" },
-          { id: "03340700", desc: "Grade 7 Social Studies (Texas History)", subject: "Social Studies", grade: "Grade 7", cat: "Category 1" },
+          { id: "03340700", desc: "Grade 7 Social Studies (Texas History)", subject: "Social Studies", grade: "Grade 7", cat: "Category 1" }
+        ]
+      },
+      socialstudies8: {
+        category: "Category 1",
+        modelNote: "NWEA MAP Growth Assessment Model (Fall-to-Spring Growth Projection)[cite: 2, 3].",
+        growthLabel: "% of Students Meeting/Exceeding NWEA MAP Social Studies Growth Target",
+        isQuartile: false,
+        serviceIds: [
           { id: "03340800", desc: "Grade 8 Social Studies (U.S. History Early Colonial to Reconstruction)", subject: "Social Studies", grade: "Grade 8", cat: "Category 1" }
         ]
       },
