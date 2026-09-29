@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TIA Eligibility & Score Calculator</title>
+  <title>Texas TIA Eligibility & Weighting Calculator</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen p-4 md:p-8">
@@ -106,13 +106,55 @@
       <!-- Section 2: Student Growth -->
       <div id="growthSection" class="space-y-4">
         <h2 id="growthHeader" class="text-xl font-bold text-slate-900 border-b pb-2">2. Student Growth Score (50% Weight)</h2>
-        <div>
+        
+        <!-- Standard Growth Input Container -->
+        <div id="standardGrowthContainer">
           <label id="growthPctLabel" class="block text-sm font-medium text-slate-700">% of Students Meeting/Exceeding Growth Target</label>
           <div class="relative mt-1 max-w-xs">
-            <input type="number" id="growthPct" min="0" max="100" step="1" required class="w-full p-2 pr-8 border rounded-md focus:ring-2 focus:ring-blue-500" placeholder="0 - 100">
+            <input type="number" id="growthPct" min="0" max="100" step="1" class="w-full p-2 pr-8 border rounded-md focus:ring-2 focus:ring-blue-500" placeholder="0 - 100">
             <span class="absolute right-3 top-2 text-slate-400 font-bold">%</span>
           </div>
         </div>
+
+        <!-- Social Studies Quartile Model Calculator Input (hidden by default) -->
+        <div id="quartileGrowthContainer" class="hidden p-4 bg-indigo-50 border border-indigo-200 rounded-lg space-y-3">
+          <div class="flex items-center justify-between">
+            <h3 class="font-bold text-indigo-900 text-sm">Quartile Growth Calculation Tool (Social Studies 6–8)</h3>
+            <span class="text-xs text-indigo-700 font-semibold">Differentiated Baseline Targets</span>
+          </div>
+          <p class="text-xs text-indigo-800 leading-relaxed">
+            Students are sorted into four quartiles based on pre-test (BOY) scores (Q1: Lowest 25%, Q2: 25–50%, Q3: 50–75%, Q4: Top 25%)[cite: 6]. Enter the number of students who met/exceeded their quartile's differentiated growth target[cite: 6]:
+          </p>
+          
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div class="bg-white p-2.5 rounded border border-indigo-200 shadow-sm">
+              <label class="block text-xs font-bold text-indigo-900 mb-1">Q1 (Lowest 25%)</label>
+              <input type="number" id="q1Total" placeholder="Total" min="0" oninput="calculateQuartilePct()" class="w-full p-1.5 text-xs border rounded mb-1">
+              <input type="number" id="q1Met" placeholder="Met Target" min="0" oninput="calculateQuartilePct()" class="w-full p-1.5 text-xs border rounded">
+            </div>
+            <div class="bg-white p-2.5 rounded border border-indigo-200 shadow-sm">
+              <label class="block text-xs font-bold text-indigo-900 mb-1">Q2 (25–50%)</label>
+              <input type="number" id="q2Total" placeholder="Total" min="0" oninput="calculateQuartilePct()" class="w-full p-1.5 text-xs border rounded mb-1">
+              <input type="number" id="q2Met" placeholder="Met Target" min="0" oninput="calculateQuartilePct()" class="w-full p-1.5 text-xs border rounded">
+            </div>
+            <div class="bg-white p-2.5 rounded border border-indigo-200 shadow-sm">
+              <label class="block text-xs font-bold text-indigo-900 mb-1">Q3 (50–75%)</label>
+              <input type="number" id="q3Total" placeholder="Total" min="0" oninput="calculateQuartilePct()" class="w-full p-1.5 text-xs border rounded mb-1">
+              <input type="number" id="q3Met" placeholder="Met Target" min="0" oninput="calculateQuartilePct()" class="w-full p-1.5 text-xs border rounded">
+            </div>
+            <div class="bg-white p-2.5 rounded border border-indigo-200 shadow-sm">
+              <label class="block text-xs font-bold text-indigo-900 mb-1">Q4 (Top 25%)</label>
+              <input type="number" id="q4Total" placeholder="Total" min="0" oninput="calculateQuartilePct()" class="w-full p-1.5 text-xs border rounded mb-1">
+              <input type="number" id="q4Met" placeholder="Met Target" min="0" oninput="calculateQuartilePct()" class="w-full p-1.5 text-xs border rounded">
+            </div>
+          </div>
+
+          <div class="flex justify-between items-center bg-indigo-100 p-2.5 rounded border border-indigo-300 text-xs text-indigo-900 font-bold">
+            <span>Overall Social Studies Composite Growth:</span>
+            <span id="quartileCalcDisplay" class="text-sm">0.0% (0 / 0 Students)</span>
+          </div>
+        </div>
+
       </div>
 
       <button type="button" onclick="calculateTIA()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-200">
@@ -171,6 +213,7 @@
         category: "Category 1",
         modelNote: "NWEA MAP Growth Assessment Model (Fall-to-Spring Growth Projection)[cite: 2, 3].",
         growthLabel: "% of Students Meeting/Exceeding NWEA MAP Math Growth Target",
+        isQuartile: false,
         serviceIds: [
           { id: "03100700", desc: "Grade 6 Mathematics", subject: "Mathematics", grade: "Grade 6", cat: "Category 1" },
           { id: "03100800", desc: "Grade 7 Mathematics", subject: "Mathematics", grade: "Grade 7", cat: "Category 1" },
@@ -181,6 +224,7 @@
         category: "Category 1",
         modelNote: "NWEA MAP Growth Assessment Model (Fall-to-Spring Growth Projection)[cite: 2, 3].",
         growthLabel: "% of Students Meeting/Exceeding NWEA MAP Reading Growth Target",
+        isQuartile: false,
         serviceIds: [
           { id: "03200510", desc: "Grade 6 English Language Arts and Reading", subject: "ELA / Reading", grade: "Grade 6", cat: "Category 1" },
           { id: "03200520", desc: "Grade 7 English Language Arts and Reading", subject: "ELA / Reading", grade: "Grade 7", cat: "Category 1" },
@@ -191,6 +235,7 @@
         category: "Category 1",
         modelNote: "NWEA MAP Growth Assessment Model (Fall-to-Spring Growth Projection)[cite: 2, 3].",
         growthLabel: "% of Students Meeting/Exceeding NWEA MAP Science Growth Target",
+        isQuartile: false,
         serviceIds: [
           { id: "03060600", desc: "Grade 6 Science", subject: "Science", grade: "Grade 6", cat: "Category 1" },
           { id: "03060700", desc: "Grade 7 Science", subject: "Science", grade: "Grade 7", cat: "Category 1" },
@@ -199,8 +244,9 @@
       },
       socialstudies: {
         category: "Category 1",
-        modelNote: "NWEA MAP Growth Assessment Model (Fall-to-Spring Growth Projection)[cite: 2, 3].",
-        growthLabel: "% of Students Meeting/Exceeding NWEA MAP Growth Target",
+        modelNote: "Quartile Growth Model: Students are grouped into 4 baseline quartiles (Q1–Q4) with differentiated growth targets based on starting scores[cite: 6].",
+        growthLabel: "% of Students Meeting Quartile-Based Expected Growth Target",
+        isQuartile: true,
         serviceIds: [
           { id: "03340600", desc: "Grade 6 Social Studies", subject: "Social Studies", grade: "Grade 6", cat: "Category 1" },
           { id: "03340700", desc: "Grade 7 Social Studies (Texas History)", subject: "Social Studies", grade: "Grade 7", cat: "Category 1" },
@@ -211,6 +257,7 @@
         category: "Category 2",
         modelNote: "Portfolio Assessment Model (Requires a minimum of 4 rubric proficiency levels and 5 student work artifacts)[cite: 2, 3].",
         growthLabel: "% of Portfolios Meeting/Exceeding Growth Standards",
+        isQuartile: false,
         serviceIds: [
           { id: "03154100", desc: "Art, Middle School 1 (Grades 6–8)", subject: "Fine Arts / Art", grade: "Grades 6–8", cat: "Category 2" },
           { id: "03154200", desc: "Art, Middle School 2 (Grades 6–8)", subject: "Fine Arts / Art", grade: "Grades 6–8", cat: "Category 2" },
@@ -233,6 +280,17 @@
       document.getElementById('categoryDisplay').value = config.category;
       document.getElementById('modelDescriptionNote').innerText = `Growth Model Parameters: ${config.modelNote}`;
       document.getElementById('growthPctLabel').innerText = config.growthLabel;
+
+      const quartileContainer = document.getElementById('quartileGrowthContainer');
+      const standardContainer = document.getElementById('standardGrowthContainer');
+
+      if (config.isQuartile) {
+        quartileContainer.classList.remove('hidden');
+        standardContainer.classList.add('hidden');
+      } else {
+        quartileContainer.classList.add('hidden');
+        standardContainer.classList.remove('hidden');
+      }
 
       // Render Service ID Table
       let tableHtml = `
@@ -263,6 +321,28 @@
       document.getElementById('serviceIdTableContainer').innerHTML = tableHtml;
 
       updateHeadersAndLabels();
+    }
+
+    function calculateQuartilePct() {
+      const q1T = parseFloat(document.getElementById('q1Total').value) || 0;
+      const q1M = parseFloat(document.getElementById('q1Met').value) || 0;
+      const q2T = parseFloat(document.getElementById('q2Total').value) || 0;
+      const q2M = parseFloat(document.getElementById('q2Met').value) || 0;
+      const q3T = parseFloat(document.getElementById('q3Total').value) || 0;
+      const q3M = parseFloat(document.getElementById('q3Met').value) || 0;
+      const q4T = parseFloat(document.getElementById('q4Total').value) || 0;
+      const q4M = parseFloat(document.getElementById('q4Met').value) || 0;
+
+      const totalStudents = q1T + q2T + q3T + q4T;
+      const totalMet = q1M + q2M + q3M + q4M;
+
+      let pct = 0;
+      if (totalStudents > 0) {
+        pct = (totalMet / totalStudents) * 100.0;
+      }
+
+      document.getElementById('quartileCalcDisplay').innerText = `${pct.toFixed(1)}% (${totalMet} / ${totalStudents} Students)`;
+      document.getElementById('growthPct').value = pct.toFixed(1);
     }
 
     function syncWeights(changed) {
@@ -352,7 +432,7 @@
       // Collect Growth Scores
       const growthPctInput = parseFloat(document.getElementById('growthPct').value);
       if (isNaN(growthPctInput) || growthPctInput < 0 || growthPctInput > 100) {
-        alert("Please enter a valid student growth percentage between 0 and 100.");
+        alert("Please enter or calculate a valid student growth percentage between 0 and 100.");
         return;
       }
 
