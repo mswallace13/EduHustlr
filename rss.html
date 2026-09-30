@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduHustlr - Congressional RSS Updates</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>EduHustlr</h1>
+    <p>Official Congressional Press Releases & Statements</p>
+    <p><a href="index.html" style="color: #8c8dff;">← Main Feed</a></p>
+  </header>
+
+  <main id="feed-container">
+    <p>Loading official statements...</p>
+  </main>
+
+  <script>
+    async function loadRssPosts() {
+      const container = document.getElementById('feed-container');
+      try {
+        const response = await fetch('./posts.json');
+        if (!response.ok) throw new Error('Failed to load feed data.');
+        
+        const data = await response.json();
+        container.innerHTML = '';
+
+        data.forEach(source => {
+          const card = document.createElement('div');
+          card.className = 'member-card';
+
+          const title = document.createElement('h2');
+          title.textContent = source.handle;
+          card.appendChild(title);
+
+          if (!source.posts || source.posts.length === 0) {
+            const empty = document.createElement('p');
+            empty.className = 'no-posts';
+            empty.textContent = 'No recent updates available.';
+            card.appendChild(empty);
+          } else {
+            source.posts.forEach(post => {
+              const postBox = document.createElement('article');
+              postBox.className = 'post';
+
+              const postTitle = document.createElement('h3');
+              postTitle.style.margin = '0 0 5px 0';
+              postTitle.style.color = '#ffffff';
+              postTitle.textContent = post.title;
+
+              const date = document.createElement('span');
+              date.className = 'date';
+              date.textContent = post.created_at;
+
+              const content = document.createElement('div');
+              content.className = 'content';
+              content.innerHTML = post.content;
+
+              const link = document.createElement('a');
+              link.href = post.url;
+              link.target = '_blank';
+              link.className = 'post-link';
+              link.textContent = 'Read Full Statement →';
+
+              postBox.appendChild(postTitle);
+              postBox.appendChild(date);
+              postBox.appendChild(content);
+              postBox.appendChild(link);
+              card.appendChild(postBox);
+            });
+          }
+
+          container.appendChild(card);
+        });
+      } catch (err) {
+        container.innerHTML = `<p class="error">Error loading statements: ${err.message}</p>`;
+      }
+    }
+
+    loadRssPosts();
+  </script>
+</body>
+</html>
