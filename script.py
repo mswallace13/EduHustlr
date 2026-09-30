@@ -1,62 +1,56 @@
 import json
-import requests
+import urllib.request
+import xml.etree.ElementTree as ET
 
-def get_mastodon_posts(mastodon_handle: str, max_results: int = 3):
-    parts = mastodon_handle.strip("@").split("@")
-    if len(parts) != 2:
-        return []
-        
-    username, instance = parts[0], parts[1]
+# Example list of official Congressional RSS feeds
+CONGRESS_RSS_FEEDS = [
+    {"name": "Senate Foreign Relations Committee", "url": "https://www.foreign.senate.gov/rss/feeds/?type=all"},
+    {"name": "House Judiciary Committee", "url": "https://judiciary.house.gov/rss.xml"},
+    {"name": "Sen. Bernie Sanders Press Releases", "url": "https://www.sanders.senate.gov/feed/"}
+]
+
+def fetch_rss_items(feed_url, max_results=3):
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    req = urllib.request.Request(feed_url, headers=headers)
     
-    lookup_url = f"https://{instance}/api/v1/accounts/lookup"
     try:
-        res = requests.get(lookup_url, params={"acct": username}, timeout=10)
-        if res.status_code != 200:
-            return []
-        account_id = res.json()["id"]
-
-        statuses_url = f"https://{instance}/api/v1/accounts/{account_id}/statuses"
-        res = requests.get(statuses_url, params={"limit": max_results, "exclude_replies": True}, timeout=10)
-        if res.status_code == 200:
-            return res.json()
+        with urllib.request.urlopen(req, timeout=10) as response:
+            xml_data = response.read()
+            root = ET.fromstring(xml_data)
+            
+            # Locate channel items (standard RSS 2.0 format)
+            items = root.findall('.//item')[:max_results]
+            parsed_items = []
+            
+            for item in items:
+                title = item.find('title').text if item.find('title') is not None else 'No Title'
+                link = item.find('link').text if item.find('link') is not None else ''
+                pub_date = item.find('pubDate').text if item.find('pubDate') is not None else ''
+                description = item.find('description').text if item.find('description') is not None else ''
+                
+                parsed_items.append({
+                    "title": title,
+                    "url": link,
+                    "created_at": pub_date,
+                    "content": description
+                })
+            return parsed_items
     except Exception as e:
-        print(f"Error fetching {mastodon_handle}: {e}")
-    
-    return []
-
-# Load dataset using your exact file name
-with open("legislators-social-media.json", "r") as f:
-    data = json.load(f)
-
-mastodon_members = [m for m in data if m.get("social", {}).get("mastodon")]
-
-print(f"Found {len(mastodon_members)} members with Mastodon accounts.")
+        print(f"Error fetching {feed_url}: {e}")
+        return []
 
 results = []
-for member in mastodon_members:
-    handle = member["social"]["mastodon"]
-    print(f"Fetching posts for {handle}...")
-    
-    posts = get_mastodon_posts(handle, max_results=3)
-    
-    clean_posts = [
-        {
-            "id": p.get("id"),
-            "created_at": p.get("created_at"),
-            "content": p.get("content"),
-            "url": p.get("url")
-        }
-        for p in posts
-    ]
+for feed in CONGRESS_RSS_FEEDS:
+    print(f"Fetching RSS feed for {feed['name']}...")
+    posts = fetch_rss_items(feed['url'], max_results=3)
     
     results.append({
-        "bioguide": member["id"]["bioguide"],
-        "handle": handle,
-        "posts": clean_posts
+        "handle": feed["name"],
+        "posts": posts
     })
 
-# Save output to posts.json
+# Output to static posts.json
 with open("posts.json", "w") as f:
     json.dump(results, f, indent=2)
 
-print("Saved Mastodon posts to posts.json!")
+print("Saved RSS updates to posts.json!")
