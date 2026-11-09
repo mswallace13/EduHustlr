@@ -23,7 +23,7 @@
       background: #1f2937;
     }
     
-    /* Mascot Pin Styling */
+    /* Mascot Pin Badge Styling */
     .mascot-pin {
       display: flex;
       align-items: center;
@@ -89,14 +89,14 @@
     <aside class="w-full md:w-80 bg-gray-800 border-r border-gray-700 flex flex-col h-full z-0">
       <div class="p-3 bg-gray-800/80 border-b border-gray-700 text-xs text-gray-400 font-medium flex justify-between items-center">
         <span>INSTITUTIONS (<span id="count">0</span>)</span>
-        <span class="text-amber-400">Click card or marker to view</span>
+        <span class="text-amber-400">Click card to zoom</span>
       </div>
       <div id="hbcuList" class="flex-1 overflow-y-auto divide-y divide-gray-700/50">
         <!-- Dynamic list -->
       </div>
     </aside>
 
-    <!-- Map -->
+    <!-- Map Container -->
     <main class="flex-1 h-full relative">
       <div id="map" class="w-full h-full"></div>
     </main>
@@ -121,99 +121,4 @@
       { name: "Shelton State Community College", city: "Tuscaloosa", state: "AL", lat: 33.1539, lng: -87.5256, est: 1952, mascot: "Buccaneers", initials: "SSCC", type: "Public", url: "https://sheltonstate.edu" },
       { name: "Stillman College", city: "Tuscaloosa", state: "AL", lat: 33.1975, lng: -87.5858, est: 1876, mascot: "Tigers", initials: "SC", type: "Private", url: "https://stillman.edu" },
       { name: "Talladega College", city: "Talladega", state: "AL", lat: 33.4331, lng: -86.1078, est: 1867, mascot: "Tornadoes", initials: "TC", type: "Private", url: "https://talladega.edu" },
-      { name: "H. Councill Trenholm State Community College", city: "Montgomery", state: "AL", lat: 32.3556, lng: -86.2575, est: 1963, mascot: "Tigers", initials: "TSCC", type: "Public", url: "https://trenholmstate.edu" },
-      { name: "Tuskegee University", city: "Tuskegee", state: "AL", lat: 32.4297, lng: -85.7077, est: 1881, mascot: "Golden Tigers", initials: "TU", type: "Private", url: "https://tuskegee.edu" },
-
-      // ARKANSAS
-      { name: "Arkansas Baptist College", city: "Little Rock", state: "AR", lat: 34.7397, lng: -92.2892, est: 1884, mascot: "Buffaloes", initials: "ABC", type: "Private", url: "https://arkansasbaptist.edu" },
-      { name: "Philander Smith University", city: "Little Rock", state: "AR", lat: 34.7347, lng: -92.2858, est: 1877, mascot: "Panthers", initials: "PSU", type: "Private", url: "https://philander.edu" },
-      { name: "Shorter College", city: "North Little Rock", state: "AR", lat: 34.7578, lng: -92.2611, est: 1886, mascot: "Bulldogs", initials: "SHC", type: "Private", url: "https://shortercollege.edu" },
-      { name: "University of Arkansas at Pine Bluff", city: "Pine Bluff", state: "AR", lat: 34.2467, lng: -92.0169, est: 1873, mascot: "Golden Lions", initials: "UAPB", type: "Public", url: "https://uapb.edu" },
-
-      // CALIFORNIA
-      { name: "Charles R. Drew University of Medicine and Science", city: "Los Angeles", state: "CA", lat: 33.9239, lng: -118.2411, est: 1966, mascot: "Mighty Lions", initials: "CDU", type: "Private", url: "https://cdrewu.edu" },
-
-      // DELAWARE
-      { name: "Delaware State University", city: "Dover", state: "DE", lat: 39.1860, lng: -75.5427, est: 1891, mascot: "Hornets", initials: "DSU", type: "Public", url: "https://desu.edu" },
-
-      // DISTRICT OF COLUMBIA
-      { name: "Howard University", city: "Washington", state: "DC", lat: 38.9227, lng: -77.0194, est: 1867, mascot: "Bison", initials: "HU", type: "Private", url: "https://howard.edu" },
-      { name: "University of the District of Columbia", city: "Washington", state: "DC", lat: 38.9439, lng: -77.0672, est: 1851, mascot: "Firebirds", initials: "UDC", type: "Public", url: "https://udc.edu" },
-
-      // FLORIDA
-      { name: "Bethune-Cookman University", city: "Daytona Beach", state: "FL", lat: 29.2117, lng: -81.0317, est: 1904, mascot: "Wildcats", initials: "BCU", type: "Private", url: "https://cookman.edu" },
-      { name: "Edward Waters University", city: "Jacksonville", state: "FL", lat: 30.3392, lng: -81.6817, est: 1866, mascot: "Tigers", initials: "EWU", type: "Private", url: "https://ewu.edu" },
-      { name: "Florida A&M University", city: "Tallahassee", state: "FL", lat: 30.4259, lng: -84.2863, est: 1887, mascot: "Rattlers", initials: "FAMU", type: "Public", url: "https://famu.edu" },
-      { name: "Florida Memorial University", city: "Miami Gardens", state: "FL", lat: 25.9239, lng: -80.2619, est: 1879, mascot: "Lions", initials: "FMU", type: "Private", url: "https://fmuniv.edu" },
-
-      // GEORGIA
-      { name: "Albany State University", city: "Albany", state: "GA", lat: 31.5542, lng: -84.1417, est: 1903, mascot: "Golden Rams", initials: "ASU", type: "Public", url: "https://asurams.edu" },
-      { name: "Clark Atlanta University", city: "Atlanta", state: "GA", lat: 33.7508, lng: -84.4109, est: 1988, mascot: "Panthers", initials: "CAU", type: "Private", url: "https://cau.edu" },
-      { name: "Fort Valley State University", city: "Fort Valley", state: "GA", lat: 32.5519, lng: -83.8903, est: 1895, mascot: "Wildcats", initials: "FVSU", type: "Public", url: "https://fvsu.edu" },
-      { name: "Interdenominational Theological Center", city: "Atlanta", state: "GA", lat: 33.7511, lng: -84.4144, est: 1958, mascot: "N/A", initials: "ITC", type: "Private", url: "https://itc.edu" },
-      { name: "Morehouse College", city: "Atlanta", state: "GA", lat: 33.7483, lng: -84.4168, est: 1867, mascot: "Maroon Tigers", initials: "MHC", type: "Private", url: "https://morehouse.edu" },
-      { name: "Morehouse School of Medicine", city: "Atlanta", state: "GA", lat: 33.7497, lng: -84.4153, est: 1975, mascot: "N/A", initials: "MSM", type: "Private", url: "https://msm.edu" },
-      { name: "Morris Brown College", city: "Atlanta", state: "GA", lat: 33.7547, lng: -84.4072, est: 1881, mascot: "Wolverines", initials: "MBC", type: "Private", url: "https://morrisbrown.edu" },
-      { name: "Paine College", city: "Augusta", state: "GA", lat: 33.4689, lng: -82.0006, est: 1882, mascot: "Lions", initials: "PC", type: "Private", url: "https://paine.edu" },
-      { name: "Savannah State University", city: "Savannah", state: "GA", lat: 32.0239, lng: -81.0647, est: 1890, mascot: "Tigers", initials: "SSU", type: "Public", url: "https://savannahstate.edu" },
-      { name: "Spelman College", city: "Atlanta", state: "GA", lat: 33.7464, lng: -84.4128, est: 1881, mascot: "Jaguars", initials: "SPC", type: "Private", url: "https://spelman.edu" },
-
-      // KENTUCKY
-      { name: "Kentucky State University", city: "Frankfort", state: "KY", lat: 38.2056, lng: -84.8622, est: 1886, mascot: "Thorobreds", initials: "KSU", type: "Public", url: "https://kysu.edu" },
-      { name: "Simmons College of Kentucky", city: "Louisville", state: "KY", lat: 38.2433, lng: -85.7656, est: 1879, mascot: "Falcons", initials: "SCK", type: "Private", url: "https://simmonscollegeky.edu" },
-
-      // LOUISIANA
-      { name: "Dillard University", city: "New Orleans", state: "LA", lat: 30.0075, lng: -90.0683, est: 1869, mascot: "Bleu Devils", initials: "DU", type: "Private", url: "https://dillard.edu" },
-      { name: "Grambling State University", city: "Grambling", state: "LA", lat: 32.5254, lng: -92.7142, est: 1901, mascot: "Tigers", initials: "GSU", type: "Public", url: "https://gram.edu" },
-      { name: "Southern University and A&M College", city: "Baton Rouge", state: "LA", lat: 30.5255, lng: -91.1906, est: 1880, mascot: "Jaguars", initials: "SUBR", type: "Public", url: "https://subr.edu" },
-      { name: "Southern University at New Orleans", city: "New Orleans", state: "LA", lat: 30.0061, lng: -90.0381, est: 1956, mascot: "Knights", initials: "SUNO", type: "Public", url: "https://suno.edu" },
-      { name: "Southern University at Shreveport", city: "Shreveport", state: "LA", lat: 32.5647, lng: -93.8189, est: 1967, mascot: "Jaguars", initials: "SUSLA", type: "Public", url: "https://susla.edu" },
-      { name: "Xavier University of Louisiana", city: "New Orleans", state: "LA", lat: 29.9647, lng: -90.1064, est: 1925, mascot: "Gold Rush", initials: "XULA", type: "Private", url: "https://xula.edu" },
-
-      // MARYLAND
-      { name: "Bowie State University", city: "Bowie", state: "MD", lat: 39.0197, lng: -76.7583, est: 1865, mascot: "Bulldogs", initials: "BSU", type: "Public", url: "https://bowiestate.edu" },
-      { name: "Coppin State University", city: "Baltimore", state: "MD", lat: 39.3108, lng: -76.6575, est: 1900, mascot: "Eagles", initials: "CSU", type: "Public", url: "https://coppin.edu" },
-      { name: "Morgan State University", city: "Baltimore", state: "MD", lat: 39.3438, lng: -76.5843, est: 1867, mascot: "Bears", initials: "MSU", type: "Public", url: "https://morgan.edu" },
-      { name: "University of Maryland Eastern Shore", city: "Princess Anne", state: "MD", lat: 38.2046, lng: -75.6841, est: 1886, mascot: "Hawks", initials: "UMES", type: "Public", url: "https://umes.edu" },
-
-      // MISSISSIPPI
-      { name: "Alcorn State University", city: "Lorman", state: "MS", lat: 31.8744, lng: -91.1408, est: 1871, mascot: "Braves", initials: "ALCN", type: "Public", url: "https://alcorn.edu" },
-      { name: "Coahoma Community College", city: "Clarksdale", state: "MS", lat: 34.2561, lng: -90.5847, est: 1924, mascot: "Tigers", initials: "CCC", type: "Public", url: "https://coahomacc.edu" },
-      { name: "Hinds Community College - Utica Campus", city: "Utica", state: "MS", lat: 32.1069, lng: -90.6272, est: 1903, mascot: "Bulldogs", initials: "HCCU", type: "Public", url: "https://hindscc.edu" },
-      { name: "Jackson State University", city: "Jackson", state: "MS", lat: 32.2968, lng: -90.2070, est: 1877, mascot: "Tigers", initials: "JSU", type: "Public", url: "https://jsums.edu" },
-      { name: "Mississippi Valley State University", city: "Itta Bena", state: "MS", lat: 33.5164, lng: -90.3456, est: 1950, mascot: "Delta Devils", initials: "MVSU", type: "Public", url: "https://mvsu.edu" },
-      { name: "Rust College", city: "Holly Springs", state: "MS", lat: 34.7744, lng: -89.4447, est: 1866, mascot: "Bearcats", initials: "RC", type: "Private", url: "https://rustcollege.edu" },
-      { name: "Tougaloo College", city: "Tougaloo", state: "MS", lat: 32.3992, lng: -90.1583, est: 1869, mascot: "Bulldogs", initials: "TC", type: "Private", url: "https://tougaloo.edu" },
-
-      // MISSOURI
-      { name: "Harris-Stowe State University", city: "St. Louis", state: "MO", lat: 38.6347, lng: -90.2253, est: 1857, mascot: "Hornets", initials: "HSSU", type: "Public", url: "https://hssu.edu" },
-      { name: "Lincoln University", city: "Jefferson City", state: "MO", lat: 38.5639, lng: -92.1692, est: 1866, mascot: "Blue Tigers", initials: "LU", type: "Public", url: "https://lincolnu.edu" },
-
-      // NORTH CAROLINA
-      { name: "Barber-Scotia College", city: "Concord", state: "NC", lat: 35.4144, lng: -80.5842, est: 1867, mascot: "Sabres", initials: "BSC", type: "Private", url: "https://bsc.edu" },
-      { name: "Bennett College", city: "Greensboro", state: "NC", lat: 36.0658, lng: -79.7828, est: 1873, mascot: "Belles", initials: "BC", type: "Private", url: "https://bennett.edu" },
-      { name: "Elizabeth City State University", city: "Elizabeth City", state: "NC", lat: 36.2847, lng: -76.2131, est: 1891, mascot: "Vikings", initials: "ECSU", type: "Public", url: "https://ecsu.edu" },
-      { name: "Fayetteville State University", city: "Fayetteville", state: "NC", lat: 35.0717, lng: -78.8925, est: 1867, mascot: "Broncos", initials: "FSU", type: "Public", url: "https://uncfsu.edu" },
-      { name: "Johnson C. Smith University", city: "Charlotte", state: "NC", lat: 35.2447, lng: -80.8547, est: 1867, mascot: "Golden Bulls", initials: "JCSU", type: "Private", url: "https://jcsu.edu" },
-      { name: "Livingstone College", city: "Salisbury", state: "NC", lat: 35.6669, lng: -80.4819, est: 1879, mascot: "Blue Bears", initials: "LC", type: "Private", url: "https://livingstone.edu" },
-      { name: "North Carolina A&T State University", city: "Greensboro", state: "NC", lat: 36.0763, lng: -79.7733, est: 1891, mascot: "Aggies", initials: "NCAT", type: "Public", url: "https://ncat.edu" },
-      { name: "North Carolina Central University", city: "Durham", state: "NC", lat: 35.9754, lng: -78.8986, est: 1910, mascot: "Eagles", initials: "NCCU", type: "Public", url: "https://nccu.edu" },
-      { name: "Saint Augustine's University", city: "Raleigh", state: "NC", lat: 35.7867, lng: -78.6217, est: 1867, mascot: "Falcons", initials: "SAU", type: "Private", url: "https://st-aug.edu" },
-      { name: "Shaw University", city: "Raleigh", state: "NC", lat: 35.7725, lng: -78.6367, est: 1865, mascot: "Bears", initials: "SU", type: "Private", url: "https://shawu.edu" },
-      { name: "Winston-Salem State University", city: "Winston-Salem", state: "NC", lat: 36.0886, lng: -80.2241, est: 1892, mascot: "Rams", initials: "WSSU", type: "Public", url: "https://wssu.edu" },
-
-      // OHIO
-      { name: "Central State University", city: "Wilberforce", state: "OH", lat: 39.7176, lng: -83.8788, est: 1887, mascot: "Marauders", initials: "CSU", type: "Public", url: "https://centralstate.edu" },
-      { name: "Payne Theological Seminary", city: "Wilberforce", state: "OH", lat: 39.7147, lng: -83.8797, est: 1891, mascot: "N/A", initials: "PTS", type: "Private", url: "https://payne.edu" },
-      { name: "Wilberforce University", city: "Wilberforce", state: "OH", lat: 39.7128, lng: -83.8803, est: 1856, mascot: "Bulldogs", initials: "WU", type: "Private", url: "https://wilberforce.edu" },
-
-      // OKLAHOMA
-      { name: "Langston University", city: "Langston", state: "OK", lat: 35.9439, lng: -97.2567, est: 1897, mascot: "Lions", initials: "LU", type: "Public", url: "https://langston.edu" },
-
-      // PENNSYLVANIA
-      { name: "Cheyney University of Pennsylvania", city: "Cheyney", state: "PA", lat: 39.9328, lng: -75.5247, est: 1837, mascot: "Wolves", initials: "CU", type: "Public", url: "https://cheyney.edu" },
-      { name: "Lincoln University", city: "Lincoln University", state: "PA", lat: 39.8087, lng: -75.9272, est: 1854, mascot: "Lions", initials: "LU", type: "Public", url: "https://lincoln.edu" },
-
-      // SOUTH CAROLINA
-      { name: "Allen University", city: "Columbia", state: "SC", lat: 34.0094, lng: -81.0186, est: 1870, mascot: "Yellow Jackets", initials: "AU", type: "Private", url: "https://allenuniversity.edu" },
-      { name: "Benedict College", city: "Columbia", state: "SC", lat: 34.0089, lng: -81.01
+      { name: "H. Councill Trenholm State Community College", city: "Montgomery", state: "AL", lat
