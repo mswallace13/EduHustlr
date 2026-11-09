@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Historically Black Colleges & Universities (HBCUs)</title>
+  
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    #map { height: calc(100vh - 73px); }
+    .custom-popup .leaflet-popup-content-wrapper {
+      background: #1f2937;
+      color: #f3f4f6;
+      border-radius: 0.5rem;
+      padding: 4px;
+      border: 1px solid #374151;
+    }
+    .custom-popup .leaflet-popup-tip {
+      background: #1f2937;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-gray-100 flex flex-col h-screen overflow-hidden font-sans">
+
+  <!-- Header & Filters -->
+  <header class="bg-gray-800 border-b border-gray-700 px-6 py-3 flex flex-wrap items-center justify-between gap-4 z-10 shadow-md">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center font-bold text-gray-900 text-sm">HBCU</div>
+      <h1 class="text-xl font-bold tracking-tight text-white">Historically Black Colleges & Universities</h1>
+    </div>
+    
+    <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+      <input type="text" id="searchInput" placeholder="Search name, mascot, city..." 
+        class="bg-gray-700 text-white text-sm rounded-lg px-3 py-2 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 w-full sm:w-64" />
+      
+      <select id="typeFilter" class="bg-gray-700 text-white text-sm rounded-lg px-3 py-2 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500">
+        <option value="All">All Types</option>
+        <option value="Public">Public</option>
+        <option value="Private">Private</option>
+      </select>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="flex flex-1 overflow-hidden relative">
+    <!-- Sidebar -->
+    <aside class="w-full md:w-80 bg-gray-800 border-r border-gray-700 flex flex-col h-full z-0">
+      <div class="p-3 bg-gray-800/80 border-b border-gray-700 text-xs text-gray-400 font-medium flex justify-between items-center">
+        <span>INSTITUTIONS (<span id="count">0</span>)</span>
+        <span class="text-amber-400">Click marker or list to open web</span>
+      </div>
+      <div id="hbcuList" class="flex-1 overflow-y-auto divide-y divide-gray-700/50">
+        <!-- List items populated dynamically -->
+      </div>
+    </aside>
+
+    <!-- Map -->
+    <main class="flex-1 h-full relative">
+      <div id="map" class="w-full h-full"></div>
+    </main>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <script>
+    // HBCU Dataset
+    const hbcus = [
+      { name: "Howard University", city: "Washington", state: "DC", lat: 38.9227, lng: -77.0194, est: 1867, mascot: "Bison", enrollment: "~12,000", type: "Private", url: "https://howard.edu" },
+      { name: "Spelman College", city: "Atlanta", state: "GA", lat: 33.7464, lng: -84.4128, est: 1881, mascot: "Jaguars", enrollment: "~2,400", type: "Private", url: "https://spelman.edu" },
+      { name: "Morehouse College", city: "Atlanta", state: "GA", lat: 33.7483, lng: -84.4168, est: 1867, mascot: "Maroon Tigers", enrollment: "~2,200", type: "Private", url: "https://morehouse.edu" },
+      { name: "Hampton University", city: "Hampton", state: "VA", lat: 37.0213, lng: -76.3353, est: 1868, mascot: "Pirates", enrollment: "~3,500", type: "Private", url: "https://hamptonu.edu" },
+      { name: "Tuskegee University", city: "Tuskegee", state: "AL", lat: 32.4297, lng: -85.7077, est: 1881, mascot: "Golden Tigers", enrollment: "~2,700", type: "Private", url: "https://tuskegee.edu" },
+      { name: "Florida A&M University", city: "Tallahassee", state: "FL", lat: 30.4259, lng: -84.2863, est: 1887, mascot: "Rattlers", enrollment: "~9,000", type: "Public", url: "https://famu.edu" },
+      { name: "North Carolina A&T State University", city: "Greensboro", state: "NC", lat: 36.0763, lng: -79.7733, est: 1891, mascot: "Aggies", enrollment: "~13,500", type: "Public", url: "https://ncat.edu" },
+      { name: "Fisk University", city: "Nashville", state: "TN", lat: 36.1670, lng: -86.8049, est: 1866, mascot: "Bulldogs", enrollment: "~1,000", type: "Private", url: "https://fisk.edu" },
+      { name: "Xavier University of Louisiana", city: "New Orleans", state: "LA", lat: 29.9647, lng: -90.1064, est: 1925, mascot: "Gold Rush / Gold Nuggets", enrollment: "~3,400", type: "Private", url: "https://xula.edu" },
+      { name: "Prairie View A&M University", city: "Prairie View", state: "TX", lat: 30.0949, lng: -95.9904, est: 1876, mascot: "Panthers", enrollment: "~9,200", type: "Public", url: "https://pvamu.edu" },
+      { name: "Morgan State University", city: "Baltimore", state: "MD", lat: 39.3438, lng: -76.5843, est: 1867, mascot: "Bears", enrollment: "~8,500", type: "Public", url: "https://morgan.edu" },
+      { name: "Southern University and A&M College", city: "Baton Rouge", state: "LA", lat: 30.5255, lng: -91.1906, est: 1880, mascot: "Jaguars", enrollment: "~7,000", type: "Public", url: "https://subr.edu" },
+      { name: "Clark Atlanta University", city: "Atlanta", state: "GA", lat: 33.7508, lng: -84.4109, est: 1988, mascot: "Panthers", enrollment: "~4,000", type: "Private", url: "https://cau.edu" },
+      { name: "Bethune-Cookman University", city: "Daytona Beach", state: "FL", lat: 29.2117, lng: -81.0317, est: 1904, mascot: "Wildcats", enrollment: "~2,800", type: "Private", url: "https://cookman.edu" },
+      { name: "Grambling State University", city: "Grambling", state: "LA", lat: 32.5254, lng: -92.7142, est: 1901, mascot: "Tigers", enrollment: "~5,400", type: "Public", url: "https://gram.edu" },
+      { name: "Jackson State University", city: "Jackson", state: "MS", lat: 32.2968, lng: -90.2070, est: 1877, mascot: "Tigers", enrollment: "~7,000", type: "Public", url: "https://jsums.edu" },
+      { name: "Norfolk State University", city: "Norfolk", state: "VA", lat: 36.8485, lng: -76.2624, est: 1935, mascot: "Spartans", enrollment: "~5,400", type: "Public", url: "https://nsu.edu" },
+      { name: "Dillard University", city: "New Orleans", state: "LA", lat: 30.0075, lng: -90.0683, est: 1869, mascot: "Bleu Devils", enrollment: "~1,200", type: "Private", url: "https://dillard.edu" },
+      { name: "Tennessee State University", city: "Nashville", state: "TN", lat: 36.1663, lng: -86.8290, est: 1912, mascot: "Tigers", enrollment: "~8,000", type: "Public", url: "https://tnstate.edu" },
+      { name: "Alabama A&M University", city: "Normal", state: "AL", lat: 34.7842, lng: -86.5722, est: 1875, mascot: "Bulldogs", enrollment: "~6,100", type: "Public", url: "https://aamu.edu" },
+      { name: "Alabama State University", city: "Montgomery", state: "AL", lat: 32.3642, lng: -86.2956, est: 1867, mascot: "Hornets", enrollment: "~4,000", type: "Public", url: "https://alasu.edu" },
+      { name: "Bowie State University", city: "Bowie", state: "MD", lat: 39.0197, lng: -76.7583, est: 1865, mascot: "Bulldogs", enrollment: "~6,200", type: "Public", url: "https://bowiestate.edu" },
+      { name: "Central State University", city: "Wilberforce", state: "OH", lat: 39.7176, lng: -83.8788, est: 1887, mascot: "Marauders", enrollment: "~5,400", type: "Public", url: "https://centralstate.edu" },
+      { name: "Delaware State University", city: "Dover", state: "DE", lat: 39.1860, lng: -75.5427, est: 1891, mascot: "Hornets", enrollment: "~5,600", type: "Public", url: "https://desu.edu" },
+      { name: "Lincoln University", city: "Lincoln University", state: "PA", lat: 39.8087, lng: -75.9272, est: 1854, mascot: "Lions", enrollment: "~2,000", type: "Public", url: "https://lincoln.edu" },
+      { name: "North Carolina Central University", city: "Durham", state: "NC", lat: 35.9754, lng: -78.8986, est: 1910, mascot: "Eagles", enrollment: "~8,000", type: "Public", url: "https://nccu.edu" },
+      { name: "Winston-Salem State University", city: "Winston-Salem", state: "NC", lat: 36.0886, lng: -80.2241, est: 1892, mascot: "Rams", enrollment: "~5,100", type: "Public", url: "https://wssu.edu" },
+      { name: "Virginia State University", city: "Petersburg", state: "VA", lat: 37.2389, lng: -77.4190, est: 1882, mascot: "Trojans", enrollment: "~4,300", type: "Public", url: "https://vsu.edu" },
+      { name: "University of Maryland Eastern Shore", city: "Princess Anne", state: "MD", lat: 38.2046, lng: -75.6841, est: 1886, mascot: "Hawks", enrollment: "~2,600", type: "Public", url: "https://umes.edu" },
+      { name: "Texas Southern University", city: "Houston", state: "TX", lat: 29.7214, lng: -95.3606, est: 1927, mascot: "Tigers", enrollment: "~7,500", type: "Public", url: "https://tsu.edu" }
+    ];
+
+    // Initialize Map
+    const map = L.map('map').setView([36.5, -89.5], 5);
+
+    // Dark Map Tiles (CARTO Dark Matter)
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
+
+    let activeMarkers = [];
+
+    // Icon Factory
+    function getMarkerIcon(type) {
+      const color = type === 'Public' ? '#f59e0b' : '#38bdf8';
+      return L.divIcon({
+        className: 'custom-pin',
+        html: `<div style="background-color: ${color}; width: 14px; height: 14px; border-radius: 50%; border: 2px solid #ffffff; box-shadow: 0 0 8px ${color};"></div>`,
+        iconSize: [14, 14],
+        iconAnchor: [7, 7]
+      });
+    }
+
+    // Render Markers & Sidebar
+    function render(data) {
+      // Clear Existing Markers
+      activeMarkers.forEach(m => map.removeLayer(m));
+      activeMarkers = [];
+
+      const listEl = document.getElementById('hbcuList');
+      listEl.innerHTML = '';
+      document.getElementById('count').textContent = data.length;
+
+      data.forEach((hbcu) => {
+        // Create Marker
+        const marker = L.marker([hbcu.lat, hbcu.lng], { icon: getMarkerIcon(hbcu.type) }).addTo(map);
+        
+        // Custom Tooltip / Popup Content
+        const popupContent = `
+          <div class="p-2 max-w-xs">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xs px-2 py-0.5 rounded font-semibold ${hbcu.type === 'Public' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-sky-500/20 text-sky-400 border border-sky-500/30'}">${hbcu.type}</span>
+              <span class="text-xs text-gray-400">${hbcu.city},${hbcu.state}</span>
+            </div>
+            <h3 class="font-bold text-base text-white mb-2 leading-tight">${hbcu.name}</h3>
+            <div class="text-xs text-gray-300 space-y-1 mb-3">
+              <div><strong class="text-gray-400">Established:</strong> ${hbcu.est}</div>
+              <div><strong class="text-gray-400">Mascot:</strong> ${hbcu.mascot}</div>
+              <div><strong class="text-gray-400">Enrollment:</strong> ${hbcu.enrollment}</div>
+            </div>
+            <a href="${hbcu.url}" target="_blank" rel="noopener noreferrer" 
+               class="block text-center w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold text-xs py-1.5 px-3 rounded transition-colors">
+              Visit Website (.edu) &rarr;
+            </a>
+          </div>
+        `;
+
+        // Hover tooltip for quick preview
+        marker.bindTooltip(`<b>${hbcu.name}</b><br/>${hbcu.city},${hbcu.state}`, { direction: 'top', offset: [0, -5] });
+        // Click popup for full details & link
+        marker.bindPopup(popupContent, { className: 'custom-popup' });
+
+        // Click Marker Direct Web Navigation (Secondary: popup link handles direct visit)
+        marker.on('dblclick', () => {
+          window.open(hbcu.url, '_blank');
+        });
+
+        activeMarkers.push(marker);
+
+        // Sidebar Entry
+        const card = document.createElement('div');
+        card.className = "p-3 hover:bg-gray-700/50 cursor-pointer transition-colors border-b border-gray-700/50";
+        card.innerHTML = `
+          <div class="flex justify-between items-start mb-1">
+            <h4 class="font-semibold text-sm text-gray-200 hover:text-amber-400 leading-snug">${hbcu.name}</h4>
+            <span class="text-[10px] px-1.5 py-0.5 rounded ${hbcu.type === 'Public' ? 'bg-amber-500/10 text-amber-400' : 'bg-sky-500/10 text-sky-400'}">${hbcu.type}</span>
+          </div>
+          <p class="text-xs text-gray-400">${hbcu.city}, ${hbcu.state} • Est. ${hbcu.est}</p>
+          <p class="text-xs text-gray-400">Mascot: <span class="text-gray-300">${hbcu.mascot}</span></p>
+        `;
+
+        card.addEventListener('click', () => {
+          map.setView([hbcu.lat, hbcu.lng], 12);
+          marker.openPopup();
+        });
+
+        listEl.appendChild(card);
+      });
+    }
+
+    // Filter Logic
+    function filterData() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const type = document.getElementById('typeFilter').value;
+
+      const filtered = hbcus.filter(item => {
+        const matchesSearch = item.name.toLowerCase().includes(query) ||
+                              item.city.toLowerCase().includes(query) ||
+                              item.state.toLowerCase().includes(query) ||
+                              item.mascot.toLowerCase().includes(query);
+        const matchesType = type === 'All' || item.type === type;
+        return matchesSearch && matchesType;
+      });
+
+      render(filtered);
+    }
+
+    // Event Listeners
+    document.getElementById('searchInput').addEventListener('input', filterData);
+    document.getElementById('typeFilter').addEventListener('change', filterData);
+
+    // Initial Render
+    render(hbcus);
+  </script>
+</body>
+</html>
