@@ -78,52 +78,111 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   
   <script>
-    const hbcus = [
-      // ALABAMA
-      { name: "Alabama A&M University", city: "Normal", state: "AL", lat: 34.7842, lng: -86.5722, est: 1875, mascot: "Bulldogs", type: "Public", url: "https://aamu.edu" },
-      { name: "Alabama State University", city: "Montgomery", state: "AL", lat: 32.3642, lng: -86.2956, est: 1867, mascot: "Hornets", type: "Public", url: "https://alasu.edu" },
-      { name: "Bishop State Community College", city: "Mobile", state: "AL", lat: 30.6936, lng: -88.0583, est: 1927, mascot: "Wildcats", type: "Public", url: "https://bishop.edu" },
-      { name: "Gadsden State Community College", city: "Gadsden", state: "AL", lat: 34.0042, lng: -86.0089, est: 1925, mascot: "Cardinals", type: "Public", url: "https://gadsdenstate.edu" },
-      { name: "J.F. Drake State Community College", city: "Huntsville", state: "AL", lat: 34.7675, lng: -86.5767, est: 1961, mascot: "Eagles", type: "Public", url: "https://drakestate.edu" },
-      { name: "Lawson State Community College", city: "Birmingham", state: "AL", lat: 33.4547, lng: -86.8833, est: 1949, mascot: "Cougars", type: "Public", url: "https://lawsonstate.edu" },
-      { name: "Miles College", city: "Fairfield", state: "AL", lat: 33.4795, lng: -86.9189, est: 1898, mascot: "Golden Bears", type: "Private", url: "https://miles.edu" },
-      { name: "Oakwood University", city: "Huntsville", state: "AL", lat: 34.7497, lng: -86.6572, est: 1896, mascot: "Ambassadors", type: "Private", url: "https://oakwood.edu" },
-      { name: "Selma University", city: "Selma", state: "AL", lat: 32.4172, lng: -87.0306, est: 1878, mascot: "Bulldogs", type: "Private", url: "https://selmauniversity.edu" },
-      { name: "Shelton State Community College", city: "Tuscaloosa", state: "AL", lat: 33.1539, lng: -87.5256, est: 1952, mascot: "Buccaneers", type: "Public", url: "https://sheltonstate.edu" },
-      { name: "Stillman College", city: "Tuscaloosa", state: "AL", lat: 33.1975, lng: -87.5858, est: 1876, mascot: "Tigers", type: "Private", url: "https://stillman.edu" },
-      { name: "Talladega College", city: "Talladega", state: "AL", lat: 33.4331, lng: -86.1078, est: 1867, mascot: "Tornadoes", type: "Private", url: "https://talladega.edu" },
-      { name: "H. Councill Trenholm State Community College", city: "Montgomery", state: "AL", lat: 32.3556, lng: -86.2575, est: 1963, mascot: "Tigers", type: "Public", url: "https://trenholmstate.edu" },
-      { name: "Tuskegee University", city: "Tuskegee", state: "AL", lat: 32.4297, lng: -85.7077, est: 1881, mascot: "Golden Tigers", type: "Private", url: "https://tuskegee.edu" },
+    let hbcus = [];
+    let activeMarkers = [];
 
-      // ARKANSAS
-      { name: "Arkansas Baptist College", city: "Little Rock", state: "AR", lat: 34.7397, lng: -92.2892, est: 1884, mascot: "Buffaloes", type: "Private", url: "https://arkansasbaptist.edu" },
-      { name: "Philander Smith University", city: "Little Rock", state: "AR", lat: 34.7347, lng: -92.2858, est: 1877, mascot: "Panthers", type: "Private", url: "https://philander.edu" },
-      { name: "Shorter College", city: "North Little Rock", state: "AR", lat: 34.7578, lng: -92.2611, est: 1886, mascot: "Bulldogs", type: "Private", url: "https://shortercollege.edu" },
-      { name: "University of Arkansas at Pine Bluff", city: "Pine Bluff", state: "AR", lat: 34.2467, lng: -92.0169, est: 1873, mascot: "Golden Lions", type: "Public", url: "https://uapb.edu" },
+    // Initialize Map
+    const map = L.map('map').setView([36.5, -89.5], 5);
 
-      // CALIFORNIA
-      { name: "Charles R. Drew University of Medicine and Science", city: "Los Angeles", state: "CA", lat: 33.9239, lng: -118.2411, est: 1966, mascot: "Mighty Lions", type: "Private", url: "https://cdrewu.edu" },
+    // Key-Free Dark Tiles
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+      maxZoom: 16,
+      attribution: 'Tiles &copy; Esri'
+    }).addTo(map);
 
-      // DELAWARE
-      { name: "Delaware State University", city: "Dover", state: "DE", lat: 39.1860, lng: -75.5427, est: 1891, mascot: "Hornets", type: "Public", url: "https://desu.edu" },
+    function createDotIcon(item) {
+      const color = item.type === 'Public' ? '#f59e0b' : '#38bdf8';
+      const html = `<div style="background-color: ${color}; width: 14px; height: 14px; border-radius: 50%; border: 2px solid #ffffff; box-shadow: 0 0 8px ${color};"></div>`;
+      return L.divIcon({
+        className: 'dot-pin',
+        html: html,
+        iconSize: [14, 14],
+        iconAnchor: [7, 7]
+      });
+    }
 
-      // DISTRICT OF COLUMBIA
-      { name: "Howard University", city: "Washington", state: "DC", lat: 38.9227, lng: -77.0194, est: 1867, mascot: "Bison", type: "Private", url: "https://howard.edu" },
-      { name: "University of the District of Columbia", city: "Washington", state: "DC", lat: 38.9439, lng: -77.0672, est: 1851, mascot: "Firebirds", type: "Public", url: "https://udc.edu" },
+    function render(data) {
+      activeMarkers.forEach(m => map.removeLayer(m));
+      activeMarkers = [];
 
-      // FLORIDA
-      { name: "Bethune-Cookman University", city: "Daytona Beach", state: "FL", lat: 29.2117, lng: -81.0317, est: 1904, mascot: "Wildcats", type: "Private", url: "https://cookman.edu" },
-      { name: "Edward Waters University", city: "Jacksonville", state: "FL", lat: 30.3392, lng: -81.6817, est: 1866, mascot: "Tigers", type: "Private", url: "https://ewu.edu" },
-      { name: "Florida A&M University", city: "Tallahassee", state: "FL", lat: 30.4259, lng: -84.2863, est: 1887, mascot: "Rattlers", type: "Public", url: "https://famu.edu" },
-      { name: "Florida Memorial University", city: "Miami Gardens", state: "FL", lat: 25.9239, lng: -80.2619, est: 1879, mascot: "Lions", type: "Private", url: "https://fmuniv.edu" },
+      const listEl = document.getElementById('hbcuList');
+      listEl.innerHTML = '';
+      document.getElementById('count').textContent = data.length;
 
-      // GEORGIA
-      { name: "Albany State University", city: "Albany", state: "GA", lat: 31.5542, lng: -84.1417, est: 1903, mascot: "Golden Rams", type: "Public", url: "https://asurams.edu" },
-      { name: "Clark Atlanta University", city: "Atlanta", state: "GA", lat: 33.7508, lng: -84.4109, est: 1988, mascot: "Panthers", type: "Private", url: "https://cau.edu" },
-      { name: "Fort Valley State University", city: "Fort Valley", state: "GA", lat: 32.5519, lng: -83.8903, est: 1895, mascot: "Wildcats", type: "Public", url: "https://fvsu.edu" },
-      { name: "Interdenominational Theological Center", city: "Atlanta", state: "GA", lat: 33.7511, lng: -84.4144, est: 1958, mascot: "N/A", type: "Private", url: "https://itc.edu" },
-      { name: "Morehouse College", city: "Atlanta", state: "GA", lat: 33.7483, lng: -84.4168, est: 1867, mascot: "Maroon Tigers", type: "Private", url: "https://morehouse.edu" },
-      { name: "Morehouse School of Medicine", city: "Atlanta", state: "GA", lat: 33.7497, lng: -84.4153, est: 1975, mascot: "N/A", type: "Private", url: "https://msm.edu" },
-      { name: "Morris Brown College", city: "Atlanta", state: "GA", lat: 33.7547, lng: -84.4072, est: 1881, mascot: "Wolverines", type: "Private", url: "https://morrisbrown.edu" },
-      { name: "Paine College", city: "Augusta", state: "GA", lat: 33.4689, lng: -82.0006, est: 1882, mascot: "Lions", type: "Private", url: "https://paine.edu" },
-      { name: "Savannah State University", city: "Savannah", state: "GA", lat: 32.0239, lng: -81.064
+      data.forEach((hbcu) => {
+        const marker = L.marker([hbcu.lat, hbcu.lng], { icon: createDotIcon(hbcu) }).addTo(map);
+        
+        const popupContent = `
+          <div class="p-2 max-w-xs">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-xs px-2 py-0.5 rounded font-semibold ${hbcu.type === 'Public' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-sky-500/20 text-sky-400 border border-sky-500/30'}">${hbcu.type}</span>
+              <span class="text-xs text-gray-400">${hbcu.city}, ${hbcu.state}</span>
+            </div>
+            <h3 class="font-bold text-base text-white mb-1 leading-tight">${hbcu.name}</h3>
+            <div class="text-xs text-gray-300 space-y-1 mb-3">
+              <div><strong class="text-gray-400">Established:</strong> ${hbcu.est}</div>
+              <div><strong class="text-amber-400 font-semibold">Mascot:</strong> ${hbcu.mascot}</div>
+            </div>
+            <a href="${hbcu.url}" target="_blank" rel="noopener noreferrer" 
+               class="block text-center w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold text-xs py-1.5 px-3 rounded transition-colors">
+              Visit Official Site (.edu) &rarr;
+            </a>
+          </div>
+        `;
+
+        marker.bindTooltip(`<b>${hbcu.name}</b><br/><span style="color:#f59e0b;">🐾 ${hbcu.mascot}</span>`, { direction: 'top', offset: [0, -5] });
+        marker.bindPopup(popupContent, { className: 'custom-popup' });
+        activeMarkers.push(marker);
+
+        const card = document.createElement('div');
+        card.className = "p-3 hover:bg-gray-700/50 cursor-pointer transition-colors border-b border-gray-700/50 flex items-center justify-between gap-2";
+        card.innerHTML = `
+          <div>
+            <h4 class="font-semibold text-sm text-gray-200 hover:text-amber-400 leading-snug">${hbcu.name}</h4>
+            <p class="text-xs text-gray-400">${hbcu.city}, ${hbcu.state} • Est. ${hbcu.est}</p>
+            <p class="text-xs text-amber-400 mt-0.5">🐾 ${hbcu.mascot}</p>
+          </div>
+          <span class="text-xs font-bold px-2 py-0.5 rounded-full ${hbcu.type === 'Public' ? 'bg-amber-500/20 text-amber-400' : 'bg-sky-500/20 text-sky-400'}">
+            ${hbcu.type}
+          </span>
+        `;
+
+        card.addEventListener('click', () => {
+          map.setView([hbcu.lat, hbcu.lng], 14);
+          marker.openPopup();
+        });
+
+        listEl.appendChild(card);
+      });
+    }
+
+    function filterData() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const type = document.getElementById('typeFilter').value;
+
+      const filtered = hbcus.filter(item => {
+        const matchesSearch = item.name.toLowerCase().includes(query) ||
+                              item.city.toLowerCase().includes(query) ||
+                              item.state.toLowerCase().includes(query) ||
+                              item.mascot.toLowerCase().includes(query);
+        const matchesType = type === 'All' || item.type === type;
+        return matchesSearch && matchesType;
+      });
+
+      render(filtered);
+    }
+
+    document.getElementById('searchInput').addEventListener('input', filterData);
+    document.getElementById('typeFilter').addEventListener('change', filterData);
+
+    // Fetch dataset relative to hbcu.html
+    fetch('hbcu.json')
+      .then(res => res.json())
+      .then(data => {
+        hbcus = data;
+        render(hbcus);
+      })
+      .catch(err => console.error("Error loading HBCU data:", err));
+  </script>
+</body>
+</html>
